@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true
+    }
+  ],
+  "name": "ExpCloudDemo",
+  "namespace": "",
+  "sfdcLoginUrl": "https://ucpath-hhs--ssodev.my.salesforce.com",
+  "sourceApiVersion": "54.0"
+}

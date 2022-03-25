@@ -1,0 +1,76 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Retrieve From ChangeSet",
+            "type": "shell",
+            "command": "sfdx",
+            "args": [
+                "force:source:retrieve",
+                "-n",
+                "${input:changesetname}",
+                "-u",
+                "${input:sourceenvironment}"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Deploy ChangeSet",
+            "type": "shell",
+            "command": "sfdx",
+            "args": [
+                "force:source:deploy",
+                "-p",
+                "${input:changesetname}/main/default",
+                "-u",
+                "${input:targetenvironment}"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "changesetname",
+            "description": "Enter Changeset Name:",
+            "type": "promptString"
+        },
+        {
+            "id": "sourceenvironment",
+            "description": "Select Environment To Retrieve",
+            "type": "pickString",
+            "options": [
+                "acfSSOdev",
+                "svittala2017org",
+                "uat"
+              ]
+        },
+        {
+            "id": "targetenvironment",
+            "description": "Select Environment To Deploy",
+            "type": "pickString",
+            "options": [
+                "acfSSOdev",
+                "svittala2017org",
+                "uat"
+              ]
+        }
+    ]
+}
