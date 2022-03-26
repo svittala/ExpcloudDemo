@@ -31,7 +31,6 @@
     <networkMemberGroups>
         <profile>admin</profile>
         <profile>identity user</profile>
-        <profile>mytrailhead</profile>
     </networkMemberGroups>
     <networkPageOverrides>
         <changePasswordPageOverrideSetting>Standard</changePasswordPageOverrideSetting>
