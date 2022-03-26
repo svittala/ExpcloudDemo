@@ -4,6 +4,18 @@
   "id" : "7cad56e6-9326-44e5-9a5c-5013a3c57ad0",
   "label" : "Login",
   "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "headerText" : "",
+        "showHeader" : false,
+        "useCommunityDomainSso" : false
+      },
+      "componentName" : "salesforceIdentity:socialLogin2",
+      "id" : "958f0e4e-988e-4fbc-bf0f-0ab24a46037a",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
     "id" : "53f5bbdd-dd79-488f-9382-bd469ea93d09",
     "regionName" : "content",
     "type" : "region"
