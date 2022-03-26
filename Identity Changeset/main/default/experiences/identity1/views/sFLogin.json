@@ -66,6 +66,18 @@
     "id" : "bbe96e33-f6ad-4fd0-a573-cc99818a9f25",
     "regionName" : "sfdcHiddenRegion",
     "type" : "region"
+  }, {
+    "id" : "87ac8337-7a29-45fd-88eb-1074f689a359",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "id" : "614c74d1-2a3e-4aca-b2a4-1dc96b1906d4",
+    "regionName" : "sidebar",
+    "type" : "region"
+  }, {
+    "id" : "300ae948-a4c4-41ef-9653-00cd00f5cb27",
+    "regionName" : "footer",
+    "type" : "region"
   } ],
   "themeLayoutType" : "Login",
   "type" : "view",

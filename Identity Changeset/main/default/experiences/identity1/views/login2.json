@@ -1,0 +1,73 @@
+{
+  "appPageId" : "646bbbbe-87cb-4325-a9b5-935b5b9543c0",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "id" : "ebf4b368-dfcd-4c43-bf1c-df8591df5171",
+  "label" : "Login2",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "richTextValue" : "<div align=CENTER >\n    <br>\n<button class=\"slds-button slds-button_inverse \" style=\"text-color:white;background-color:orange\">\n   <a href=\"https://ucpath-hhs--ssodev.my.salesforce.com/services/auth/sso/HHS_Users\" style=\"color:white;font-weight:bold;font-size:18px\">HHS User </a>\n</button>\n</div>\n<br>"
+      },
+      "componentName" : "forceCommunity:htmlBlock",
+      "id" : "c582d820-1f86-4ad5-990c-e8f05c75cac9",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "881498ec-393a-4cfb-9fe3-d3e721853a88",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Login"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "5bbea70a-de60-4b95-9b1a-d0cba6c55578",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "021682ba-67a4-4b8c-bf16-d9c0784be60b",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "headerText" : "",
+        "showHeader" : false,
+        "useCommunityDomainSso" : false
+      },
+      "componentName" : "salesforceIdentity:socialLogin2",
+      "id" : "62abb956-306c-4626-a493-e4cdc15f873c",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "25bce273-773d-482f-8abd-2e535a5f6346",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "id" : "054c37fe-31e0-45b5-8fe9-2992ccd7f5ea",
+    "regionName" : "sidebar",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "richTextValue" : "<div align=CENTER >\n<div  style=\"align:center;width:250px\" >\nThis is a U.S. government service. Your use indicates your consent to monitoring, recording, and no expectation of privacy. Misuse is subject to criminal and civil penalties. \n<br/><a href=\"/identity/s/terms-of-service\" >Read more details.</a>\n</div>\n</div>"
+      },
+      "componentName" : "forceCommunity:htmlBlock",
+      "id" : "52e7859a-9af0-4edf-b59e-41f1e76cd2ca",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "0c3b45be-038c-4d23-87cc-ec62768a4ee9",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "login-home"
+}
