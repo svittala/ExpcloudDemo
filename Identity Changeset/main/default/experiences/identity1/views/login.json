@@ -1,0 +1,63 @@
+{
+  "appPageId" : "646bbbbe-87cb-4325-a9b5-935b5b9543c0",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "id" : "7cad56e6-9326-44e5-9a5c-5013a3c57ad0",
+  "label" : "Login",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "headerText" : "",
+        "showHeader" : false,
+        "useCommunityDomainSso" : false
+      },
+      "componentName" : "salesforceIdentity:socialLogin2",
+      "id" : "958f0e4e-988e-4fbc-bf0f-0ab24a46037a",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "53f5bbdd-dd79-488f-9382-bd469ea93d09",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Login"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "4c4ca362-40a6-466d-8b0d-b1e820f40313",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "341399f7-aaf0-4a4a-ad08-983782ece297",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "richTextValue" : "<div align=CENTER>\n<button class=\"slds-button slds-button_outline-brand \" style=\"background-color:#3f83cc;padding:0.5rem;width:300px\">    \n   <a style=\"color:white;textsyle:bold;font-weight:bold;font-size:20px\" href=\"https://idp.int.identitysandbox.gov/\">Non-HHS User </a>\n</button>    \n</div>\n<br/>\n<div align=CENTER >\n<button class=\"slds-button slds-button_inverse \" style=\"text-color:white;background-color:orange;padding:0.5rem;width:300px\">\n   <a href=\"https://ucpath-hhs--ssodev.my.salesforce.com/services/auth/sso/HHS_Users\" style=\"color:white;font-weight:bold;font-size:20px\">HHS User </a>\n</button>\n</div>\n<br/>\n<div align=CENTER >\n<div  style=\"align:center;width:250px\" >\nThis is a U.S. government service. Your use indicates your consent to monitoring, recording, and no expectation of privacy. Misuse is subject to criminal and civil penalties. \n<br/><a href=\"/identity/s/terms-of-service\" >Read more details.</a>\n</div>\n</div>"
+      },
+      "componentName" : "forceCommunity:htmlBlock",
+      "id" : "c9db0343-d08b-4bf1-8ca8-f4cdeaf45222",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "c3baca65-b3b4-41ba-b8ff-a26d609d9a85",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "id" : "3033abc2-1e65-4b3c-b977-f396ad2ac8d1",
+    "regionName" : "sidebar",
+    "type" : "region"
+  }, {
+    "id" : "dca68a49-d445-422e-a8c2-7da1f697a584",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "login-home"
+}

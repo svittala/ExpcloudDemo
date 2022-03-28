@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "1547099e-cfe5-4998-8dad-8a9b17e02f0f",
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "configurationTags" : [ ],
+  "id" : "52466c76-7f63-4794-a207-1c57ba38758d",
+  "label" : "terms of service",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-terms-of-service",
+  "type" : "route",
+  "urlPrefix" : "terms-of-service"
+}
