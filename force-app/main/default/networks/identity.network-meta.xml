@@ -30,7 +30,8 @@
     <logoutUrl>https://acf-orr.force.com/identity/s/login/</logoutUrl>
     <networkMemberGroups>
         <profile>admin</profile>
-        <profile>identity user</profile>
+        <profile>Identity User</profile>
+        <profile>mytrailhead</profile>
     </networkMemberGroups>
     <networkPageOverrides>
         <changePasswordPageOverrideSetting>Standard</changePasswordPageOverrideSetting>
@@ -44,7 +45,6 @@
     <selfRegistration>false</selfRegistration>
     <sendWelcomeEmail>false</sendWelcomeEmail>
     <site>identity</site>
-    <siteArchiveStatus>NotArchived</siteArchiveStatus>
     <status>UnderConstruction</status>
     <tabs>
         <defaultTab>home</defaultTab>
