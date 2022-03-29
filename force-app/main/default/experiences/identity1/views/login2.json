@@ -6,7 +6,7 @@
   "regions" : [ {
     "components" : [ {
       "componentAttributes" : {
-        "richTextValue" : "<div align=CENTER >\n    <br>\n<button class=\"slds-button slds-button_inverse \" style=\"text-color:white;background-color:orange\">\n   <a href=\"https://ucpath-hhs--ssodev.my.salesforce.com/services/auth/sso/HHS_Users\" style=\"color:white;font-weight:bold;font-size:18px\">HHS User </a>\n</button>\n</div>\n<br>"
+        "richTextValue" : "<div align=CENTER >\n    <br>\n<button class=\"slds-button slds-button_inverse \" style=\"text-color:white;background-color:orange;height:45px;width:130px\">\n   <a href=\"https://ucpath-hhs--ssodev.my.salesforce.com/services/auth/sso/HHS_Users\" style=\"color:white;font-weight:bold;font-size:16px\">HHS User</a>\n</button>\n</div>\n<br>"
       },
       "componentName" : "forceCommunity:htmlBlock",
       "id" : "c582d820-1f86-4ad5-990c-e8f05c75cac9",

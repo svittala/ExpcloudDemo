@@ -1,8 +1,7 @@
 {
   "packageDirectories": [
     {
-      "path": "Identity Changeset",
-      "pathDefault": "force-app",
+      "path": "force-app",
       "default": true
     }
   ],
