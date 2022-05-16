@@ -103,7 +103,11 @@
                     aura:id="logoContainer"
                   >
                     <a href="{!v.homePath}" title="Home" aria-label="Home">
-
+                      <img
+                      style="width:200px"
+                      src="{!$Resource.SSOImages2+'/sso_images/acf_icon.png'}"
+                      alt="ACF Logo"
+                    />
                     </a>
                   </span>
                 </div>
@@ -125,12 +129,7 @@
             <button class="usa-nav__close">
               <img src="{!$Resource.uswds_2_x+'/img/close.svg'}" alt="close" />
             </button>
-            <!-- section let's you turn on/off the inherent Salesforce navBar zone and replace it
-						with an aura.component[] zone which lets you drop in your own custom styled nav menu -->
-            <aura:if isTrue="{!v.customNavToggle == 'On'}">
-              {!v.customNavBar}
-              <aura:set attribute="else"> {!v.navBar} </aura:set>
-            </aura:if>
+
 
             <div class="usa-nav__secondary">
               <!-- inline style to keep SF User Profile Menu from being squished -->
@@ -141,7 +140,7 @@
                   </div>
                   <!-- toggle allows community manager to remove the login/ User profile section from theme - for unauthenticated communities -->
                   <aura:if isTrue="{!v.displayLogin == 'Yes'}">
-                    <div class="grid-col-fill">
+                    <div class="grid-col-fill" >
                       <!-- section let's you turn on/off the inherent Salesforce User Profile Menu zone 
                 and replace it with an aura.component[] zone which lets you drop in your own 
                 custom styled User Profile Menu  -->
@@ -158,14 +157,15 @@
 							custom styled Search box -->
               <aura:if isTrue="{!v.customSearchToggle == 'On'}">
                 {!v.customSearch}
-                <aura:set attribute="else"> {!v.search} </aura:set>
+                <aura:set attribute="else"> &nbsp; </aura:set>
               </aura:if>
+              
               <!-- custom margin-top since USWDS template places secondary-links above Search
 							in this case, we are putting it below -->
               <ul class="usa-nav__secondary-links" style="margin-top: 0.25rem">
                 <c:uswdsNavSecondaryLinks
                   navigationLinkSetId="{!v.secondaryNavigationLinkSetId}"
-                />
+                /> 
               </ul>
             </div>
           </div>

@@ -8,6 +8,9 @@
 
   <aura:attribute name="loggedIn" type="Boolean" default="false" />
   <aura:attribute name="user" type="String" default="user" />
+  <aura:attribute name="currentUser" type="User"/> 
+  <force:recordData aura:id="recordLoader" recordId="{!$SObjectType.CurrentUser.Id}" fields="Name" 
+  targetFields="{!v.currentUser}"/>
   <aura:attribute
     name="navigationLinkSetId"
     type="String"
@@ -25,8 +28,8 @@
   <aura:if isTrue="{!v.loggedIn}">
     <lightning:buttonMenu
       iconName="action:user"
-      label="{!v.user}"
-      onselect="{! c.handleMenuSelect }"
+      label="{!v.currentUser.Name}"
+      
     >
       <aura:iteration
         items="{!v.menuItems}"
@@ -36,8 +39,10 @@
         <lightning:menuItem label="{!item.label}" value="{!item.id}" />
       </aura:iteration>
     </lightning:buttonMenu>
+   
     <aura:set attribute="else">
       <a href="login">Login</a>
     </aura:set>
+    
   </aura:if>
 </aura:component>

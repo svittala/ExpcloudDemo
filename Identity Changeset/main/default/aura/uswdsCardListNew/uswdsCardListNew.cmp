@@ -13,10 +13,13 @@
 
   <aura:method name="processCardData" action="{!c.processCardData}" />
   <lightning:notificationsLibrary aura:id="notifLib" />
+  
 
   <ul class="usa-card-group">
+    <div  class="grid-col-8"  ></div>    
     <aura:iteration items="{!v.processedCardData}" var="card">
       <c:uswdsCardElementNew cardElement="{! card }" />
     </aura:iteration>
+
   </ul>
 </aura:component>

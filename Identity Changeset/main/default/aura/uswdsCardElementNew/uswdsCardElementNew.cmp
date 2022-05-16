@@ -22,12 +22,12 @@
   <aura:if
     isTrue="{! equals(v.cardElement.cardType, 'Card') || equals(v.cardElement.cardType, 'Card with Media') || equals(v.cardElement.cardType, 'Media and Header First') || equals(v.cardElement.cardType, 'Inset Media') || equals(v.cardElement.cardType, 'Exdent Media') }"
   >
-    <li class="tablet:grid-col-2 usa-card" aura:id="uswdsCard-li">
+    <li class="tablet:grid-col-4 usa-card" aura:id="uswdsCard-li">
       <div class="usa-card__container" >
         <div style="display: none">{!v.cardElement.cardType}</div>
         <header class="usa-card__header" aura:id="uswdsCard-header">
           <h2 class="usa-card__heading">{! v.cardElement.header }</h2>
-        </header>
+        </header> 
         <div class="usa-card__media"  aura:id="uswdsCard-media">
           <a href="{! v.cardElement.buttonLinkUrl }">
           <div >
@@ -35,10 +35,14 @@
               src="{! v.cardElement.mediaUrl }"
               alt="{! v.cardElement.mediaAltText }"
             />
-          </div>
+          </div>        
           </a>
         </div>
-
+        <a href="{! v.cardElement.buttonLinkUrl }">        
+        <div class="usa-card__body">
+          <p>{! v.cardElement.body }</p>
+        </div> 
+        </a>
       </div>
     </li>
   </aura:if>
@@ -48,7 +52,7 @@
     isTrue="{! or(equals(v.cardElement.cardType, 'Flag Right'), equals(v.cardElement.cardType, 'Flag Left')) }"
   >
     <li
-      class="tablet:grid-col-6 usa-card usa-card--flag"
+      class="tablet:grid-col-12 usa-card usa-card--flag"
       aura:id="uswdsFlag-li"
     >
       <div class="usa-card__container">

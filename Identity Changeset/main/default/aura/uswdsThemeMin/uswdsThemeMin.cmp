@@ -147,8 +147,10 @@
       </header>
     </div>
   </div>
+
   <!-- main body -->
   <div aura:id="mainContent" id="mainContent" class="">
+
     <div>{!v.announcementBanner}</div>
     <div>{!v.body}</div>
   </div>

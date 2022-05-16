@@ -12,7 +12,6 @@
   />
   <aura:attribute name="bannerType" type="String" default="Gov English" />
   <aura:attribute name="bannerContent" type="Map" />
-
   <section class="usa-banner" aria-label="{!v.siteName}">
     <div class="usa-accordion">
       <header class="usa-banner__header">
@@ -106,21 +105,11 @@
         </div>
       </div>
     </div>
-    <br/>
- 
   </section>
   <section
   class="usa-identifier__section usa-identifier__section--usagov"
   aria-label="{! v.identifierContent.usaGovAria }"
 >
-  <div class="usa-identifier__container" height="50px"    >
 
-    <img
-     
-    src="{!$Resource.SSOImages2+'/sso_images/acf_main_logo.png'}"
-    alt="ACF ORR Logo"
-  />
-
-  </div>
 </section>
 </aura:component>

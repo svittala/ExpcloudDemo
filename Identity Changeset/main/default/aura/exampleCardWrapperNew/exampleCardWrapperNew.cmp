@@ -18,7 +18,9 @@
         <h1></h1>
       </div>
       <div class="grid-row">
+        <center>
         <c:uswdsCardListNew cardData="{!v.cardDataMapped}" aura:id="cardList" />
+      </center>
       </div>
 
 

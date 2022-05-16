@@ -5,70 +5,10 @@
         cardType: "Card with Media",
         cardsPerRow: "3",
         header: "",
-        body: "",
-        buttonLinkUrl: "https://acf-orr.force.com/identity/idp/login?app=0sp3d000000001s",
+        body: "UC Portal",
+        buttonLinkUrl: "/resource/1649693361000/SSOImages2/sso_images/UCPortal.png",
         buttonLinkText: "UC Portal",
         mediaUrl: "/resource/1647464641000/SSOImages/sso_images/UCPortal.png",
-        mediaAltText: "A placeholder image"
-      },
-      {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "",
-        body: "",
-        buttonLinkUrl: "https://sso.online.tableau.com/public/idp/SSO",
-        buttonLinkText: "Tableau",
-        mediaUrl: "/resource/1647464641000/SSOImages/sso_images/tableau.png",
-        mediaAltText: "A placeholder image"
-      },
-      {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "",
-        body: "",
-        buttonLinkUrl: "https://app.slack.com/client/T01S988DX29/C036BLNDUDC",
-        buttonLinkText: "Slack",
-        mediaUrl: "/resource/1647464641000/SSOImages2/sso_images/quip.png",
-        mediaAltText: "A placeholder image"
-      },
-      {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "",
-        body: "",
-        buttonLinkUrl: "https://app.slack.com/client/T01S988DX29/C036BLNDUDC",
-        buttonLinkText: "Slack",
-        mediaUrl: "/resource/1647464641000/SSOImages2/sso_images/workday.png",
-        mediaAltText: "A placeholder image"
-      },
-      {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "",
-        body: "",
-        buttonLinkUrl: "https://app.slack.com/client/T01S988DX29/C036BLNDUDC",
-        buttonLinkText: "Slack",
-        mediaUrl: "/resource/1647464641000/SSOImages2/sso_images/gmail.png",
-        mediaAltText: "A placeholder image"
-      },
-      {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "",
-        body: "",
-        buttonLinkUrl: "https://app.slack.com/client/T01S988DX29/C036BLNDUDC",
-        buttonLinkText: "Slack",
-        mediaUrl: "/resource/1647464641000/SSOImages2/sso_images/gmeet.svg",
-        mediaAltText: "A placeholder image"
-      },
-      {
-        cardType: "Card with Media",
-        cardsPerRow: "3",
-        header: "",
-        body: "",
-        buttonLinkUrl: "https://app.slack.com/client/T01S988DX29/C036BLNDUDC",
-        buttonLinkText: "Slack",
-        mediaUrl: "/resource/1647464641000/SSOImages2/sso_images/gcal.jpg",
         mediaAltText: "A placeholder image"
       }
 

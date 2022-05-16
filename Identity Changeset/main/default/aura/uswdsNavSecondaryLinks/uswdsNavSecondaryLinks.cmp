@@ -13,7 +13,7 @@
     default="1"
     description="Start number for the navigation menu. Default = 1 which skips the first entry, Home. Changing to 0 will include a link to Home in the navigation menu output."
   />
-
+  
   <!-- if a value is not specified in the Theme Layout Settings, don't display -->
   <aura:if isTrue="{! not(empty(v.navigationLinkSetId))}">
     <aura:iteration
@@ -21,9 +21,9 @@
       var="item"
       start="{! v.startNumber }"
     >
-      <li class="usa-nav__secondary-item">
+      <li class="usa-nav__secondary-item"> 
         <a href="" data-menu-item-id="{!item.id}" onclick="{!c.onClick}"
-          >{!item.label}</a
+          >{!item.label} </a
         >
       </li>
     </aura:iteration>
