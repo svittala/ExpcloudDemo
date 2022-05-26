@@ -6,12 +6,12 @@
         cardsPerRow: "3",
         header: "",
         body: "UC Portal",
-        buttonLinkUrl: "/resource/1649693361000/SSOImages2/sso_images/UCPortal.png",
+        buttonLinkUrl: "https://ssoit-acf-orr.cs234.force.com/identity/idp/login?app=0sp3d000000001s",
         buttonLinkText: "UC Portal",
-        mediaUrl: "/resource/1647464641000/SSOImages/sso_images/UCPortal.png",
-        mediaAltText: "A placeholder image"
+        mediaUrl: "/identity/resource/1649693361000/SSOImages2/sso_images/UCPortal.png",
+        mediaAltText: "UC Portal Image"
       }
-
+     
     ];
   },
   generateDataNotMapped: function () {

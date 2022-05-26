@@ -1,13 +1,12 @@
 {
   "packageDirectories": [
     {
-      "path": "Identity Changeset",
-      "pathDefault": "force-app",
+      "path": "force-app",
       "default": true
     }
   ],
   "name": "ExpCloudDemo",
   "namespace": "",
-  "sfdcLoginUrl": "https://ucpath-hhs--ssodev.my.salesforce.com",
+  "sfdcLoginUrl": "http://uacpath--sprintqa.my.salesforce.com",
   "sourceApiVersion": "54.0"
 }

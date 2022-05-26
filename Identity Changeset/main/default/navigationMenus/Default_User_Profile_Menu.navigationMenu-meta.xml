@@ -4,29 +4,15 @@
     <containerType>Network</containerType>
     <label>Default User Profile Menu</label>
     <navigationMenuItem>
-        <label>Experience Workspaces</label>
-        <position>1</position>
-        <publiclyAvailable>false</publiclyAvailable>
-        <target>ExperienceWorkspaces</target>
-        <type>SystemLink</type>
-    </navigationMenuItem>
-    <navigationMenuItem>
-        <label>Experience Builder</label>
-        <position>2</position>
-        <publiclyAvailable>false</publiclyAvailable>
-        <target>ExperienceBuilder</target>
-        <type>SystemLink</type>
-    </navigationMenuItem>
-    <navigationMenuItem>
         <label>Salesforce Setup</label>
-        <position>3</position>
+        <position>1</position>
         <publiclyAvailable>false</publiclyAvailable>
         <target>Setup</target>
         <type>SystemLink</type>
     </navigationMenuItem>
     <navigationMenuItem>
         <label>Log Out</label>
-        <position>4</position>
+        <position>2</position>
         <publiclyAvailable>false</publiclyAvailable>
         <target>Logout</target>
         <type>Event</type>

@@ -24,8 +24,8 @@
         "recordId" : "{!recordId}",
         "relatedTabLabel" : "Related",
         "tab1Type" : "details",
-        "tab2Type" : "none",
-        "tab3Type" : "none",
+        "tab2Type" : "related",
+        "tab3Type" : "chatter",
         "tab4Type" : "none",
         "timelineTabLabel" : "Activity"
       },
