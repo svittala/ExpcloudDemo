@@ -1,0 +1,143 @@
+<!--
+  @File Name         : uacListView.html
+  @Description       : Generic List View LWC component to display list of records as table
+  @Group             : UAC_listView
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-10-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-10-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+
+  <table class="slds-table slds-table_bordered uac-list-view">
+    <thead>
+        <tr class="slds-line-height_reset">
+            <template for:each={_columns} for:item="fld">
+            <th scope="col" key={fld.name}>
+                <div class="slds-wrap" title={fld.label}>{fld.label}</div>
+            </th>
+            </template>
+            <template if:false={disableActions}>
+              <th scope="col" style={actionColumnStyle}>
+                  <div class="slds-truncate slds-assistive-text" title="Actions">Actions</div>
+              </th>
+            </template>
+        </tr>
+    </thead>
+    <tbody>
+        <template if:true={isLoading}>
+          <tr class="slds-hide">
+              <template for:each={_columns} for:item="fld">
+                  <td key={fld.name}><div class="slds-assistive-text">{lblLoading}</div></td>
+              </template>
+              <template if:false={disableActions}>
+                <td><div class="slds-assistive-text">{lblLoading}</div></td>
+              </template>
+          </tr>
+          <tr>
+              <td colspan={columnLength}>{lblLoading}</td>
+          </tr>
+        </template>
+        <template if:false={isLoading}>
+            <template if:false={data.length}>
+              <tr class="slds-hide">
+                <template for:each={_columns} for:item="fld">
+                  <td key={fld.name}><div class="slds-assistive-text">{lblNoData}</div></td>
+                </template>
+                <template if:false={disableActions}>
+                  <td><div class="slds-assistive-text">{lblNoData}</div></td>
+                </template>
+              </tr>
+              <tr>
+                  <td colspan={columnLength}>{lblNoData}</td>
+              </tr>
+            </template>
+            <template for:each={data} for:item="row" for:index="rowIndex">
+              <tr key={row.record.Id}>
+                <template for:each={row.fields} for:item="fld" for:index="fieldIndex">
+                  <td key={fld.name} class="slds-cell-wrap">
+                    <template if:true={fld.isReference}>
+                      <template if:true={fld.isClickable}>
+                        <button class="slds-button uac-button-link"
+                        title={fld.nameFieldValue}
+                        data-id={fld.value}
+                        onclick={onReferenceFieldClick}>
+                        {fld.nameFieldValue}
+                      </button>
+                      </template>
+                      <template if:false={fld.isClickable}>
+                        <lightning-formatted-text data-id={fld.value} value={fld.nameFieldValue}></lightning-formatted-text>
+                      </template>
+                    </template>
+                    <template if:true={fld.isDate}>
+                      <lightning-formatted-date-time value={fld.value}></lightning-formatted-date-time>
+                    </template>
+                    <template if:true={fld.isText}>
+                      <template if:true={fld.isClickable}>
+                        <button class="slds-button uac-button-link"
+                          title={fld.value}
+                          data-id={fld.idValue}
+                          onclick={onReferenceFieldClick}>
+                          {fld.value}
+                        </button>
+                      </template>
+                      <template if:false={fld.isClickable}>
+                        <lightning-formatted-rich-text value={fld.value}></lightning-formatted-rich-text>
+                      </template>
+                    </template>
+                  </td>
+                </template>
+                <template if:false={disableActions}>
+                  <td class="uac-button-col">
+                    <template for:each={additionalButtons} for:item="button">
+                      <button class={button.className} key={button.label}
+                          data-index={rowIndex}
+                          data-action={button.name}
+                          aria-label={button.label}
+                          onclick={onRowAction}>
+                          <template if:true={button.iconName}>
+                            <lightning-icon data-index={rowIndex}
+                                icon-name={button.iconName}
+                                variant={button.iconVariant}
+                                data-action={button.name}
+                                class="slds-m-right_x-small"
+                                size="x-small">
+                            </lightning-icon>
+                          </template>
+                          {button.label}
+                      </button>
+                    </template>
+                    <template if:false={disableEdit}>
+                      <button class="slds-button" data-index={rowIndex}
+                        aria-label="Edit"
+                        data-action="edit"
+                        onclick={onRowAction}>
+                        <lightning-icon data-index={rowIndex}
+                            icon-name="action:edit"
+                            data-action="edit"
+                            size="x-small">
+                        </lightning-icon>
+                      </button>
+                    </template>
+                    <template if:false={disableDelete}>
+                      <button class="slds-button" data-index={rowIndex}
+                          aria-label="Delete"
+                          data-action="delete"
+                          onclick={onDeleteClick}>
+                          <lightning-icon data-index={rowIndex}
+                              icon-name="action:delete"
+                              data-action="delete"
+                              size="x-small">
+                          </lightning-icon>
+                      </button>
+                    </template>
+                  </td>
+                </template>
+              </tr>
+            </template>
+        </template>
+    </tbody>
+  </table>
+</template>

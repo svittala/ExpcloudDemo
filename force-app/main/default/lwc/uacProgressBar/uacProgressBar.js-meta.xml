@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Progress Indicator</masterLabel>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="relatedTo" label="Related To" type="String" description="Related to."/>
+            <property name="recordId" label="Record ID" type="String" description="Id of record to get status."/>
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="recordId" label="Record ID" type="String" role="inputOnly" description="Id of record to get status."/>
+            <property name="relatedTo" label="Related To" type="String" role="inputOnly" description="Related to."/>
+            <property name="currentSection" label="Current Section" type="String" role="inputOnly" description="Name of current section."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

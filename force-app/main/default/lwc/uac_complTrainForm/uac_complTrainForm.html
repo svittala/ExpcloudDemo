@@ -1,0 +1,66 @@
+<!--
+  @Description        : LWC for ORR Compliance Community page
+  @Author             : Piyush
+  @Last Modified On   : 2/5/2021
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0    2/5/2021     Piyush(Deloitte)           Initial Version
+  1.1    3/16/2021    Abhisek Pati (Deloitte)    ORRUAC-5469 Added code to Validate Email
+  1.2    6/10/2021    Abhisek Pati (Deloitte)    ORRUAC-5858 Modified the logic
+-->
+<template>
+    <div class="slds-align_absolute-center" style="zoom:60%">
+        <img src={commLogo} alt="PATH Logo" title="PATH Logo">
+    </div>
+    <div data-title='ORR Compliance Training Form' icon-name="custom:custom18" class="slds-card__body slds-card__body_inner login-section">
+        <div if:false={submitting}>
+            <div if:true={unsubmitted}>
+                <h1 class="header-text">ORR Compliance Training Form</h1>
+                <lightning-input class="uac-form-input" type="text" name="fname" label="First Name" required="true"
+                    disabled={submitting} value={firstName} onchange={onFirstNameChange} max-length="255">
+                </lightning-input>
+                <lightning-input class="uac-form-input" type="text" name="lname" label="Last Name" required="true"
+                    disabled={submitting} value={lastName} onchange={onLastNameChange} max-length="255">
+                </lightning-input>
+                <lightning-input class="uac-form-input" type="email" name="email" label="Email" required="true" disabled={submitting} read-only={readOnly} 
+                    value={email} onchange={onEmailChange} 
+                    message-when-pattern-mismatch="Please enter a valid email." message-when-type-mismatch="Please enter a valid email.">
+                </lightning-input>
+                <lightning-button variant="brand" label="Validate Email" title="Validate Email" onclick={validate} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button>
+                <div class={validateSection}>
+                    <lightning-combobox class="uac-form-input" name="formtype" label="Compliance Form" required="true" disabled={submitting}
+                    placeholder="Select Form" value={formtype} options={typeOptions} onchange={onTypeChange}>
+                    </lightning-combobox>
+                    <div if:true={formtypeSelected} style="margin-left:4%">
+                    <div>
+                        <lightning-input label="" name="file uploader" onchange={handleFilesChange} type="file"></lightning-input>
+                    </div><br/>
+                    <div if:true={isTrue} class="slds-text-body_medium slds-text-color_success">{fileName}</div>
+                    <div if:false={isTrue} class="slds-text-body_medium slds-text-color_default">{fileName}
+                    <template if:true={showLoadingSpinner}>
+                            <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+                        </template>
+                    </div><br/>
+                    </div>
+                    <div if:true={unsubmitted} class="slds-m-top_medium slds-m-bottom_x-large">
+                        <lightning-button-group class="slds-align_absolute-center">
+                            <lightning-button class="slds-m-left_x-small" label={UploadFile} onclick={handleSave} variant="brand" disabled={isTrue}></lightning-button>
+                            <lightning-button variant="brand" label="Cancel" onclick={cancel} class="slds-m-left_x-small"></lightning-button>
+                        </lightning-button-group>
+                    </div>
+                </div>
+                <div if:true={error} class="uac-form-input slds-text-color_error">{errorMessage}<br /></div>
+            </div>
+            <div if:false={unsubmitted} class="slds-m-top_medium slds-m-bottom_x-large">
+                <p class="uac-success-message">Form has been submitted successfully.</p>
+                <lightning-button variant="brand" label="Submit Again" onclick={resubmit} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button>
+            </div>
+        </div>
+        <div if:true={submitting} class="uac-spinner-wrapper">
+            <br />
+            <lightning-spinner class="uac-spinner-padding" alternative-text="Loading..." size="medium">
+            </lightning-spinner>
+            <br />
+        </div>
+    </div>
+</template>

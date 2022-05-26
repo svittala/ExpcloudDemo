@@ -1,0 +1,57 @@
+<template>
+    <div class="spinner">
+        <template if:true={isLoading}>
+             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+             </lightning-spinner>
+        </template>
+    </div>
+    <template if:false={isLoading}>
+    <div class="uac-wrapper" data-target-id="log-call-contact-list">
+        <lightning-card variant="narrow" class="uac-related-list slds-card__body_inner" icon-name="standard:customers">
+            <h1 slot="title" class="uac-header">{LBLauthorizedTableTitle} ({authorizedContactLength})</h1>
+    
+        <lightning-datatable
+                key-field="id"
+                data={authorizedContactdata}
+                columns={columnsAuthorized}
+                onrowaction={handleRowAction}
+                sorted-direction={sortedDirectionAuthorized}
+                sorted-by={sortedBy}
+                onsort={onHandleSortAuthorized}
+                hide-checkbox-column>
+        </lightning-datatable>
+        <div slot="actions">
+            <lightning-button variant="neutral" class="uac-button" label="New Contact" title="New Contact" data-name="newAuthorized"
+                onclick={onClickFamilyFriend}>
+            </lightning-button>
+            <lightning-button-icon variant="neutral" class="uac-button" icon-name="utility:refresh" title="Refresh"
+                onclick={onRefreshClick}></lightning-button-icon>
+        </div>
+    </lightning-card>
+</div>
+<br></br>
+<div class="uac-wrapper" data-target-id="log-call-contact-list2">
+    <lightning-card variant="narrow" class="uac-related-list slds-card__body_inner" icon-name="custom:custom15">
+        <h1 slot="title" class="uac-header">{LBLrestrictedTableTitle} ({RestrictedContactLength})</h1>
+    
+        <lightning-datatable
+                key-field="id"
+                data={RestrictedContactdata}
+                columns={columnsRestricted}
+                onrowaction={handleRowAction}
+                sorted-direction={sortedDirectionRestricted}
+                sorted-by={sortedBy}
+                onsort={onHandleSortRestricted}
+                hide-checkbox-column>
+        </lightning-datatable>
+        <div slot="actions">
+            <lightning-button variant="neutral" class="uac-button" label="New Contact" title="New Contact" data-name="newRestricted"
+                onclick={onClickFamilyFriend}>
+            </lightning-button>
+            <lightning-button-icon variant="neutral" class="uac-button" icon-name="utility:refresh" title="Refresh"
+                onclick={onRefreshClick}></lightning-button-icon>
+        </div>
+        </lightning-card>
+    </div>
+    </template>
+</template>

@@ -1,0 +1,184 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global">
+    
+    <!-- Global component configuration -->
+    <aura:attribute name="title"       type="String"   default="KPIs of the Day"
+                    description="Id field for the target record." />
+    <aura:attribute name="icon"        type="String"   default="standard:dashboard"
+                    description="Component card icon." />
+    <aura:attribute name="showBorder"  type="Boolean"  default="false"
+                    description="Show border around component card?" />
+    <aura:attribute name="columns"     type="Integer"  default="2"
+                    description="Number of horizontal KPI groups." />
+    <aura:attribute name="kpiColumns"  type="Integer"  default="2"
+                    description="Number of horizontal KPIs per KPI groups." />
+    <aura:attribute name="iconSize"    type="String"   default="xx-small"
+                    description="Size of the unitary KPI icons." />
+    <aura:attribute name="badgeDisplay"  type="Boolean" default="true"
+                    description="display KPIs as badges instead of sub-tiles"/>
+    
+    <!-- KPI configuration -->
+    <aura:attribute name="kpiConfigStr"    type="String"
+                    default='[{"icon":"standard:lead","label":"Pistes","name":"Lead",
+                               "kpis":[{"icon":"utility:dayview","label":"Today","error":"5","warning":"2","query":"select count(Id) from Lead where CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED"},
+                                       {"icon":"utility:reminder","label":"This month","error":"2","warning":"5", "inverse":"true","query":"select count(Id) from Lead where CreatedDate = THIS_MONTH WITH SECURITY_ENFORCED"}]},
+                              {"icon":"standard:opportunity","label":"Opportunités","name":"Opportunity", 
+                               "kpis":[{"icon":"utility:dayview","label":"Today","error":"5","warning":"2","query":"select count(Id) from Opportunity where CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED"},
+                                       {"icon":"utility:reminder","label":"This month","error":"5","warning":"2","query":"select count(Id) from Opportunity where CreatedDate = THIS_MONTH WITH SECURITY_ENFORCED"}]},
+                              {"icon":"standard:task","label":"Tâches","name":"Task",
+                               "kpis":[{"icon":"utility:dayview","label":"Today","error":"5","warning":"2","query":"select count(Id) from Task where CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED"},
+                                       {"icon":"utility:reminder","label":"This month","error":"5","warning":"2","query":"select count(Id) from Task where CreatedDate = THIS_MONTH WITH SECURITY_ENFORCED"}]},
+                              {"icon":"standard:case","label":"Demandes","name":"Case",
+                               "kpis":[{"icon":"utility:dayview","label":"Today","error":"5","warning":"2","query":"select count(Id) from Case where CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED"},
+                                       {"icon":"utility:reminder","label":"This month","error":"2","warning":"5", "inverse":"true", "query":"select count(Id) from Case where CreatedDate = THIS_MONTH WITH SECURITY_ENFORCED"}]}]'
+                    description="Configuration of the KPIs to display in component."/>  
+    <aura:attribute name="kpiConfigJson"   type="Object"  
+                    description="JSON parsing of kpiConfigStr attribute (with values)." />
+    <aura:attribute name="kpiFetchCount"   type="Integer" default="100"
+                    description="Number of remaining KPI fetch SOQL queries." />
+    
+	
+    <!-- Actions configuration -->
+    <aura:attribute name="tableActionStr"  type="String"
+                    default='[ { "label" : "Calendar", "icon" : "open",
+                                 "event" : { "name" : "e.force:navigateToObjectHome",
+                                             "params" : { "scope" : "Event" } } },
+                               { "label" : "Tasks", "icon" : "open",
+                                 "event" : { "name" : "e.force:navigateToObjectHome",
+                                             "params" : { "scope" : "Task" } } }]'
+                    description="Header actions configuration (if any)." />
+    <aura:attribute name="tableActionJson"  type="List"
+                    default='[]'
+                    description="JSON conversion of header actions configuration." />
+    
+    <aura:attribute name="kpiActionStr"  type="String"
+                    default='[{"icon":"new_window", "name":"Open details",
+                               "event":{"name":"e.ltng:sendMessage",
+                                        "params": { "channel": "PEG_ActionPlan",
+                                                    "message":{"name":"e.force:navigateToSObject","selection":"{{{Row.name}}}",
+                                                               "params":{"recordId": "{{{Context.agency.Id}}}"} } } } }
+                             ]'
+                    description="KPI actions configuration (if any)." />
+    <aura:attribute name="kpiActionJson"  type="List"
+                    default='[]'
+                    description="JSON conversion of KPI actions configuration." />
+    
+    <!-- Server callout configuration -->
+    <aura:attribute name="bypassFLS"         type="Boolean" default="false" 
+                    description="Bypass FLS when executing query." />
+    <aura:attribute name="bypassSharing"     type="Boolean" default="false" 
+                    description="Bypass Sharing when executing query." />
+    <aura:attribute name="queryType"         type="String"  default="" 
+                    description="When requesting a byPass, a valid queryType should be provided (see PEG_Query__mdt)." />
+    <aura:attribute name="isStorable"        type="Boolean" default="false" 
+                    description="Query action storable mode activation." />
+    <aura:attribute name="isBackground"      type="Boolean" default="false" 
+                    description="Query action background mode activation." />
+  
+    
+    <!-- Component initialization -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Initialization of the component : generation of the SOQL queries." />
+    <aura:handler event="lightning:tabRefreshed" action="{!c.refreshKPIs}"
+                  description="Refreshing of the underlying SOQL queries." />
+    
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    <c:PEG_SOQL_CMP  aura:id="soqlUtil"/>
+    
+    <!-- Component Display -->
+    <lightning:card title="{!v.title}" iconName="{!v.icon}" 
+                   class="{! if(v.showBorder, 'slds-card_boundary', '')}" >
+        <aura:set attribute="actions">
+                
+            <aura:if isTrue="{!v.tableActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.tableActionJson}"
+                                   callback="{!c.handleTableAction}" />
+            </aura:if>
+                
+            <lightning:buttonGroup class="slds-col">
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border"
+                                  onclick="{!c.refreshKPIs}"/>
+            </lightning:buttonGroup>
+        </aura:set>
+        <!--
+        <aura:set attribute="footer">
+        </aura:set>
+        -->
+    <aura:if isTrue="{!v.kpiFetchCount == 0}">
+    <div class="slds-card__body">
+    <ul class="slds-card__body_inner slds-grid slds-wrap slds-grid_pull-padded slds-p-horizontal_medium">
+    <aura:iteration items="{!v.kpiConfigJson}" var="eachConfig">
+        <li class="{! 'slds-size_1-of-' + v.columns}">
+        <lightning:card title="{!eachConfig.label}" iconName="{!eachConfig.icon}" 
+                        class="slds-card_boundary slds-m-around_xx-small">
+            
+            <aura:set attribute="actions">
+          
+            <lightning:buttonGroup class="slds-col">
+            <aura:iteration items="{!v.kpiActionJson}" var="eachAction">
+            <lightning:buttonIcon iconName="{!'utility:' + eachAction.icon}"
+                                  alternativeText="{!eachAction.name}"
+                                  variant="border"
+                                  value="{!eachConfig}"
+                                  class="{!eachAction.isLast ? 'slds-button_last' : ''}"
+                                  onclick="{!c.handleKpiAction}"/>
+            </aura:iteration>
+            </lightning:buttonGroup>
+            
+            </aura:set>
+            
+        <div class="slds-card__body slds-card__body_inner">
+        
+        <aura:if isTrue="{#v.badgeDisplay}">
+        <ul class="slds-has-block-links_space slds-list_horizontal slds-wrap">
+            <aura:iteration items="{!eachConfig.kpis}" var="eachKpi">
+            <li class="slds-item slds-m-bottom_small">
+                <span class="slds-badge slds-m-right_small slds-badge_lightest">
+                       <lightning:icon iconName="{!eachKpi.icon}"
+                                       size="x-small" 
+                                       variant="{!eachKpi.color}" 
+                                       class="slds-media_center"/>
+                       <span class="slds-m-horizontal_small slds-truncate">{!eachKpi.label}</span>
+                       <strong>{!eachKpi.value}</strong>
+                </span>
+            </li>
+            </aura:iteration>
+        </ul> 
+        <aura:set attribute="else">
+        <!-- slds-grid_pull-padded -->
+        <ul class="slds-grid slds-wrap ">
+            <aura:iteration items="{!eachConfig.kpis}" var="eachKpi">
+            <li class="{! 'slds-p-horizontal_xx-small slds-size_1-of-' + v.kpiColumns}">
+               <lightning:tile label="" class="slds-text-heading_medium">
+                   <aura:set attribute="media">
+                       <lightning:icon iconName="{!eachKpi.icon}"
+                                       size="{!v.iconSize}" 
+                                       variant="{!eachKpi.color}" 
+                                       class="slds-media_center"/>
+                   </aura:set>
+                   <p class="slds-truncate">{!eachKpi.label}</p>
+                   <p class="slds-text-heading_medium">{!eachKpi.value}</p>
+                   
+               </lightning:tile>
+            </li>
+            </aura:iteration>
+        </ul>
+        
+        </aura:set>
+        </aura:if>
+        </div>
+        </lightning:card>
+        </li>
+    </aura:iteration>
+    </ul>
+    </div>
+    </aura:if>
+    </lightning:card>
+    
+</aura:component>

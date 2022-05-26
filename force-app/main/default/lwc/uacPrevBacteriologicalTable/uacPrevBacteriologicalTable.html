@@ -1,0 +1,30 @@
+<!--
+  @File Name         : uacPrevBacteriologicalTable.html
+  @Description       : LWC for displaying previous bacteriological table for Health Evaluation
+  @Group             : uacBacteriologicalTable
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 08-17-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-17-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+
+    <div class="uac-table-container">
+
+      <template if:true={title}>
+        <c-uac-flow-header title={title}>
+        </c-uac-flow-header>
+      </template>
+
+      <c-uac-list-view
+        object-api-name={objectApiName}
+        columns={columns}
+        filter={filter}
+        disable-actions="true">
+      </c-uac-list-view>
+
+    </div>
+
+</template>

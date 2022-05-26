@@ -1,0 +1,24 @@
+<design:component label="PEG FieldSet Display">
+    <design:attribute name="fieldSetName"
+                      label="Fieldset"
+                      description="Name of the FieldSet containing the fields displayed in the header."
+					  datasource="apex://PEG_FieldSetList_CTL" />
+    
+    <design:attribute name="mode"
+                      label="Display Mode" 
+                      description="Graphical variant to display the set of fields."
+                      datasource="hList,vList,dList"
+                      default="hList" />
+    
+	<design:attribute name="showTitle"
+                      label="Show Title?" 
+                      description="Displays the Field Set label as component title."
+                      default="true" />
+    
+    <design:attribute name="addClass"
+                      label="Wrapping Class"
+                      description="Wrapping CSS classes to apply to the container (from SLDS)."
+                      default="slds-card slds-has-cushion slds-theme_default slds-text-body_small" />
+    
+    
+</design:component>

@@ -1,0 +1,36 @@
+<!--
+  @File Name          : UAC_headerWithPictureAndSidebarLayout.cmp
+  @Description        : Lightning layout template for Record Home page. Includes header component
+                        with a photo display area and main content with right side bar.
+  @Author             : Sachet Khanal (Deloitte)
+  @Group              : UAC_designTemplate
+  @Last Modified By   : Sachet Khanal (Deloitte)
+  @Last Modified On   : 5/14/2020, 1:11:14 PM
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0    5/5/2020   Sachet Khanal (Deloitte)     Initial Version
+-->
+<aura:component implements="lightning:recordHomeTemplate" description="Header with Profile Picture and Right Sidebar">
+    <aura:attribute name="photo" type="Aura.Component[]" description="Photo region" />
+    <aura:attribute name="header" type="Aura.Component[]" description="Header region" />
+    <aura:attribute name="main" type="Aura.Component[]" description="Main region" />
+    <aura:attribute name="sidebar" type="Aura.Component[]" description="Sidebar region" />
+
+    <lightning:layout class="slds-wrap">
+        <lightning:layoutItem flexibility="no-grow" class="slds-align_absolute-center slds-p-around_x-small">
+            {!v.photo}
+        </lightning:layoutItem>
+        <lightning:layoutItem flexibility="grow" class="slds-p-around_x-small">
+            {!v.header}
+        </lightning:layoutItem>
+    </lightning:layout>
+
+    <lightning:layout class="slds-wrap">
+        <lightning:layoutItem size="12" mediumDeviceSize="8" flexibility="grow" padding="around-small">
+            {!v.main}
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" mediumDeviceSize="4" padding="around-small">
+            {!v.sidebar}
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

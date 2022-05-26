@@ -1,0 +1,26 @@
+<!--
+  @File Name         : uacPrevConfirmatoryLabTestTable.html
+  @Description       : LWC for displaying previous Confirmatory Lab test table for Health Evaluation
+  @Group             : uacPrevConfirmatoryLabTestTable
+  @Author            : Ranjith kumar (AI-Vets)
+  @Last Modified By  : Ranjith kumar (AI-Vets)
+  @Last Modified On  : 08-19-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-19-2020   Ranjith kumar (AI-Vets)   Initial Version
+-->
+<template>
+
+    <div class="uac-table-container">
+
+        <template if:true={title}>
+            <c-uac-flow-header title={title}>
+            </c-uac-flow-header>
+        </template>
+
+        <c-uac-list-view object-api-name={objectApiName} columns={columns} filter={filter} disable-actions="true">
+        </c-uac-list-view>
+
+    </div>
+
+</template>

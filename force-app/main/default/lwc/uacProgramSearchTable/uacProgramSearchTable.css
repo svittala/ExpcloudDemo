@@ -1,0 +1,7 @@
+.program-search-input {
+    padding: 10px;
+}
+.datatable-wrapper {
+    max-height: 500px !important;
+    overflow-y: auto;
+}

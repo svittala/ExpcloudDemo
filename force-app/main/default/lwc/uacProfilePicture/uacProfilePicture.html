@@ -1,0 +1,38 @@
+<!--
+  @File Name          : uacProfilePicture.html
+  @Description        : ORRUAC-107 - LWC for displaying and uploading profile picture
+  @Author             : Sachet Khanal (Deloitte)
+  @Group              : ProfilePicture
+  @Last Modified By   : Sachet Khanal (Deloitte)
+  @Last Modified On   : 11-10-2020
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0    5/5/2020   Sachet Khanal (Deloitte)     Initial Version
+  1.1    7/9/2020   Abhisek Pati (Deloitte)      Modified for UAC Assessment
+-->
+<template>
+    <div role="region" class="profile-picture-container slds-p-around_small">
+        <c-uac-file-upload class="uac-file-upload"
+            title="Upload Profile Photo"
+            record-id={recordId}
+            onconfirm={handleUploadConfirm}>
+        </c-uac-file-upload>
+
+        <input class={pictureSize}
+            type="image"
+            title="View Profile Picture"
+            alt="View Profile Picture"
+            src={pictureSrc}
+            onclick={handlePictureClick}
+        />
+        <template if:true={editable}>
+        <lightning-button-icon class="profile-picture-edit-button"
+            role="button"
+            icon-name="utility:edit"
+            variant="bare"
+            title="Edit Profile Picture"
+            onclick={handleEditClick}>
+        </lightning-button-icon>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,29 @@
+<!--
+  @File Name         : uacPHIMedicationTable.html
+  @Description       : LWC for adding/updating/deleting Immunization records
+  @Group             : uacPHIMedicationTable
+  @Author            : Abhisek Pati (Deloitte)
+  @Last Modified By  : 
+  @Last Modified On  : 
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   09-17-2020   Abhisek Pati (Deloitte)   Initial Version
+  2.0   10/7/2020    Sarang Padhye(Deloitte)   ORRUAC 2760
+-->
+<template>
+    <div class="uac-wrapper" data-target-id="entry-team-member-related-list">
+        <lightning-card variant="narrow" class="uac-related-list" icon-name="custom:custom5">
+            <h1 slot="title" class="uac-header">Medications</h1>
+        <div class={tableContainerClass}>
+          <c-uac-table
+            columns={lstField}
+            default-new-record={defaultNewRecord}
+            onloadcomplete={handleLoad}
+            onsave={handleSave}
+            ondelete={handleDelete}
+            onfieldchange={handleFieldChange}>
+          </c-uac-table>
+        </div>
+        </lightning-card>
+        </div>
+    </template>

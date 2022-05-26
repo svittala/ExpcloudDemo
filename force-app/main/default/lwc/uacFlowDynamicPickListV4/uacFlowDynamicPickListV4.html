@@ -1,0 +1,7 @@
+<template>
+    <div class="uac-picklist-wrapper">
+        <lightning-combobox name={question} label={question} value={selectedValue} options={picklistOptions}
+            required={required} onchange={handleChange} class="uac-picklist" disabled={isReadOnly}>
+        </lightning-combobox>
+    </div>
+</template>

@@ -1,0 +1,112 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component enabling to display a fieldSet (in read-only mode)."
+                controller="PEG_Configuration_CTL" >
+<!--
+@author P-E GROS
+@date   Feb. 2020
+
+Legal Notice
+This code is the property of Salesforce.com and is protected by U.S. and International
+copyright laws. Reproduction, distribution without written permission of Salesforce is
+strictly prohibited. In particular this code has been delivered by Salesforce.com for
+its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+re-used, reproduced or distributed for any other purposes.
+-->
+   
+    <!-- Global Configuration -->
+    <aura:attribute name="mode"			type="String"
+                    access="global"		default="hList"
+                    description="Graphical option to display the field set data (hList, vList or dList)." />                 
+    <aura:attribute name="showTitle"	type="Boolean"
+                    access="global"		default="true"
+                    description="Flag to displays the FieldSet label as component title." />    
+    <aura:attribute name="addClass"		type="String"
+                    access="global"
+                    description="Wrapping CSS classes to apply to the container (from SLDS)." />
+
+    <aura:attribute name="fieldSetName"	type="String"
+                    access="global"		    default="N/A"
+                    description="Name of the FieldSet containing the fields displayed."/>
+    <aura:attribute name="fieldList"    type="List"
+                    access="private"
+                    description="List of fields contained in the fieldSetName and allowed for the User."/>
+	<aura:attribute name="title"        type="String"
+                    access="private"
+                    description="Label of the FieldSet possibly displayed as title."/>
+    
+    <aura:attribute name="isReady"		type="Boolean"
+                    access="private"	default="false"
+                    description="Flag to control display of Component."/>
+    
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Initialisation of the Component."/>
+    
+    <!-- Component Display -->
+    <div class="{#v.addClass}">
+    <aura:if isTrue="{!v.isReady}">
+        <!-- Ready Mode -->    
+        <aura:if isTrue="{#v.showTitle}">
+            <h2 class="slds-text-heading_small slds-var-p-bottom_x-small"
+                style="word-wrap: break-word !important;">
+                <lightning:formattedText value="{!v.title}"/>
+            </h2>
+        </aura:if>
+        
+        <lightning:recordViewForm recordId="{!v.recordId}"
+                                  objectApiName="{!v.sObjectName}" >
+            <!-- hList display mode -->
+            <aura:if isTrue="{#v.mode == 'hList'}">
+                <ul class="slds-list_horizontal slds-has-dividers_left slds-listbox slds-listbox_horizontal">
+                <aura:iteration items="{!v.fieldList}" var="eachField">
+                    <li class="slds-item">
+                        <lightning:outputField fieldName="{!eachField}"
+                                               class="slds-text-body_small" 
+                                               variant="label-hidden" />
+                    </li>
+                </aura:iteration>
+                </ul>
+                
+            <!-- vList display mode -->
+            <aura:set attribute="else">
+            <aura:if isTrue="{#v.mode == 'vList'}">
+				<ul class="slds-has-dividers_top">
+                <aura:iteration items="{!v.fieldList}" var="eachField">
+                    <li class="slds-item slds-var-p-bottom_xx-small" >
+                        <lightning:outputField fieldName="{!eachField}"
+                                               class="slds-text-body_small" 
+                                               variant="standard" />
+                    </li>
+                </aura:iteration>
+                </ul>
+                
+            <!-- dList display mode -->
+            <aura:set attribute="else">
+				<dl class="slds-dl_horizontal slds-has-dividers_top">
+                <aura:iteration items="{!v.fieldList}" var="eachField">
+                    <dt class="slds-dl_horizontal__label slds-text-color_weak slds-truncate"
+                        title="{!eachField.label}" >
+                        {!eachField.label}
+                    </dt>
+                    <dd class="slds-dl_horizontal__detail">
+                        <lightning:outputField fieldName="{!eachField.name}"
+                                               class="slds-text-body_small" 
+                                               variant="label-hidden" />
+                    </dd>
+                </aura:iteration>
+                </dl>
+                
+            </aura:set>
+            </aura:if>
+            </aura:set>
+            </aura:if> 
+        </lightning:recordViewForm>
+        
+    <aura:set attribute="else">
+        <!-- Loading Mode -->
+        <lightning:spinner alternativeText="Loading" size="small" />
+    </aura:set>
+    </aura:if>
+    </div>
+</aura:component>

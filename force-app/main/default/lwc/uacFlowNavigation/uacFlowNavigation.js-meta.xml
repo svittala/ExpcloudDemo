@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="previousButtonLabel" label="Previous Button Label" type="String" role="inputOnly" default="Previous" description="Label for previous button."/>
+            <property name="previousScreen" label="Previous Screen" type="String" role="inputOnly" description="Name of previous screen."/>
+            <property name="nextButtonLabel" label="Next Button Label" type="String" role="inputOnly" default="Next" description="Label for next button"/>
+            <property name="nextScreen" label="Next Screen" type="String" role="inputOnly" description="Name of next screen."/>
+            <property name="navigateToScreen" label="Navigate to Screen" type="String" role="outputOnly" description="Name of screen to navigate to."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

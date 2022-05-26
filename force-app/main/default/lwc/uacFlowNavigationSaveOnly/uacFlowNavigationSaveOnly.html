@@ -1,0 +1,23 @@
+<!--
+  @File Name         : uacFlowNavigationSaveOnly.html
+  @Description       : Flow Navigation Button Component for replacing Next button with "Save" button
+  @Group             : uacFlow
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 08-18-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-16-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+  <div class="slds-grid">
+      <div></div>
+      <div class="slds-col_bump-left">
+        <lightning-button
+          label={saveButtonLabel}
+          variant="brand"
+          onclick={handleSaveButtonClick}>
+        </lightning-button>
+      </div>
+  </div>
+</template>

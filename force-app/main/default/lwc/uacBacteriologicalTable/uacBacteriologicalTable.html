@@ -1,0 +1,48 @@
+<!--
+  @File Name         : uacBacteriologicalTable.html
+  @Description       : LWC for adding/updating/deleting Risk Based Lab Test records
+  @Group             : UAC_bacteriologicalTable
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 10-29-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-04-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+
+  <div class="slds-p-top_medium"></div>
+
+  <template for:each={healthEvalFields} for:item="fld">
+    <div class="slds-grid" key={fld.name}>
+      <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+          <c-uac-input
+            type={fld.type}
+            name={fld.name}
+            label={fld.label}
+            value={fld.value}
+            options={fld.options}
+            required={fld.required}
+            hide={fld.hide}
+            onfieldchange={handleHealthEvalFieldChange}>
+          </c-uac-input>
+      </div>
+    </div>
+  </template>
+
+  <div class={tableSectionClass}>
+    <c-uac-flow-header title={title}>
+    </c-uac-flow-header>
+
+    <div class="uac-table-container">
+        <c-uac-table
+            columns={fields}
+            default-new-record={defaultNewRecord}
+            onloadcomplete={handleLoad}
+            onsave={handleSave}
+            ondelete={handleDelete}
+            onfieldchange={handleFieldChange}>
+        </c-uac-table>
+    </div>
+  </div>
+</template>

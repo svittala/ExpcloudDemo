@@ -1,0 +1,263 @@
+<template>
+    <div class="slds-m-around_large">
+        <div if:false={isLoaded} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+        <template if:true={isLoaded}>
+            <div class="uac-button-right">
+                <lightning-button if:true='{isModifyEnabledBool}' variant="brand" label="Initiate Prescreen"
+                title="Initiate Prescreen" onclick={prescreenCases} class="slds-m-left_x-small">
+                </lightning-button>
+            </div>
+            <div if:true={tableErrors} class="slds-text-color_error slds-m-bottom_small">
+                <p title={tableError}>{tableError}</p>
+            </div>
+            <lightning-datatable key-field="Id" columns={columns} data={data} onrowaction={openModal}
+                onsort={updateSortingColumns} sorted-by={sortedBy} sorted-direction={sortedDirection}>
+            </lightning-datatable>
+        </template>
+    </div>
+    <!-- Modal/Popup Box LWC starts here -->
+    <c-uac-modal data-target-id="reviewPreScreenCriteria-modal-create" class="large"
+        header="Manual and Prescreen Criteria Review">
+
+
+        <!-- Modal/Popup Box LWC body starts here -->
+        <lightning-layout>
+            <lightning-layout-item padding="around-small">
+                <div class="slds-col">
+                    <span>Profile Name</span>
+                </div>
+                <div class="slds-col">
+                    <span>A#</span>
+                </div>
+                <div class="slds-col">
+                    <span>Entry ID</span>
+                </div>
+                <div class="slds-col">
+                    <span>Status</span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <div class="slds-col">
+                    <span><b>{profileName}</b></span>
+                </div>
+                <div class="slds-col">
+                    <span><b>{aNum}</b></span>
+                </div>
+                <div class="slds-col">
+                    <span><b>{entryID}</b></span>
+                </div>
+                <div class="slds-col">
+                    <span><b>{Status}</b></span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <div class="slds-col">
+                    <span>Age</span>
+                </div>
+                <div class="slds-col">
+                    <span>Gender</span>
+                </div>
+                <div class="slds-col">
+                    <span>Gender Other</span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <div class="slds-col">
+                    <span><b>{age}</b></span>
+                </div>
+                <div class="slds-col">
+                    <span><b>{gender}</b></span>
+                </div>
+                <div class="slds-col">
+                    <span><b>{genderOther}</b></span>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+
+
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-text-heading_medium"><b>Manual Review</b></div>
+                </div>
+            </div>
+        </div>
+        <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered">
+            <thead>
+                <tr class="slds-line-height_reset">
+
+                    <th aria-label="Name" aria-sort="none"
+                        class="slds-is-resizable slds-is-sortable slds-is-sorted slds-is-sorted_asc" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Criteria"><b>Criteria</b></span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                    <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon "
+                                        aria-hidden="true">
+                                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </div>
+                        </a>
+                    </th>
+                    <th aria-label="Manual Status" aria-sort="none" class="slds-is-resizable slds-is-sortable"
+                        scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Status"><b>Status</b></span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                    <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon "
+                                        aria-hidden="true">
+                                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </div>
+                        </a>
+                    </th>
+                    <th aria-label="Manual Comment" aria-sort="none" class="slds-is-resizable slds-is-sortable"
+                        scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Comment"><b>Comment</b></span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                    <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon "
+                                        aria-hidden="true">
+                                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </div>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <template for:each={manualReviewCriteria} for:item="criteria">
+                <tr key={criteria.Id}>
+                    <th scope="row">
+                        <div class="slds-truncate uacCriteriaColumn" title="">
+                            <p class="slds-truncate"><b>{criteria.Rank}.</b> {criteria.Criteria}</p>
+                        </div>
+                    </th>
+                    <th scope="col">
+                        <lightning-combobox data-id='manualCombobox' name="progress" label="" value={criteria.Status}
+                            options={manualStatusOptions} placeholder="Select Status">
+                        </lightning-combobox>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="">
+                            <lightning-input type="text" data-id='manualInputComment' value={criteria.Comment}>
+                            </lightning-input>
+                        </div>
+                    </th>
+                </tr>
+            </template>
+        </table>
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-text-heading_medium"><b>Prescreen Criteria</b></div>
+                </div>
+            </div>
+        </div>
+        <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered">
+            <thead>
+                <tr class="slds-line-height_reset">
+
+                    <th aria-label="Name" aria-sort="none"
+                        class="slds-is-resizable slds-is-sortable slds-is-sorted slds-is-sorted_asc" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Criteria"><b>Criteria</b></span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                    <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon "
+                                        aria-hidden="true">
+                                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </div>
+                        </a>
+                    </th>
+                    <th aria-label="Auto Status" aria-sort="none" class="slds-is-resizable slds-is-sortable"
+                        scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Status"><b>Status</b></span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                    <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon "
+                                        aria-hidden="true">
+                                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </div>
+                        </a>
+                    </th>
+                    <th aria-label="Override Reason" aria-sort="none" class="slds-is-resizable slds-is-sortable"
+                        scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0">
+                            <span class="slds-assistive-text">Sort by: </span>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Override Reason"><b>Override
+                                        Reason</b></span>
+                                <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                    <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon "
+                                        aria-hidden="true">
+                                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </div>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <template for:each={autoReviewCriteria} for:item="autoCriteria">
+                <tr key={autoCriteria.Id} data-item={autoCriteria.Id}>
+                    <th scope="row">
+                        <div class="slds-truncate uacCriteriaColumn" title="">
+                            <p class="slds-truncate"><b>{autoCriteria.Rank}.</b> {autoCriteria.Criteria}</p>
+                        </div>
+                    </th>
+                    <th scope="col">
+                        <lightning-combobox data-id='combobox' label="" value={autoCriteria.Status}
+                            options={autoCriteria.statusOptions} onchange={onCriteriaStatusChange}
+                            placeholder="Select Status">
+                        </lightning-combobox>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="">
+                            <lightning-input type="text" data-id='inputComment' value={autoCriteria.Comment}>
+                            </lightning-input>
+                        </div>
+                    </th>
+                </tr>
+            </template>
+        </table>
+        <div slot="footer">
+            <lightning-button variant="brand" label="Complete Manual Review" title="Complete Manual Review"
+                onclick={completeManualReview} class="slds-m-left_x-small">
+            </lightning-button>
+            <lightning-button variant="brand" label="Save" title="Save" onclick={handleSave}
+                class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+    </c-uac-modal>
+
+</template>

@@ -1,0 +1,25 @@
+<!--
+  @File Name         : uacExposureEventFlowTbl.html
+  @Description       : LWC for displaying Exposure Event table for Health Evaluation
+  @Group             : uacExposureEventFlowTbl
+  @Author            : Karthi Subramanian (Deloitte)
+  @Last Modified By  : Karthi Subramanian (Deloitte)
+  @Last Modified On  : 09-16-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   09-16-2020   Karthi Subramanian (Deloitte)   Initial Version
+-->
+<template>
+
+    <div class="uac-table-container">
+
+      <c-uac-list-view
+        object-api-name={objectApiName}
+        columns={columns}
+        filter={filter}
+        disable-actions="true">
+      </c-uac-list-view>
+
+    </div>
+
+</template>

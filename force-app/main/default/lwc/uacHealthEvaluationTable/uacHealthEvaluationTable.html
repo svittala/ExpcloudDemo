@@ -1,0 +1,57 @@
+<!--
+  @File Name         : uacHealthEvaluationTable.html
+  @Description       : Display Potentially Exposed UACs associated to the Exposure Event
+  @Group             :
+  @Author            : Vijayakumar Pethanan (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-23-2020
+  Modifications Log
+  Ver   Date        Author                            Modification
+  1.0   09-09-2020  Vijayakumar Pethanan (Deloitte)   Initial Version
+  1.1   09-22-2020  Sachet Khanal (Deloitte)          Adding pagination controls
+  1.2   06-09-2021  Abhisek Pati (Deloitte)           ORRUAC-5867 Renamed UAC to UC.
+  1.3   07-20-2021  Abhisek Pati (Deloitte)           ORRUAC-6049 Added code for error handling.
+-->
+<template>
+  <lightning-card title={title} icon-name="standard:groups">
+
+    <template if:true={isphiclosedate}>
+      <lightning-button label="+ Add" slot="actions" onclick={showModal}></lightning-button>
+      <c-uac-modal class="uac-modal" header="Add UC to Exposure Event" tagline={subHeader} size="medium" onclosedialog={handleClose}>
+
+        Disease/Condition <br />
+        {diseaseCondition}
+        <c-uac-Application-Number-Search onrowselection={onhandleRowSelection}></c-uac-Application-Number-Search>
+        <div slot="footer">
+          <button class="slds-button slds-button_neutral" onclick={handleClose}>Cancel</button>
+          <button class="slds-button slds-button_brand" onclick={handleSave}>Create PHI</button>
+        </div>
+      </c-uac-modal>
+
+    </template>
+    <template if:true={showTable}>
+      <div class="slds-m-horizontal_small">
+        <c-uac-paginator class="uac-paginator"
+          records={healthEvaluationsList}
+          show-search-box="true"
+          onpaginatorchange={handlePaginatorChange}>
+        </c-uac-paginator>
+      </div>
+      <div class="slds-m-around_small">
+        <lightning-datatable key-field="Id"
+          data={recordsToDisplay}
+          columns={columns}
+          hide-checkbox-column
+          row-number-offset={rowNumberOffset}
+          sorted-by={sortBy}
+          sorted-direction={sortDirection}
+          onrowaction={callRowAction}
+          onsort={handleSortdata}>
+
+        </lightning-datatable>
+      </div>
+    </template>
+
+  </lightning-card>
+
+</template>

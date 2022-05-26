@@ -1,0 +1,13 @@
+.badgestyle {
+  font-size: 14px !important;
+  width: 105%;
+  flex-flow: column-reverse;
+}
+
+.layoutclass {
+  flex-wrap: wrap;
+}
+
+.layoutitemclass {
+  height: 50px;
+}

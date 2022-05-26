@@ -1,0 +1,9 @@
+.uac-banner {
+  border-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+}
+.uac-banner-icon {
+  margin-right: 5px;
+}
+.uac-banner-text {
+  vertical-align: middle;
+}

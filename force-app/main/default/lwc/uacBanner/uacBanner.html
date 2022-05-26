@@ -1,0 +1,24 @@
+<!--
+  @File Name         :
+  @Description       :
+  @Group             :
+  @Test Class        :
+  @Author            :
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 10-14-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   10-14-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+    <div class="slds-grid slds-grid_align-center uac-banner" style={backgroundStyle}>
+      <div class="slds-col slds-var-p-around_large">
+        <template if:true={iconName}>
+          <lightning-icon icon-name={iconName} size={iconSize} variant={iconVariant} alternative-text={iconName} class="uac-banner-icon">
+          </lightning-icon>
+        </template>
+        <lightning-formatted-text class="uac-banner-text" value={text} style={fontStyle}>
+        </lightning-formatted-text>
+      </div>
+    </div>
+</template>

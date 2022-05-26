@@ -1,0 +1,32 @@
+<aura:documentation>
+	<aura:description>
+        
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_CollapsedTile_CMP&gt;</code> component is a pure display Lightning
+        component. It enables to display the compact layoutof an object, that may be expanded
+        or collapsed.</p>
+<pre>&lt;c:PEG_CollapsedTile_CMP
+     label="{!eachResult.title}"
+     icon="{!eachResult.icon}"
+     recordId="{!eachResult.Id}"
+     sObjectName="{!eachResult.sObjectName}"
+     columns="{!eachResult.columns}"
+     showBorder="false"
+     isCollapsible="{!eachResult.isCollapsible}"
+     isExpanded="false"
+     color="{!eachResult.color}"/&gt;</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

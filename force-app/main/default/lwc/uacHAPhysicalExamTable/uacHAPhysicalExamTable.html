@@ -1,0 +1,35 @@
+<!--
+  @File Name         : uacHAPhysicalExamTable.html
+  @Description       : Custom LWC table for editing Physical Exam records.
+  @Group             : uacHAPhysicalExamTable
+  @Author            : Abhisek Pati (Deloitte)
+  @Last Modified By  : Abhisek Pati (Deloitte)
+  @Last Modified On  : 08-26-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-26-2020   Abhisek Pati (Deloitte)   Initial Version
+-->
+<template>
+    <div class="slds-m-bottom_small">
+      <c-uac-input
+        type="radio"
+        name="physicalExamPerformed"
+        label="Physical Exam Performed by HCP?"
+        value={physicalExamReported}
+        options={physicalExamOptions}
+        required
+        onfieldchange={handlePhysicalExamReportedChange}>
+      </c-uac-input>
+  
+      <div class={tableContainerClass}>
+        <c-uac-table
+          columns={lstField}
+          default-new-record={defaultNewRecord}
+          onloadcomplete={handleLoad}
+          onsave={handleSave}
+          ondelete={handleDelete}
+          onfieldchange={handleFieldChange}>
+        </c-uac-table>
+      </div>
+    </div>
+  </template>

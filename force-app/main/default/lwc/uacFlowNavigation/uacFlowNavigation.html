@@ -1,0 +1,32 @@
+<!--
+  @File Name         : uacFlowNavigation.html
+  @Description       : Generic Flow Navigation Button Component
+  @Group             : uacFlow
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 07-16-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-16-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+    <div class="slds-grid">
+        <div>
+            <template if:true={previousScreen}>
+                <lightning-button
+                    label={previousButtonLabel}
+                    onclick={handlePreviousButtonClick}>
+                </lightning-button>
+            </template>
+        </div>
+        <div class="slds-col_bump-left">
+            <template if:true={nextScreen}>
+                <lightning-button
+                    label={nextButtonLabel}
+                    variant="brand"
+                    onclick={handleNextButtonClick}>
+                </lightning-button>
+            </template>
+        </div>
+    </div>
+</template>

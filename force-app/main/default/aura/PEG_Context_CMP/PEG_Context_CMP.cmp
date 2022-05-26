@@ -1,0 +1,21 @@
+<aura:component >
+    
+     <!-- Callback post execution de la requête -->
+    <aura:registerEvent name="onValueUpdate" type="aura:doneWaiting"
+                        description="Callback method called automatically each time the context is updated." />
+    
+    <!-- Methods -->
+    <aura:method name="getValue"
+                 description="Method enabling to get the current .">
+    </aura:method>
+    
+    <aura:method name="setValue"
+                 description="Method enabling to get the current. A lntg:sendMessage is also triggered on the 'PEG_Context' channel.">
+        <aura:attribute name="context" type="Object" required="true"/>
+    </aura:method>
+    
+    <!-- Main event handling -->
+    <aura:handler event="ltng:sendMessage"
+                  action="{!c.handleContextChange}"/>
+    
+</aura:component>

@@ -1,0 +1,236 @@
+<aura:component implements="flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:hasSObjectName,force:hasRecordId"
+                access="global"
+                description="Component displaying Record data as a summary section and a set of subtabs (typically for Knowledge articles).">
+    
+    <!-- Global Component Configuration -->
+    <aura:attribute name="title"      type="String"  default="Tab Display of Data"
+                    description="Component card title."/>
+    <aura:attribute name="icon"       type="String"  default="custom:custom13"
+                    description="Component card icon."/>
+    <aura:attribute name="showBorder" type="Boolean" default="false"
+                    description="Show border around component card?"/>
+
+    
+    <!-- Data Display & Fetch Configuration -->
+    <aura:attribute name="fieldStr"  type="String"
+                    description="JSON configuration of the fields to display in header and subtabs."
+                    default='{"header":{"value":"{{{Row.Name}}}", "fields":[{"value":"{{{Row.Name}}}","size":"6"},
+                                                                 {"name":"Id",  "size":"6"}]},
+                              "tabs": [{"label":"Tab 1",  "fields":[{"value":"Name","size":"6", "variant":"label-hidden"},
+                                                                    {"value":"{{{Row.URL__c}}}",  "size":"12", "type":"video", "variant":"label-hidden"},
+                                                                    {"value":"{{{Row.Owner.Name}}}",  "size":"12", "variant":"label-hidden"}]},
+                                       {"value":"{{{Row.Name}}}",  "fields":[{"value":"{{{Row.Id}}}", "size":"4"},
+                                                                    {"value":"{{{Row.CreatedDate}}}", "size":"8"},
+                                                                    {"value":"{{{Row.Comment__c}}}",  "size":"12", "type":"richText", "variant":"label-hidden"}]}]}' />
+    
+    <!--            default='{"header":{"name":"Name", "fields":[{"name":"Name","size":"6"},
+                                                                    {"name":"Id",  "size":"6"}]},
+                              "tabs": [{"label":"Tab 1",  "fields":[{"name":"Name","size":"6", "variant":"label-hidden"},
+                                                                    {"name":"Id",  "size":"6", "variant":"label-hidden"},
+                                                                    {"name":"Comment__c",  "size":"12", "variant":"label-hidden"}]},
+                                       {"name":"Name",  "fields":[{"name":"Id",  "size":"4"},
+                                                                    {"name":"Name","size":"8"},
+                                                                    {"name":"Comment__c",  "size":"12", "variant":"label-hidden"}]}]}'
+-->
+    
+    <aura:attribute name="fieldJson" type="Object"
+                    description="JSON conversion of the field configuration string." />
+
+    
+    <aura:attribute name="useLDS"    type="Boolean"   default="false"
+                    description="Use LDS for data fetch?" />
+    <aura:attribute name="showTabs"  type="Boolean"   default="false"
+                    description="SOQL fetch done --> sho tabs ?" />
+    <aura:attribute name="soqlQuery" type="string"
+                    default="Select Name, Owner.Name, CreatedDate, Comment__c, URL__c from {{{sObjectName}}} where Id ='{{{recordId}}}' WITH SECURITY_ENFORCED"
+                    description="If LDS not used, SOQL query enabling to fetch the necessary data." />
+    
+    
+    <!-- Component Initialization -->
+    <aura:handler   name="init"      value="{!this}"  action="{!c.doInit}"
+                  description="Initialization of the component: generation of the underlying SOQL query (if any)." />
+    <aura:handler event="lightning:tabRefreshed" action="{!c.refreshData}"
+                  description="Refreshing of the underlying SOQL query (if any)." />
+
+    
+    <!-- Component Display -->    
+    <lightning:card title="{!v.title}" iconName="{!v.icon}" 
+                    class="{! if(v.showBorder, 'slds-card_boundary', '')}" > 
+    <aura:set attribute="actions">
+        <aura:if isTrue="{# !v.useLDS}">
+            <lightning:buttonGroup class="slds-col">
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border"
+                                  class="slds-button_last"
+                                  onclick="{!c.refreshData}"/>
+            </lightning:buttonGroup>
+        </aura:if>
+    </aura:set>
+    <div class="slds-card__body">
+    
+    <!-- Display with LDS -->
+    <aura:if isTrue="{#v.useLDS}">
+    <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="{!v.sObjectName}" >
+        
+        <!-- Header (via LDS) --> 
+        <div class="slds-text-heading_small slds-p-horizontal_small slds-m-vertical_small">
+            <aura:if isTrue="{!v.fieldJson.header.label.length > 0}">
+                <lightning:formattedText value="{!v.fieldJson.header.label}"/>
+            <aura:set attribute="else">
+                <lightning:outputField fieldName="{!v.fieldJson.header.name}"
+                                       variant="label-hidden"
+                                       class="slds-text-heading_small"/>
+            </aura:set>
+            </aura:if>
+        </div>
+
+        <lightning:layout horizontalAlign="end" multipleRows="true" >
+        <aura:iteration items="{!v.fieldJson.header.fields}" var="eachHeaderField">
+            <lightning:layoutItem size="{!eachHeaderField.size}"
+                                  flexibility="auto,no-shrink"
+                                  padding="horizontal-small" >
+                <lightning:outputField fieldName="{!eachHeaderField.name}"
+                                       variant="{!eachHeaderField.variant || 'standard'}"
+                                       class="slds-hyphenate" />
+            </lightning:layoutItem>
+        </aura:iteration>
+        </lightning:layout>
+         
+        <!-- Tabs (via LDS) -->
+        <lightning:tabset>
+        <aura:iteration items="{!v.fieldJson.tabs}" var="eachTab">
+        <lightning:tab >
+            <aura:set attribute="label">
+                <aura:if isTrue="{!eachTab.label.length > 0}">
+                  <lightning:formattedText value="{!eachTab.label}"
+                                           class="slds-text-heading_small"/>
+                <aura:set attribute="else">
+                  <lightning:outputField fieldName="{!eachTab.name}"
+                                       variant="label-hidden"
+                                       class="slds-text-heading_small"/>
+                </aura:set>
+                </aura:if>
+            </aura:set>
+            <lightning:layout horizontalAlign="end" multipleRows="true" >
+            <aura:iteration items="{!eachTab.fields}" var="eachTabField">
+                <lightning:layoutItem size="{!eachTabField.size}"
+                                      flexibility="auto,no-shrink"
+                                      padding="horizontal-small" >
+                <lightning:outputField fieldName="{!eachTabField.name}"
+                                       variant="{!eachTabField.variant || 'standard'}"
+                                       class="slds-hyphenate" />
+                </lightning:layoutItem>
+            </aura:iteration>
+            </lightning:layout>
+        </lightning:tab>
+        </aura:iteration>
+        </lightning:tabset>
+        
+    </lightning:recordViewForm>
+        
+        
+    <!-- Display without LDS but SOQL -->    
+    <aura:set attribute="else">
+    
+    <!-- Utility Components necessary for SOQL -->   
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    <c:PEG_SOQL_CMP  aura:id="soqlUtil"/>
+    <c:PEG_JSON_CMP  aura:id="jsonUtil"/>
+        
+    <aura:if isTrue="{!v.showTabs}">
+        <!-- Header (via SOQL) --> 
+        <div class="slds-text-heading_small slds-p-horizontal_small slds-m-vertical_small">
+            <aura:if isTrue="{!v.fieldJson.header.label.length > 0}">
+                <lightning:formattedText value="{!v.fieldJson.header.label}"
+                                         class="slds-text-heading_small"/>
+            <aura:set attribute="else">
+                <lightning:formattedText value="{!v.fieldJson.header.value}"
+                                         class="slds-text-heading_small"/>
+            </aura:set>
+            </aura:if>
+        </div>
+        
+        <lightning:layout horizontalAlign="end" multipleRows="true" >
+        <aura:iteration items="{!v.fieldJson.header.fields}" var="eachHeaderField">
+            <lightning:layoutItem size="{!eachHeaderField.size}"
+                                  flexibility="auto,no-shrink"
+                                  padding="horizontal-small" >
+            <aura:if isTrue="{!eachHeaderField == 'richText'}">
+              <lightning:formattedRichText value="{!eachHeaderField.value}"
+                                           class="slds-has-flexi-truncate"/>  
+              <!-- class="slds-text-longform" -->
+            <aura:set attribute="else">
+              <aura:if isTrue="{!eachHeaderField == 'video'}">
+                <aura:if isTrue="{!eachHeaderField.value.length > 0}">
+                  <div class="container">
+                  <iframe class="video"            frameborder="0" 
+                          src="{!eachHeaderField.value}" allowfullscreen="true" />
+                  </div>
+                </aura:if>
+              <aura:set attribute="else">
+                 <lightning:formattedText value="{!eachHeaderField.value}"
+                                          class="slds-has-flexi-truncate"/> 
+              </aura:set>
+              </aura:if>    
+            </aura:set>
+            </aura:if>
+            </lightning:layoutItem>
+        </aura:iteration>
+        </lightning:layout>
+             
+        <!-- Tabs (via SOQL) -->
+        <lightning:tabset>
+        <aura:iteration items="{!v.fieldJson.tabs}" var="eachTab">
+        <lightning:tab >
+            <aura:set attribute="label">
+               <aura:if isTrue="{!eachTab.label.length > 0}">
+                <lightning:formattedText value="{!eachTab.label}"
+                                         class="slds-text-heading_small"/>
+               <aura:set attribute="else">
+                <lightning:formattedText value="{!eachTab.value}"
+                                         class="slds-text-heading_small"/>
+               </aura:set>
+               </aura:if>              
+            </aura:set>
+            
+            <lightning:layout horizontalAlign="end" multipleRows="true" >
+            <aura:iteration items="{!eachTab.fields}" var="eachTabField">
+              <lightning:layoutItem size="{!eachTabField.size}"
+                                    flexibility="auto,no-shrink"
+                                    padding="horizontal-small" >
+              <aura:if isTrue="{!eachTabField.type == 'richText'}">
+                  <lightning:formattedRichText class="slds-has-flexi-truncate" 
+                                               value="{!eachTabField.value}"/>  
+                  <!-- class="slds-text-longform" -->
+              <aura:set attribute="else">
+                <aura:if isTrue="{!eachTabField.type == 'video'}">
+                  <aura:if isTrue="{! and(eachTabField.value.length > 0, eachTabField.value != 'undefined')}">
+                    <div class="container">
+                    <iframe class="video"            frameborder="0" 
+                            src="{!eachTabField.value}" allowfullscreen="true" />
+                    </div>
+                </aura:if>
+                <aura:set attribute="else">
+                  <lightning:formattedText class="slds-has-flexi-truncate"
+                                           value="{!eachTabField.value}"/> 
+                </aura:set>
+                </aura:if>    
+              </aura:set>
+              </aura:if>
+            </lightning:layoutItem>
+            </aura:iteration>
+            </lightning:layout>
+        </lightning:tab>
+        </aura:iteration>
+        </lightning:tabset>
+    </aura:if>    
+    </aura:set>
+    </aura:if>
+    </div>
+    </lightning:card>
+	
+</aura:component>

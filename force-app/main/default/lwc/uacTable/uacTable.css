@@ -1,0 +1,34 @@
+.uac-data-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+th {
+  white-space: break-spaces;
+  word-wrap: break-word;
+}
+
+td {
+  vertical-align: top;
+}
+
+td.slds-cell-wrap {
+  min-width: 10rem;
+}
+
+th.uac-icon-col {
+  width: 30px;
+}
+
+td.uac-icon-col {
+  padding: 0.1rem;
+  text-align: center;
+}
+
+th.uac-button-col {
+  width: 50px;
+}
+
+td.uac-button-col {
+  padding: 0.25rem;
+}

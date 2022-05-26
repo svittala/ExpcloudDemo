@@ -1,0 +1,144 @@
+<!--
+  @description       : 
+  @author            : 
+  @group             : 
+  @last modified on  : 09-08-2021
+  @last modified by  : Sreenath Tella
+-->
+<template>
+    <div class="uac-wrapper" data-target-id="entity-team-member-related-list">
+        <lightning-card variant="narrow" class="uac-related-list" icon-name="standard:team_member">
+            <h1 slot="title" class="uac-header">Entity Team ({intNumberEntityTeamMembers})</h1>
+            <lightning-datatable if:true={isData} class="uac-data-table" resize-column-disabled hide-checkbox-column
+                data={lstEntityTeamMembers} columns={columns} key-field="idRecord" onrowaction={handleRowAction}>
+            </lightning-datatable>
+            <div slot="actions">
+                <lightning-button variant="neutral" class="uac-button" label="Add Member" title="Add Member"
+                    onclick={onAddMemberClick}>
+                </lightning-button>
+                <lightning-button-icon variant="neutral" class="uac-button" icon-name="utility:refresh" title="Refresh"
+                    onclick={onRefreshClick}></lightning-button-icon>
+            </div>
+        </lightning-card>
+    </div>
+    <c-uac-modal data-target-id="entity-team-member-modal-create" class="uac-modal" header="Search for and add member">
+        <div if:true={boolError} class="slds-text-color_error slds-m-bottom_small">
+            <p title={strErrorMessage}>{strErrorMessage}</p>
+        </div>
+        <template if:false={alternateProfiles}>
+            <lightning-record-edit-form object-api-name="Case" onload={onUserLookupLoad}>
+                <label class="slds-form-element__label" for="fieldid" title="User"><abbr class="slds-required"
+                        title="required">*
+                    </abbr>User</label></label>
+                <lightning-input-field id="fieldid" class="uac-modal-input" required={boolTrue} variant="label-hidden"
+                    field-name="UAC_person__c" onchange={handleUserLookupChange} disabled={boolFalse}>
+                </lightning-input-field>
+            </lightning-record-edit-form>
+            </template>
+            <template if:true={alternateProfiles}>
+                <lightning-record-edit-form object-api-name="Account" onload={onUserLookupLoad}>
+                    <label class="slds-form-element__label" for="fieldid" title="User"><abbr class="slds-required"
+                            title="required">*
+                        </abbr>User</label></label>
+                    <lightning-input-field id="fieldidalt" class="uac-modal-input" required={boolTrue} variant="label-hidden"
+                        field-name="UAC_organizationContact1__c" onchange={handleUserLookupChange} disabled={boolFalse}>
+                    </lightning-input-field>
+                </lightning-record-edit-form>
+                </template> 
+        <br />
+        <lightning-record-edit-form object-api-name="AccountTeamMember" onload={onUserLookupLoad}>
+            <label class="slds-form-element__label" for="fieldid" title="Role"><abbr class="slds-required"
+                    title="required">*
+                </abbr>Team Member Role</label></label>
+            <lightning-input-field class="uac-modal-input" required={boolTrue} variant="label-hidden"
+                field-name="TeamMemberRole" onchange={handleRoleChange} disabled={boolFalse}>
+            </lightning-input-field>
+        </lightning-record-edit-form>
+        <br />
+        <lightning-combobox name="Entity Access Level" class="uac-modal-input" label="Entity Access Level"
+            options={optionsAccount} required={boolTrue} onchange={onAccountAccessLevelChange} disabled={boolFalse}
+            value={strAccountAccessDefault}>
+        </lightning-combobox>
+        <br />
+        <lightning-combobox name="Entry Access Level" class="uac-modal-input" label="Entry Access Level"
+            options={optionsChildObjects} required={boolTrue} onchange={onCaseAccessLevelChange} disabled={boolFalse}
+            value={strCaseAccessDefault}>
+        </lightning-combobox>
+        <br />
+        <lightning-combobox name="UAC Access Level" class="uac-modal-input" label="UC Access Level"
+            options={optionsChildObjects} required={boolTrue} onchange={onContactAccessLevelChange} disabled={boolFalse}
+            value={strContactAccessDefault}>
+        </lightning-combobox>
+        <br />
+        <div if:true={boolSavingRecord} class="slds-is-relative">
+            <lightning-spinner variant="brand" size="medium">
+            </lightning-spinner>
+        </div>
+        <div slot="footer">
+            <lightning-button label="Save" title="Save" variant="brand" disabled={boolSavingRecord}
+                onclick={handleSave}>
+            </lightning-button>
+            <lightning-button label="Cancel" title="Cancel" variant="neutral" disabled={boolSavingRecord}
+                onclick={handleCancelCreate}>
+            </lightning-button>
+        </div>
+    </c-uac-modal>
+    <c-uac-modal data-target-id="entity-team-member-modal-delete" class="uac-modal" header="Delete Entity Team Member">
+        <p title={strConfirmText} class="slds-p-around_medium">{strConfirmText}</p>
+        <div if:true={boolSavingRecord} class="slds-is-relative">
+            <lightning-spinner variant="brand" size="medium">
+            </lightning-spinner>
+        </div>
+        <div slot="footer">
+            <lightning-button label="Cancel" title="Cancel" variant="neutral" disabled={boolSavingRecord}
+                onclick={handleCancelDelete}>
+            </lightning-button>
+            <lightning-button label="Delete" title="Delete" variant="brand" disabled={boolSavingRecord}
+                onclick={handleConfirmDelete}>
+            </lightning-button>
+        </div>
+    </c-uac-modal>
+    <c-uac-modal data-target-id="entity-team-member-modal-edit" class="uac-modal" header="Edit Team member">
+        <div if:true={boolError} class="slds-text-color_error slds-m-bottom_small">
+            <p title={strErrorMessage}>{strErrorMessage}</p>
+        </div>
+        <lightning-record-edit-form
+        record-id={cATMrecordId}
+        object-api-name="AccountTeamMember">
+        <lightning-input-field field-name="UserId">
+        </lightning-input-field>
+        <lightning-input-field field-name="TeamMemberRole" onchange={editATMRolechange}>
+        </lightning-input-field>
+        <div if:true={boolEditATM}>
+        <br />
+        <lightning-combobox name="Entity Access Level" class="uac-modal-input" label="Entity Access Level"
+            options={optionsAccount} required={boolTrue}  
+            value={onSelectATM.strAccAccess} onchange={editATMAccountAccess} >
+        </lightning-combobox>
+        <br />
+        <lightning-combobox name="Entry Access Level" class="uac-modal-input" label="Entry Access Level"
+            options={optionsChildObjects} required={boolTrue}  
+            value={onSelectATM.strCaseAccess} onchange={editATMCaseAccess}>
+        </lightning-combobox>
+        <br />
+        <lightning-combobox name="UAC Access Level" class="uac-modal-input" label="UC Access Level"
+            options={optionsChildObjects} required={boolTrue} 
+            value={onSelectATM.strConAccess} onchange={editATMContactAccess}>
+        </lightning-combobox>
+        <br />
+    </div>
+</lightning-record-edit-form>
+<div if:true={boolSavingRecord} class="slds-is-relative">
+    <lightning-spinner variant="brand" size="medium">
+    </lightning-spinner>
+</div>
+<div slot="footer">
+    <lightning-button label="Save" title="Save" variant="brand" 
+        onclick={handleClickUpdate}>
+    </lightning-button>
+    <lightning-button label="Cancel" title="Cancel" variant="neutral" 
+        onclick={handleCancelCreate}>
+    </lightning-button>
+</div>
+    </c-uac-modal>
+</template>

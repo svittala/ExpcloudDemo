@@ -1,0 +1,27 @@
+<!--
+  @File Name          : uacReferralFlagContact.html
+  @Description        : LWC for displaying Contact Referral Flags
+  @Author             : Chaitanya Nandamuri (Deloitte)
+  @Group              : Referral Contact - ORRUAC-115
+  @Last Modified By   : 
+  @Last Modified On   : 
+  @Modification Log   :
+  Ver       Date            Author      		         Modification
+  1.0     5/12/2020    Chaitanya Nandamuri (Deloitte)     Initial Version
+-->
+<template>
+    <lightning-card>
+        <div class="slds-text-title_bold slds-p-left_medium slds-p-right_medium" style = "font-size:16px;" title = "This panel displays important flags for this record.">
+            Contact Flags
+        </div>  
+        <div if:true={boolDataPresent}>
+        <!--Binding child generic Flags Widget component-->
+        <c-uac-generic-flags-widget fields={lstFlags}></c-uac-generic-flags-widget>  
+        </div>
+        <div if:false={boolDataPresent}>
+            <div class="slds-p-around_medium lgc-bg" title = "No flags exist for this Adult Contact.">
+                No flags exist for this Adult Contact.
+            </div>
+        </div>
+    </lightning-card>
+</template>

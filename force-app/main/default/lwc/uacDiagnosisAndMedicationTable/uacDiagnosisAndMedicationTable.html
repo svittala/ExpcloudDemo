@@ -1,0 +1,116 @@
+<!--
+  @File Name         : uacDiagnosisAndMedicationTable.html
+  @Description       : LWC for diagnosis and medications table
+  @Group             : UAC_diagnosisAndMedicationTable
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-01-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-11-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+
+  <template if:true={isLoading}>
+    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+  </template>
+
+  <template if:false={isHealthAssessment}>
+    <c-uac-flow-header title="Diagnosis"></c-uac-flow-header>
+
+    <c-uac-input
+      type="radio"
+      name="diagnosesMedsReferrals"
+      label={lblDiagnosesMedsReferrals}
+      value={diagnosesMedsReferrals}
+      options={diagnosesMedsReferralsOptions}
+      required
+      onfieldchange={handleFieldChange}>
+    </c-uac-input>
+  </template>
+
+  <template if:true={errors.diagnosesMedsReferrals}>
+    <div class="uac-error slds-m-vertical_x-small">
+      <lightning-formatted-rich-text value={errors.diagnosesMedsReferrals}>
+      </lightning-formatted-rich-text>
+    </div>
+  </template>
+
+  <template if:true={isHealthAssessment}>
+    <div class="uac-prev-diagnosis-table-container">
+      <c-uac-flow-header title={prevDiagnosisTableTitle}>
+      </c-uac-flow-header>
+
+      <c-uac-list-view class="uac-prev-diagnosis-table"
+        object-api-name={prevDiagnosisObjectApiName}
+        columns={prevDiagnosisColumns}
+        filter={prevDiagnosisFilter}
+        child-relationships={prevDiagnosisChildRelationshipsToQuery}
+        additional-buttons={prevDiagnosisAdditionalButtons}
+        onrowaction={handlePrevDiagnosisRowAction}
+        onloadcomplete={handlePrevDiagnosisLoadComplete}
+        disable-edit="true"
+        disable-delete="true">
+      </c-uac-list-view>
+    </div>
+  </template>
+
+  <div class="uac-diagnosis-table-container slds-m-vertical_x-small slds-hide">
+    <template if:true={isHealthAssessment}>
+      <c-uac-flow-header title={diagnosisTableTitle}>
+      </c-uac-flow-header>
+    </template>
+    <div class="slds-grid slds-grid_align-spread slds-m-vertical_x-small">
+      <div class="slds-col"></div>
+      <div class="slds-col">
+        <button class="slds-button slds-button_neutral" title="Add" onclick={onAddDiagnosisClick}>
+          <lightning-icon icon-name="utility:add" class="slds-m-right_x-small" size="x-small">
+          </lightning-icon>
+          Add
+        </button>
+      </div>
+    </div>
+    <c-uac-list-view  class="uac-diagnosis-table"
+      object-api-name={objApiNameDiagnosis}
+      columns={diagnosisTableColumns}
+      filter={diagnosisTableFilter}
+      additional-fields={diagnosisTableAdditionalFields}
+      additional-buttons={diagnosisTableAdditionalButtons}
+      onloadcomplete={initialize}
+      onrowaction={handleDiagnosisRowAction}
+      override-delete-action="true">
+    </c-uac-list-view>
+    <template if:true={errors.diagnosisTable}>
+        <div class="uac-error slds-m-vertical_x-small">
+          <lightning-formatted-rich-text value={errors.diagnosisTable}>
+          </lightning-formatted-rich-text>
+        </div>
+    </template>
+  </div>
+
+  <div class="uac-medication-table-container slds-m-vertical_x-small slds-hide">
+    <c-uac-flow-header title="Medications"></c-uac-flow-header>
+    <c-uac-list-view class="uac-medication-table"
+      object-api-name={objApiNameMedication}
+      columns={medicationTableColumns}
+      filter={medicationTableFilter}
+      onloadcomplete={initialize}
+      onrowaction={handleMedicationRowAction}>
+    </c-uac-list-view>
+    <template if:true={errors.medicationTable}>
+      <div class="uac-error slds-m-vertical_x-small">
+        <lightning-formatted-rich-text value={errors.medicationTable}>
+        </lightning-formatted-rich-text>
+      </div>
+    </template>
+  </div>
+
+  <c-uac-diagnosis-outcome onsuccess={handleDiagnosisOutcomeSaveSuccess}>
+  </c-uac-diagnosis-outcome>
+
+  <c-uac-diagnosis-form onsuccess={handleDiagnosisSaveSuccess}>
+  </c-uac-diagnosis-form>
+
+  <c-uac-medication-form onsuccess={handleMedicationSaveSuccess}>
+  </c-uac-medication-form>
+</template>

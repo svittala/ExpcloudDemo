@@ -1,0 +1,75 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_JSON_CMP&gt;</code> component is a pure utility Lightning component.
+        It provides various utility methods to manipulate JSON structures commonly required to
+        display data fetched by a SOQL query (e.g. via the <code>&lt;c:PEG_SOQL_CMP&gt;</code>
+        component) within data-table or data-trees (see <code>&lt;c:PEG_SoqlList_CMP&gt;</code>
+        component for example).</p>
+    <p>Two main methods are available, <code>flattenJson</code> to 'flatten' a JSON structure and
+        <code>transposeJson</code> to transpose it.</p>
+<pre>&lt;c:PEG_JSON_CMP aura:id="jsonUtil" /&gt;</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>JSON Flattening</h4>
+    <p>When a component wishes to display information from a SOQL query including relationships
+        or sub-queries in a <code>&lt;lightning:datatable&gt;</code> or a
+        <code>&lt;lightning:treeGrid&gt;</code> standard component, various JSON modifications
+        are required.</p>
+    <ul>
+    <li>Relationships: only attributes of the root JSON level may be displayed in the data-tables,
+        and attributes of sub-structures created implicitely by SOQL must be brought at this level.
+        This operation replaces the <code>{"Name":"Account1","Owner":{"Name":"Owner1","Id":"xxxx"}}</code>
+        JSON object by a 'flat' <code>{"Name":"Account1","Owner.Name":"Owner1","Owner.Id":"xxxx"}</code>
+        version of it.</li>
+    <li>Hierarchies: in order to display a hierarchical JSON object (e.g. one fetched from SOQL
+        queries with subqueries) within a tree or tree table, the standard base Lightning components
+        need the relationship attribute to be named as '_children'. 
+        This operation replaces the <code>{"Name":"Account1","ChildAccounts":[{"Name":"Account11"}]}</code>
+        JSON object by a 'normalized' <code>{"Name":"Account1","_children":[{"Name":"Account11"}]}</code>
+        version of it.</li>
+    <li>SOQL subqueries: in order to count directly items selected in record relations
+        (e.g. <code>select Name, (select Id from Contacts) from Account)</code>),
+        a <code>_length</code> field is automatically added to count the number of items
+        in the sub-list.</li>
+    </ul>
+<pre>let treeFields = ['ChildAccount'];
+let flatResults = component.find('jsonUtil').flattenJson(queryResult,treeFields);</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>JSON Transposition</h4>
+    <p>This method enables to transpose a JSON structure from a list of rows to a list of 
+        columns.</p>
+    <p>Its primary use case is the <code>&lt;c:PEG_Graphs_CMP&gt;</code> to let it
+        display graphically the results of a SOQL <code>select count()... group by...</code>
+        query leveraging the <code>chart.js</code> library.</p>
+<pre>let transposedResult = component.find('jsonUtil').transposeJson(queryResult);</pre>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Get color list</h4>
+    <p>This method enables to get a standard list of colors extracted from the SLDS.
+       This may be used as input to graphics to get a varied set of colors for each
+       measure or dimension.</p>
+    <p>A number of colours is requested as input.</p>
+<pre>let colorList = component.find('jsonUtil').getColors(resultData.length);</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

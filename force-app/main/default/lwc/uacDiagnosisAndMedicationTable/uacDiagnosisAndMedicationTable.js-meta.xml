@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Diagnoses and Medications Table</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="relatedTo" type="String" label="Related To" role="inputOnly" description="Record type of Health Evaluation." />
+            <property name="healthEvaluationId" type="String" label="Health Evaluation Id" role="inputOnly" description="Id of health evaluation record." />
+            <property name="uacId" type="String"  label="UAC Id"  role="inputOnly" description="UAC Contact Id" />
+            <property name="diagnosesMedsReferrals" type="String" label="Minor with Diagnoses/Meds/Referrals?" description="Yes/No value for minor with diagnoses/meds/referrals." />
+            <property name="validationRan" type="Boolean" label="Validation Ran?" description="Has validation ran?" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,25 @@
+<!--
+  @File Name          : uacGenericFlagsWidget.html
+  @Description        : generic LWC for displaying  Flags
+  @Author             : Vaibhav Kudesia (Deloitte)
+  @Group              : 
+  @Last Modified By   : 
+  @Last Modified On   : 
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0     5/7/2020    Vaibhav Kudesia (Deloitte)     Initial Version
+-->
+
+<template>
+    <div class="slds-m-bottom_x-large">
+        <lightning-layout class="layoutclass" >
+        <template for:each={fields} for:item="flag">             
+                <lightning-layout-item  padding="around-small" class="layoutitemclass" key={flag.Name}>                      
+                <span key={flag.Name}>
+                    <lightning-badge title={flag.Name} label={flag.Name} class={flag.class} style={flag.style}></lightning-badge>
+                </span>
+            </lightning-layout-item>        
+        </template> 
+    </lightning-layout>       
+    </div>    
+</template>

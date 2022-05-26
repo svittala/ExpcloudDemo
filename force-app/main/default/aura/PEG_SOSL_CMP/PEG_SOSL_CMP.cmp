@@ -1,0 +1,19 @@
+<aura:component controller="PEG_SoslOperation_CTL"
+                description="Component enabling to fetch data via a SOSL statement.">
+    
+    <!-- Method -->
+    <aura:method name="runQuery" action="{!c.doRunQuery}"
+                 description="Method enabling to execute a query.">
+        <aura:attribute name="queryString" type="String" required="true" 
+                        description="SOSL statement to execute." />
+        <aura:attribute name="isStorable"   type="Boolean" default="false" 
+                        description="Query action storable mode activation." />
+        <aura:attribute name="isBackground" type="Boolean" default="false" 
+                        description="Query action background mode activation." />
+        <aura:attribute name="callback" type="Function" required="true"
+                        description="Callback method called when query results are returned. 2 object parameters expected for this callback : result and error."/>
+    </aura:method>
+	
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    
+</aura:component>

@@ -1,0 +1,116 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                controller="PEG_Configuration_CTL"
+                description="Component tracking displaying a graphical summary of a record (with background, avatar, badge and title)." >
+<!--
+@author P-E GROS
+@date   Nov. 2019
+
+Legal Notice
+This code is the property of Salesforce.com and is protected by U.S. and International
+copyright laws. Reproduction, distribution without written permission of Salesforce is
+strictly prohibited. In particular this code has been delivered by Salesforce.com for
+its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+re-used, reproduced or distributed for any other purposes.
+-->
+    
+    <!-- Card Header Configuration -->
+    <aura:attribute name="size"			type="String"
+                    access="global"		default="large"
+                    description="Size of the header/avatar images (medium or large)." />
+                    
+    <aura:attribute name="background"		type="String"
+                    access="global"			default="/_slds/images/themes/lightning_blue/lightning_blue_profile.png"
+                    description="URL of a static background resource, also used as default." />
+    <aura:attribute name="backgroundField"	type="String"
+                    access="global"
+                    description="Name of the record field containing the URL for the background image (if dynamic)." />
+
+    <aura:attribute name="avatar"			type="String"
+                    access="global"		    default="/_slds/images/themes/lightning_blue/lightning_blue_profile_avatar_96.png"
+                    description="URL of a static avatar resource, also used as default." />
+	<aura:attribute name="avatarField"		type="String"
+                    access="global"			
+                    description="Name of the record field containing the URL for the avatar image (if dynamic)."/>
+    
+    <aura:attribute name="headerFieldsSet"	type="String"
+                    access="global"		    default="N/A"
+                    description="Name of the FieldSet containing the fields displayed in the header. 1st field is the Title, 2nd is the badge."/>
+    <aura:attribute name="headerFields"     type="List"
+                    access="private"
+                    description="List of fields contained in the headerFieldsSet and allowed for the User."/>
+    
+	<aura:attribute name="fieldList"        type="List"
+                    access="private"
+                    description="List of all fields to be fetched via LDS (including the dynamic avatar and background fields)."/>
+
+    
+    <!-- Info Loading -->
+    <aura:attribute name="recordObject"      type="Object"  access="private"
+                    description="Current Record data fetched via LDS."/>
+	<aura:attribute name="recordFields"      type="Object"  access="private"
+                    description="Current Record data fetched via LDS (alternate format)."/>
+	<aura:attribute name="ldsError"          type="String"  access="private"
+                    description="LDS Record Data load error."/>
+  
+	<aura:attribute name="displayObject"     type="Object"
+                    access="private"
+                    description="JSON Object containing record data organized for display."/>
+    
+    <aura:attribute name="headerOK"		type="Boolean"
+                    access="private"	default="false"
+                    description="Flag to track loading of Header Data."/>
+    <aura:attribute name="isReady"		type="Boolean"
+                    access="private"	default="false"
+                    description="Flag to control display of Component."/>
+    
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Initialisation of the Component."/>
+
+    <!-- Info Loading -->
+    <aura:if isTrue="{! v.headerOK}">
+    <force:recordData aura:id="ldsUtil" 
+        fields="{!v.fieldList}"
+		recordId="{!v.recordId}"  
+		targetError="{!v.ldsError}"
+		targetRecord="{!v.recordObject}"
+		targetFields="{!v.recordFields}" 
+        recordUpdated="{!c.updateData}"/>
+    </aura:if>
+    
+    <!-- Component Display -->
+    <aura:if isTrue="{!v.isReady}">
+        <div class="slds-card">
+        <div class="{! 'pegBanner pegBanner-' + v.size}" >
+        	<img src="{!v.displayObject.background}"/>
+    	</div>
+        
+        <div class="{# 'pegAvatar pegAvatar-' + v.size}" >
+        	<img src="{!v.displayObject.avatar}"/>
+    	</div>
+            
+        <div class="{# 'pegBadge-' + v.size}" >
+            <span class="slds-badge slds-badge_lightest">
+                {!v.displayObject.badge}
+            </span>
+    	</div>
+        
+        <lightning:card title="{!v.displayObject.title}" class="{# 'slds-truncate pegCard pegCard-' + v.size}" >
+        	<div class="slds-text-body_small">
+                <ul class="slds-list_horizontal slds-has-dividers_left slds-listbox slds-listbox_horizontal">
+                    <aura:iteration items="{!v.displayObject.header}" var="eachField">
+						<li class="slds-item">{!eachField}</li>
+                    </aura:iteration>
+                </ul>
+            </div>
+        </lightning:card>
+            
+        </div>
+ 
+    <aura:set attribute="else">
+        <lightning:spinner alternativeText="Loading" size="small" />
+    </aura:set>
+    </aura:if>
+    
+</aura:component>

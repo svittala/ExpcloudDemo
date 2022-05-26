@@ -1,0 +1,34 @@
+<!--
+  @description       : 
+  @author            : Abhisek Pati 
+  @group             : 
+  @last modified on  : 09-20-2021
+  @last modified by  : Abhisek Pati
+-->
+<template>
+    <div class="login-wrapper">
+        <div class="login-title">
+            <img src={acfLogo} alt="ACF ORR Logo" title="ACF ORR Logo">
+        </div>      
+        <div class="uac-center">
+            <div class="slds-align_absolute-center">
+                <img src={commLogo} alt="PATH Logo" title="PATH Logo">
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-size_5-of-12 login-section">
+                    <h1 class="header-text">{buttonNameExt}</h1>
+                    <p class="login-button-description" title={buttonHelptextExt}>{buttonHelptextExt}</p>
+                    <a class="login-button" title="Login External" href={extPathUrl}>{buttonName}</a>
+                </div>
+                <div class="slds-col slds-size_1-of-12 slds-align_absolute-center margin-none center-text">
+                    <div class="aSeparator"></div>
+                </div>
+                <div class="slds-col slds-size_5-of-12 login-section">
+                    <h1 class="header-text">{buttonNameDhs}</h1>
+                    <p class="login-button-description" title={buttonHelptextExt}>{buttonHelptextDhs}</p>
+                    <a class="login-button" title="Login Dhs" href={dhsPathUrl}>{buttonName}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

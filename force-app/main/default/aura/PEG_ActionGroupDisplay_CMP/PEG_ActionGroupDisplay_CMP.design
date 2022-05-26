@@ -1,0 +1,23 @@
+<design:component label="PEG Action Group" >
+	<design:attribute name="showCard"
+                      label="Show as card ?" />
+    
+    <design:attribute name="title"
+                      label="Card Title" />
+    <design:attribute name="icon"
+                      label="Card Icon" />
+    <design:attribute name="showBorder"
+                      label="Show card border?" />
+    <design:attribute name="showInline"
+                      label="Show in card header?" />
+    <design:attribute name="isVertical"
+                      label="Show vertically?" />
+    
+    <design:attribute name="alignClass"
+                      label="Group alignment"
+                      description="SLDS CSS class applied to group component."/>
+    
+    <design:attribute name="actionListStr"
+                      label="Group configuration"
+                      description="JSON string with a list of button or menu configuration elements." />
+</design:component>

@@ -1,0 +1,50 @@
+<!--
+  @File Name          : uacFileUpload.html
+  @Description        : Generic LWC for uploading files
+  @Author             : Sachet Khanal
+  @Group              : FileUpload
+  @Last Modified By   : Sachet Khanal (Deloitte)
+  @Last Modified On   : 5/12/2020, 9:27:52 AM
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0    5/8/2020   Sachet Khanal     Initial Version
+-->
+<template>
+    <c-uac-modal class="uac-modal" header={title}>
+        <lightning-layout multiple-rows="true" horizontal-align="center">
+            <template for:each={lstFileTypes} for:item="fileType" for:index="index">
+                <lightning-layout-item size="12" padding="around-small" key={fileType.Name}>
+                    <input class="file-input"
+                        type="file"
+                        name="file"
+                        accept={fileType.Supported_File_Types__c}
+                        data-index={index}
+                        onchange={handleFileChange}
+                    />
+                    <lightning-button
+                        data-index={index}
+                        label={fileType.uploadLabel}
+                        title={fileType.uploadLabel}
+                        icon-name="utility:upload"
+                        icon-position="right"
+                        aria-described-by={index}
+                        onclick={handleUploadClick}>
+                    </lightning-button>
+                    <template if:true={fileType.file}>
+                        <br />
+                        <div class="slds-text_title" id={index}>1 file selected</div>
+                    </template>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+        <div slot="footer">
+            <lightning-button
+                label="Confirm"
+                title="Confirm"
+                variant="brand"
+                disabled={isUploading}
+                onclick={handleConfirmClick}>
+            </lightning-button>
+        </div>
+    </c-uac-modal>
+</template>

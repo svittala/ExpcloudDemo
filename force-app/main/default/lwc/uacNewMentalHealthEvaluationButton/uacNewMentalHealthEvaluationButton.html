@@ -1,0 +1,72 @@
+<!--
+  @File Name         : uacNewMentalHealthEvaluationButton.html
+  @Description       : LWC for creating Mental Health Evaluation records
+  @Group             : uacNewMentalHealthEvaluationButton
+  @Author            : Abhisek Pati (Deloitte)
+  @Last Modified By  : 
+  @Last Modified On  : 
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   10-12-2020   Abhisek Pati (Deloitte)   Initial Version
+  1.1   01-22-2021   Abhisek Pati (Deloitte)   ORRUAC-4998 Added null check for Program
+  1.2   07-06-2021   Abhisek Pati (Deloitte)   ORRUAC-6057 Modified error message handler.
+-->
+
+<template>
+    <div class="slds-card">
+      <div class="slds-clearfix slds-card__body">
+        <div class="slds-align_absolute-center">
+          <lightning-button variant="brand" 
+                          label="New Mental Health Evaluation" 
+                          title="New Mental Health Evaluation" 
+                          onclick={openPopUp} 
+                          class="slds-m-left_x-small slds-p-right_medium">
+          </lightning-button>
+        </div>
+      </div>
+      
+      <template if:true={openModal} >      
+          <section role="dialog" 
+                    tabindex="-1" 
+                    aria-labelledby="modal-heading-01" 
+                    aria-modal="true" 
+                    aria-describedby="modal-content-id-1" 
+                    class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+              <header class="slds-modal__header">
+                <lightning-button-icon alternative-text="Close"  
+                                      variant="bare-inverse" 
+                                      onclick={closePopUp} 
+                                      class="slds-button slds-modal__close closeIcon slds-button_icon-bare slds-button_icon-inverse" 
+                                      icon-name="utility:close">
+                </lightning-button-icon>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{tableTitle}</h2>
+              </header>
+              <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <c-uac-input name={question} 
+                            value={selectedRecordType} 
+                            type="radio" 
+                            label={question} 
+                            options={recordTypeOptions}
+                            onfieldchange={handleChange} >
+                </c-uac-input>
+              </div>
+              <footer class="slds-modal__footer">
+                <lightning-button variant="neutral" 
+                    label="Cancel"
+                    title="Cancel"
+                    onclick={closePopUp} >
+                </lightning-button>
+                <lightning-button variant="brand" 
+                    label="Next"
+                    title="Save"
+                    onclick={createHealthEvaluation} 
+                    class="slds-m-left_x-small">
+                </lightning-button>
+              </footer>
+            </div>
+          </section>
+          <div class="slds-backdrop slds-backdrop_open"></div>
+      </template>   
+    </div>
+  </template>

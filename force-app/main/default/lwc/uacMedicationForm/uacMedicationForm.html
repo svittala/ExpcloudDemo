@@ -1,0 +1,97 @@
+<!--
+  @File Name         : uacMedicationForm.html
+  @Description       : Create/Edit form for Medication object
+  @Group             : uacForm
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 11-17-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-07-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+
+  <template if:true={isLoading}>
+    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+  </template>
+
+
+  <c-uac-modal class="uac-modal" header={title} size="medium" onclosedialog={handleClose}>
+
+    <template if:true={error}>
+      <div class="slds-notify_container slds-is-relative">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+          <div class="slds-notify__content">
+            <h2 class="slds-text-heading_small">{saveErrorTitle}</h2>
+            <lightning-formatted-rich-text value={error}>
+            </lightning-formatted-rich-text>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <lightning-record-view-form
+      record-id={associatedDiagnosisId}
+      object-api-name="UAC_diagnosis__c">
+
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-output-field field-name={diagnosisFldAssociatedUAC} variant="label-stacked">
+          </lightning-output-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+        </div>
+      </div>
+
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-output-field field-name={diagnosisFldName} variant="label-stacked">
+          </lightning-output-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-output-field field-name={diagnosisFldCategory} variant="label-stacked">
+          </lightning-output-field>
+        </div>
+      </div>
+
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-output-field field-name={diagnosisFldStatus} variant="label-stacked">
+          </lightning-output-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-output-field field-name={diagnosisFldCondition} variant="label-stacked">
+          </lightning-output-field>
+        </div>
+      </div>
+    </lightning-record-view-form>
+
+    <c-uac-record-edit-form record-id={recordId}
+      object-api-name={objectApiName}
+      sections={medicationFormSections}
+      onloadcomplete={handleLoad}
+      onfieldchange={handleFieldChange}
+      onsuccess={handleSuccess}
+      onerror={handleError}
+      hide-error="true">
+      <template if:false={recordId}>
+        <div slot="form-top">
+          <lightning-input-field field-name={fldAssociatedDiagnosis} value={associatedDiagnosisId} class="slds-hide">
+          </lightning-input-field>
+          <lightning-input-field field-name={fldAssociatedUAC} value={associatedUACId} class="slds-hide">
+          </lightning-input-field>
+          <lightning-input-field field-name={fldAssociatedHealthEvaluation} value={associatedHealthEvaluationId} class="slds-hide">
+          </lightning-input-field>
+        </div>
+      </template>
+    </c-uac-record-edit-form>
+
+    <br/><br/><br/><br/><br/><br/><br/>
+
+    <div slot="footer">
+      <button class="slds-button slds-button_neutral" onclick={handleClose}>Cancel</button>
+      <button class="slds-button slds-button_brand" onclick={handleSave}>Save</button>
+    </div>
+
+  </c-uac-modal>
+</template>

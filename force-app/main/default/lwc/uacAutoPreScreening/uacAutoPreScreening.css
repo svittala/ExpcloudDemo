@@ -1,0 +1,32 @@
+.THIS .green { 
+    background-color: green !important;
+ }
+
+
+.slds-truncate{
+    white-space: normal !important;
+}
+
+.THIS .slds-icon-utility-success svg {
+    fill: rgb(52,168,83);
+  }
+
+  .slds-icon_container.slds-icon_container_circle.slds-icon-action-check {
+    background-color: #f1cf05 !important;
+}
+.slds-icon_container .slds-icon_container_circle .slds-icon-action-check {
+    background-color: #f1cf05 !important;
+}
+.THIS .slds-button .slds-button_brand{
+float: right !important;
+}
+.uacCriteriaColumn{
+max-width: 600px !important;
+}
+.uac-button-right {
+    text-align: right;
+    padding: 10px;
+}
+.slds-icon-action-check{
+    background-color: #f5b03d !important;
+}

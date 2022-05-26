@@ -1,0 +1,31 @@
+.THIS .pieSize{
+    /*max-width: 250px;*/
+    max-width: 300px !important;
+    min-width: 50%;
+    /*min-height: 300px;*/
+    /*width: min(100%, 300px);*/
+    /*min-width: 20em;*/
+    /*min-width: 20em;
+    max-width: 100%;*/
+}
+.THIS .barSize{
+    /*max-width: 650px;*/
+    max-width:  500px !important;
+    min-width:  75%;
+    /*height: 300px !important;*/
+    /*width: min(100%, 600px);
+    /*min-width: 35em;
+    max-width: 100%;*/
+}
+.THIS .legendSize{
+    max-width: 100%;
+    min-width: 50%;
+    /*min-width: 20em;
+    max-width: 100%;*/
+}
+.THIS .dot{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}

@@ -1,0 +1,212 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component able to present multiple data table in a card with data fetched via a SOQL query (with merge fields based on current record / user)." >
+    
+    <!-- Global Component Parameters -->
+    <aura:attribute name="title"      type="String"  default="Plan d'action"
+                    description="Component card title."/>
+    <aura:attribute name="icon"       type="String"  default="standard:action_list_component"
+                    description="Component card icon."/>
+    <aura:attribute name="showBorder" type="Boolean" default="false"
+                    description="Show border around component card?"/>
+    <aura:attribute name="showCount"  type="Boolean" default="true"
+                    description="Show row count in title?"/>
+    <aura:attribute name="showQuery"  type="Boolean" default="false"
+                    description="Show SOQL query (for debug)?"/>
+    <aura:attribute name="showSearch"        type="Boolean" default="false"
+                    description="Displays a search utility in the header."/>
+    <aura:attribute name="maxRowSelection"   type="integer" default="0"
+                    description="Max number of rows selected (0 means no selection checkbox display)."/>
+    <aura:attribute name="tableHeight" type="String" default="15em"
+                    description="Height of the data-table (empty = no scroll)."/>
+    
+    <!-- List Selection Parameters -->
+    <aura:attribute name="soqlListStr"   type="String"
+                    default='[ {"label":"Opportunités", "icon":"standard:opportunity",
+                                "name":"Opportunity", "relatedList":"Comptes_del__r",
+                                "tableActions":[{"label":"Edit",
+                                                 "event":{"name":"e.ltng:sendMessage",
+                                                          "params":{"channel":"PEG_PopUp",
+                                                                    "message":{"name":"c:PEG_MassEdit_CMP",
+                                                                               "header":"Mass Edit",
+                                                                               "params":{"records":"{{{Row.SelectedRows}}}",
+                                                                                         "fields":["Next_Step__c","Next_Step_Date__c","StageName","Responsable__c"],
+                                                                                         "sObjectName":"Opportunity"} } } } },
+                                                {"label":"Show","variant":"brand",
+                                                 "event":{"name":"e.force:showToast","params":{"type":"error","title":"Success!","message":"The User is {{{User.Name}}} in Department {{{User.Department}}} with {{{Row.SelectedRows}}}" } } } ],
+                                "query":"select Name, RecordTypeId, tolabel(Situation__c), Owner.Name, CloseDate, Next_Step__c, Next_Step_Date__c, StageName, Responsable__r.Name  from Opportunity",
+                                "fields":[{"label":"Name", "fieldName": "Name", "type": "text", "sortable": "true"},
+                                          {"type":"button","initialWidth":"50","typeAttributes":{"iconName":"utility:new_window","name":"Show","variant":"base"}},
+                                          {"label":"Responsable",  "fieldName": "Responsable__r.Name", "type": "text", "sortable": "true"},
+                                          {"type":"button","initialWidth":"50","typeAttributes":{"iconName":"utility:new_window","name":"Look","variant":"base"}},
+                                          {"label":"Situation",  "fieldName": "Situation__c", "type": "text", "sortable": "true"},
+                                          {"label":"Statut",  "fieldName": "StageName", "type": "text", "sortable": "true"},
+                                          {"label":"Action",  "fieldName": "Next_Step__c", "type": "text", "sortable": "true"},
+                                          {"label":"Echéance",  "fieldName": "Next_Step_Date__c", "type": "date", "sortable": "true"},
+                                          {"label":"Cible",  "fieldName": "CloseDate", "type": "date", "sortable": "true"}],
+                                "filters":[{"label":"A moi","filter":"WITH SECURITY_ENFORCED ORDER BY CreatedDate desc "},
+                                           {"label":"En retard","filter":"WITH SECURITY_ENFORCED ORDER BY CreatedDate desc "},
+                                           {"label":"Non affectées","filter":"WHERE CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED "},
+                                           {"label":"De mon Agence","filter":"WHERE CreatedDate = LAST_MONTH WITH SECURITY_ENFORCED "} ] },
+                               {"label":"Pistes", "icon":"standard:lead",
+                                "name":"Lead", "relatedList":"Comptes_del__r",
+                                "query":"select Name, RecordTypeId, Owner.Name, Email, LeadSource, Status, CreatedDate, Next_Step__c, Next_Step_Date__c from Lead",
+                                "fields":[{"label":"Name", "fieldName": "Name", "type": "text", "sortable": "true"},
+                                          {"type":"button","initialWidth":"50","typeAttributes":{"iconName":"utility:new_window","name":"Show","variant":"base"}},
+                                          {"label":"Owner",  "fieldName": "Owner.Name", "type": "text", "sortable": "true"},
+                                          {"label":"Statut",  "fieldName": "Status", "type": "text", "sortable": "true"},
+                                          {"label":"Action",  "fieldName": "Next_Step__c", "type": "text", "sortable": "true"},
+                                          {"label":"Echéance",  "fieldName": "Next_Step_Date__c", "type": "date", "sortable": "true"},
+                                          {"label":"Source",  "fieldName": "LeadSource", "type": "text", "sortable": "true"} ],
+                                "filters":[{"label":"A moi","filter":"WITH SECURITY_ENFORCED ORDER BY CreatedDate desc "},
+                                           {"label":"Non affectées","filter":"WHERE CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED "},
+                                           {"label":"De mon Agence","filter":"WHERE CreatedDate = LAST_MONTH WITH SECURITY_ENFORCED "} ] },
+                               {"label":"Tâches", "icon":"standard:task",
+                                "name":"Task", "relatedList":"Comptes_del__r",
+                                "query":"select Subject, RecordTypeId, Owner.Name from Task",
+                                "fields":[{"label":"Sujet", "fieldName": "Subject", "type": "text", "sortable": "true"},
+                                          {"type":"button","initialWidth":"50","typeAttributes":{"iconName":"utility:new_window","name":"Show","variant":"base"}},
+                                          {"label":"Owner", "fieldName": "Owner.Name", "type": "text", "sortable": "true"}],
+                                "filters":[{"label":"A moi","filter":" WITH SECURITY_ENFORCED ORDER BY CreatedDate desc "},
+                                           {"label":"Non affectées","filter":"WHERE CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED "},
+                                           {"label":"De mon Agence","filter":"WHERE CreatedDate = LAST_MONTH WITH SECURITY_ENFORCED "} ] } ]'
+                    description="Action list."/>
+    <aura:attribute name="soqlListJson" type="List"
+                    description="JSON parsed version of soqlListStr"/>
+    <aura:attribute name="selectedQuery" type="Object"
+                    description="Selected query from list"/>
+    <aura:attribute name="selectedData" type="Object"
+                    description="Selected data table config"/>
+        
+    <!-- Actions configuration -->
+    <aura:attribute name="tableActionStr"  type="String"
+                    default='[ { "label":"Plan", "icon":"open",
+                                 "event": { "name" : "e.ltng:sendMessage",
+                                            "params" : { "channel":"PEG_Object",
+                                                         "message": { "name":"e.force:navigateToURL",
+                                                                      "params": { "url": "/lightning/n/Plan_3" } } } } } ]'
+                    description="Header actions configuration (if any)." />
+    <aura:attribute name="tableActionJson"  type="List"
+                    default='[]'
+                    description="JSON conversion of header actions configuration." />
+    
+    <aura:attribute name="rowActions" type="String"
+                    default='[{"label":"Edit",
+                               "event":{"name": "e.ltng:sendMessage",
+                                        "params":{"channel":"PEG_Object",
+                                                  "message":{"name":"e.force:editRecord",
+                                                             "params":{"recordId":"{{{Row.Id}}}"} } } } },
+                              {"label":"Look",
+                               "event":{"name": "e.ltng:sendMessage",
+                                        "params":{"channel":"PEG_Object",
+                                                  "message":{"name":"e.force:navigateToSObject",
+                                                             "params":{"recordId":"{{{Row.Responsable__c}}}"} } } } },
+                              {"label":"Show","variant":"brand",
+                               "event":{"name": "e.ltng:sendMessage",
+                                        "params":{"channel":"PEG_Object",
+                                                  "message":{"name":"e.force:navigateToSObject",
+                                                             "params":{"recordId":"{{{Row.Id}}}"} } } } }
+                             ]'
+                    description="Selected query from list"/>
+    
+    <aura:attribute name="bypassFLS"  type="Boolean" default="false" 
+                    description="Bypass FLS when executing query." />
+    <aura:attribute name="bypassSharing"    type="Boolean" default="false" 
+                    description="Bypass Sharing when executing query." />
+    <aura:attribute name="queryType"        type="String"  default="" 
+                    description="When requesting a byPass, a valid queryType should be provided (see PEG_Query__mdt)." />
+    <aura:attribute name="isStorable"        type="Boolean" default="false" 
+                    description="Query action storable mode activation." />
+    <aura:attribute name="isBackground"      type="Boolean" default="false" 
+                    description="Query action background mode activation." />
+    <aura:attribute name="isFlatten"         type="Boolean" default="false"
+                    description="Flatten JSON structure of results (when fetching lookup info)?"/>
+
+    <!--
+    [     {   "label": "Report", "variant": "brand",    "event": { "name": "e.ltng:sendMessage",             "params": {"channel":"PEG_Report","message":{"name":"TEST_OBJECTS"}}         }     },     {         "label": "Dashboard",         "variant": "neutral",         "event": {             "name": "e.ltng:sendMessage",             "params": {"channel":"PEG_Dashboard","message":{"name":"AdoptionDashboard"}}         }     },     {         "type":"menu",         "items":[         {             "label": "Wave",             "variant": "brand",             "event": {                 "name": "e.ltng:sendMessage",                 "params": {"channel":"PEG_Analytics","message":{"name":"Accounts_Summary"}}             }         },         {             "label": "Report merged",             "variant": "neutral",             "event": {                 "name": "e.ltng:sendMessage",                 "params": {"channel":"PEG_Report","message":{"name":"REPORT_ACCOUNT_1_FILTER","filters":{"fv0":"{{{Account.Type}}}"} } }             }         }         ]     } ]
+    
+    <aura:attribute name="width" type="String"/>
+    <aura:attribute name="isExpanded" type="Boolean" default="false"
+                    description="Expand result data table width"/>
+    -->               
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.initConfig}"
+                  description="Init of component: parsing and reset of attributes."/>
+    
+    <lightning:card title="{#v.title}"
+                    iconName="{#v.icon}"
+                    class="{# if(v.showBorder, 'slds-card_boundary', '')}" >
+    
+    <aura:set attribute="actions">
+       <!--
+       <lightning:buttonGroup class="slds-col"> 
+       <lightning:button iconName="utility:summary"
+                         label="Plan"
+                         variant="neutral"
+                         class="slds-button_last"
+                         onclick="{!c.openPlan}"/>     
+       </lightning:buttonGroup>  
+       -->
+        <aura:if isTrue="{!v.tableActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.tableActionJson}"
+                                   callback="{!c.handleTableAction}" />
+        </aura:if>
+        
+        
+        <aura:if isTrue="{!v.soqlListJson.length > 0}">
+        <lightning:buttonGroup class="slds-col">  
+          <lightning:select name="QuerySelector"
+                            variant="label-hidden"
+                            class="mySelect"
+                            onchange="{!c.handleChange}">
+            <aura:iteration items="{!v.soqlListJson}"
+                            var="eachQuery"
+                            indexVar="eachNbr" >
+                <option value="{!eachNbr}"
+                        selected="{! eachQuery.name == v.selectedQuery.name }" >{!eachQuery.label}</option>
+            </aura:iteration>
+          </lightning:select>
+        </lightning:buttonGroup>
+        </aura:if>
+    </aura:set>
+
+    <div class="slds-card__body slds-card__body_inner"
+         onresize="{!c.handleResize}" 
+         aura:id="containingDiv" >
+    <aura:if isTrue="{!v.selectedQuery}">
+    <lightning:tabset>
+    <aura:iteration items="{!v.selectedQuery.filters}"
+                            var="eachFilter">
+    <lightning:tab label="{!eachFilter.label}">
+    <c:PEG_SoqlList_CMP title="{!v.selectedQuery.label + ' - ' + eachFilter.label }"
+                        icon="{!v.selectedQuery.icon}"
+                        showBorder="false"
+                        showCount="{#v.showCount}" showQuery="{#v.showQuery}"
+                        query="{!v.selectedQuery.query + ' ' + eachFilter.filter}" 
+                        fields="{!v.selectedQuery.fields}"
+                        tableActionStr="{!v.selectedQuery.tableActions}"
+                        rowActionStr="{!v.rowActions}"
+                        isFlatten="{#v.isFlatten}"
+                        bypassFLS="{#v.bypassFLS}"
+                        bypassSharing="{#v.bypassSharing}"
+                        queryType="{#v.queryType}"
+                        isStorable="{#v.isStorable}"
+                        isBackground="{#v.isBackground}"
+                        showSearch="{#v.showSearch}"
+                        maxRowSelection="{#v.maxRowSelection}"
+                        tableHeight="{#v.tableHeight}"
+                        isInfiniteLoad="true"
+                        pageSize="20" 
+                        loadMoreOffset="20"/>
+    </lightning:tab>
+    </aura:iteration>
+    </lightning:tabset>
+    </aura:if>
+    </div>
+    </lightning:card>
+    
+    <!-- Utilities -->
+    <c:PEG_Context_CMP aura:id="contextMgr"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"/>
+    
+</aura:component>

@@ -1,0 +1,136 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_KpiDisplay_CMP&gt;</code> component may be used in any type of Lightning
+        page and is available directly in the App Builder (or Community Builder).
+        It enables to display a card containing a configurable set of subcards displaying tiles of
+        KPIs corrresponding to simple count queries.</p>
+    <p>It relies on the <code>&lt;c:PEG_SOQL_CMP&gt;</code> and <code>&lt;c:PEG_Merge_CMP&gt;</code>
+        custom utility Lighting components to execute all these queries in a contexual manner.</p>
+    <p>Most of its behaviour is configurable via simple App Builder configuration attributes
+        (title, icon...) and extensible in terms of actions available (both at KPI card and global
+        levels).</p>
+    <p>The main configuration is managed within the <code>kpiConfigStr</code> attribute, containing
+        a stringified JSON structure of the KPI display card hierarchy.</p>
+<pre>[
+     {"icon":"standard:lead","label":"Leads","name":"Lead",
+      "kpis":[{"icon":"utility:dayview","label":"Today","error":"5","warning":"2",
+               "query":"select count(Id) from Lead where CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED"},
+              {"icon":"utility:reminder","label":"This Month","error":"5","warning":"2",
+               "query":"select count(Id) from Lead where CreatedDate = THIS_MONTH WITH SECURITY_ENFORCED"}]},
+     {"icon":"standard:opportunity","label":"Opportunities","name":"Opportunity",
+      "kpis":[{"icon":"utility:dayview","label":"Today","error":"5","warning":"2",
+               "query":"select count(Id) from Opportunity where CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED"},
+              {"icon":"utility:reminder","label":"This Month","error":"5","warning":"2",
+               "query":"select count(Id) from Opportunity where CreatedDate = THIS_MONTH WITH SECURITY_ENFORCED"}]}
+]</pre>
+    <p>Note : Beware that direct <code>count()</code> queries are not supported for the time
+        being, a <code>database.query()</code> apex statement being indeed executed.
+        Please use <code>count(Id)</code> instead.</p>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Advanced Color Configuration</h4>
+    <p>It is possible to customise the color of the KPI icon leveraging the standard
+        variants of the <code>lightning:icon</code> component for <code>utility</code>
+        icons. Three colors are available : standard, warning and error.</p>
+    <p>For each KPI definition, two thresholds may be defined, respectively for the 
+        warning and error levels. A numeric value may be provided for each of these
+        via the <code>warning</code> and <code>error</code> fields.</p>
+    <p>By default, comparisons are made in increasing order, i.e. the icon will appear in
+        orange (warning level) if the KPI value is superior to the warning level but lower
+        than the error level. Comparisons may also be done in the other way by simply adding
+        <code>"inverse":"true"</code> to the KPI definition.</p>
+     <p>E.g. in the following example, the comparison is done in increasing order for the 
+         first KPI and in decreasing order for the second.</p>
+<pre>[
+     {"icon":"standard:lead","label":"Leads","name":"Lead",
+      "kpis":[{"icon":"utility:dayview","label":"Today","error":"5","warning":"2",
+               "query":"select count(Id) from Lead where CreatedDate = THIS_WEEK"},
+              {"icon":"utility:reminder","label":"This Month","error":"5","warning":"10", "inverse":"true",
+               "query":"select count(Id) from Lead where CreatedDate = THIS_MONTH"}]}
+]</pre>
+    <br/>
+    </div>      
+            
+    <div class="slds-m-top_large">
+    <h4>Actions configuration</h4>
+    <p>The configuration of actions is done via two attributes, which have a similar content
+        based on the syntax defined for the <code>&lt;c:PEG_ActionGroupDisplay_CMP&gt;</code>
+        component:</p>
+    <ul>
+    <li><code>tableActionStr</code> to define the main actions of the global containing card.</li>
+    <li><code>kpiActionStr</code> to define the icon buttons on the each KPI sub-card.</li>
+    </ul>
+    <p>Typically, these attributes must be configured with a JSON list of actions.</p>
+<pre>[
+ { "label" : "Calendar", "icon" : "open",
+   "event" : { "name" : "e.force:navigateToObjectHome",
+               "params" : { "scope" : "Event" } } },
+ { "label" : "Tasks", "icon" : "open",
+   "event" : { "name" : "e.force:navigateToObjectHome",
+               "params" : { "scope" : "Task" } } }
+]</pre>
+    <p>For the KPI actions, the <code>icon</code> attribute is mandatory and should
+        correspond to the name of one of the standard SLDS activity icons.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Advanced Actions Configuration</h4>
+    <p>For KPI level actions, the applicable KPI JSON object is passed as input to the
+        action trigger and may be merged within the event configuration via the 
+        <code>Row</code> keyword. This enables to have a same set of KPI actions but with
+        differentiated parameters.</p>
+    <p>In the following example, a custom <code>target</code> field is added to the KPI
+        JSON configuration.</p>
+<pre>[
+    {
+        "icon": "standard:lead",
+        "label": "Lead",
+        "name": "Lead",       
+        "target": "Lead",
+        "kpis": [
+            {
+                "icon": "utility:dayview",
+                "label": "Today",
+                "error": "5",
+                "warning": "2",
+                "query": "select count(Id) from Lead where CreatedDate = THIS_WEEK WITH SECURITY_ENFORCED"
+            }
+        ]
+    }
+]</pre>
+     <p>It is then reused as merge parameter to the triggered event in the KPI action
+         definition.</p>
+<pre>[
+    {
+        "icon": "new_window",
+        "name": "Navigate",
+        "event": {
+            "name": "e.force:navigateToObjectHome",
+            "params": {
+                "scope": "{{{Row.target}}}"
+            }
+        }
+    }
+]</pre>
+    <p>This is a simple illustration example, as the standard <code>name</code> JSON
+        field could have been used. In such a case, the <code>{{{Row.name}}}</code>
+        could have been used directly in the KPI action.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

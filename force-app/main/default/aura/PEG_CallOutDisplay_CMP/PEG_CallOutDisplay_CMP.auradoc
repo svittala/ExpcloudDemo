@@ -1,0 +1,173 @@
+<aura:documentation>
+	<aura:description>
+    
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_CallOutDisplay_CMP&gt;</code> component may be used in any type
+        of Lightning page and is available directly in the App Builder (or Community Builder).
+        It enables to fetch data from an external REST Web Service and display them
+        as individual fields and/or within a data/tree table.</p>
+    <p>Il relies on the <code>&lt;c:PEG_CallOut_CMP&gt;</code> component to fetch the data
+        and on the <code>&lt;c:PEG_Merge_CMP&gt;</code> one to customize the callout parameters
+        depending on the current Object or User.</p>
+    <p>Most of its behaviour is configurable via simple App Builder configuration attributes
+        (title, icon...) and extensible in terms of actions available (both at row and global
+        levels. For each attribute, some additional help is provided to in information popup. 
+    </p>
+    <p>Please refer to the <code>&lt;c:PEG_SoqlList_CMP&gt;</code> for most of the
+        configuration details.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Callout Configuration</h4>
+    <p>The main Use Case is to fetch data from an external Web service and
+        display its results in a Lightning card. The main parameters are the
+        following.</p>
+    <ul>
+        <li><code>targetURL</code>: Target URL to be called, which should be 
+            explicit (e.g. <code>https://xxx.xxx/xxx</code>) and be registered as a valid
+            Remote Site, or use a registered Named Credentials (e.g. 
+            <code>callout:xxxx/yyy</code>).</li>
+        <li><code>httpMethod</code>: HTTP method to be used (GET, POST, PATCH...),
+            as defined for by the remote REST Web Service.</li>
+        <li><code>headerParams</code>: list of header parameters to be provided
+        for the request (in addition to the ones provided by the target
+        Named Credentials), provided as a simple stringified JSON object,
+        such as <code>{"Content-Type":"application/json;charset=UTF-8"}</code>
+        by default.</li>
+        <li><code>requestBody</code>: any JSON Object to be provided as part of
+        the request body (GET method excepted, for which it should remain empty).</li>
+    </ul>
+    <p>All of these parameters may be contextualised to the current Object or
+        User leveraging the <code>&lt;c:CMN_Merge_CMP&gt;</code> syntax, 
+        except the HTTP method.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Example #1: Simple List Display</h4>
+    <p>Assuming the following message body is returned by the called Service:</p>
+<pre>[
+ {"card":"xxx","value":12},
+ {"card":"yyy","value":55}
+]</pre>
+    <p>the required configuration is the following:</p>
+    <ul>
+        <li><code>HTTP Method</code>: GET</li>
+        <li><code>Header Parameters</code>: {"Content-Type","application/json;charset=UTF-8"}</li>
+        <li><code>Display Fields?</code>: unchecked</li>
+        <li><code>Display List ?</code>: checked</li>
+        <li><code>List Field Name</code>: (empty)</li>
+        <li><code>Display as Tree?</code>: unchecked</li>
+        <li><code>Sub-hierarchy fields</code>: (empty)</li>
+        <li><code>Table Configuration</code>:[{"label": "Card","fieldName": "card","type": "text","sortable": "true"},
+                                              {"label":"Value","fieldName":"value","type": "number","sortable":"true"}]</li>
+        <li><code>Row Identifier</code>: card</li>
+    </ul>
+    <br/>
+    </div>
+                
+    <div class="slds-m-top_large">
+    <h4>Example #2: Structured Object with Sub-Tree</h4>
+    <p>Assuming the following message body is returned by the called Service:</p>
+<pre>{
+  "contract":"xxx",
+  "id":12,
+  "nbcards":6214,
+  "services": [
+      {
+        "id":"x123",
+        "name":"Service 1",
+        "status":"Active",
+        "svcdetails": [
+            {
+                "id":"abc87",
+                "name":"option X",
+                "status":"Active"
+            },
+            {
+                "id":"def63",
+                "name":"option Y",
+                "status":"Inactive"
+            }
+        ]
+      },
+      {
+        "id":"x123",
+        "name":"Service 3",
+        "status":"Active",
+        "svcdetails": [
+            {
+                "id":"dhu54",
+                "name":"option E",
+                "status":"Active"
+            },
+            {
+                "id":"jik32",
+                "name":"option Y",
+                "status":"Active"
+            }
+        ]
+      }
+  ]
+}</pre>         
+    <p>the required configuration is the following:</p>
+    <ul>
+        <li><code>HTTP Method</code>: GET</li>
+        <li><code>Header Parameters</code>: {"Content-Type","application/json;charset=UTF-8"}</li>
+        <li><code>Display Fields?</code>: checked</li>
+        <li><code>Object Fields to Display</code>:[{"label":"Contract","fieldName":"contract","type":"text"},
+                                                   {"label":"Id","fieldName": "id","type":"text"},
+                                                   {"label":"NB Cards","fieldName":"nbcards","type":"number"}]</li>
+        <li><code>Display List ?</code>: checked</li>
+        <li><code>List Field Name</code>: services</li>
+        <li><code>Display as Tree?</code>: checked</li>
+        <li><code>Sub-hierarchy fields</code>: ["svcdetails"]</li>
+        <li><code>Table Configuration</code>: [{"label": "ID","fieldName": "id","type": "text","sortable": "true"},
+                                               {"label": "Name","fieldName": "name","type": "text","sortable": "true"},
+                                               {"label": "Status","fieldName": "status","type": "text","sortable": "true"}]</li>
+        <li><code>Row Identifier</code>: id</li>
+        </ul>
+        <p>Note: the two levels of lists are assumed to have a lot of common attributes,
+           "id", "name" and "status" in the exemple above, in order to be properly
+           displayed in the underlying <code>lightning:treeGrid</code>.</p>
+        <br/>
+        </div>
+        
+        
+    <div class="slds-m-top_large">
+    <h4>Action Configuration</h4>
+    <p>When handling actions, the component provides contextual some contextual
+        data upon action triggers to be used in <code>{{{Row.xxxx}}}</code> merge tokens.</p>
+    <ul>
+    <li>for row actions (in the data table), only the data of the corresponding row is
+        provided.</li>
+    <li>for header actions (in the card header), a JSON object with two fields is provided, 
+        with the displayed Object field values provided as a JSON sub-object in the
+        <code>Record</code> field and the list of selected datatable rows as a 
+        stringified JSON list in the <code>SelectedRows</code> field.</li>
+    </ul>
+    <p>Please refer to
+        <a href="/docs/component-library/bundle/c:PEG_ActionGroupDisplay_CMP/documentation">
+        <code>&lt;PEG_ActionGroupDisplay_CMP&gt;</code></a> for details about action 
+        configuration and 
+        <a href="/docs/component-library/bundle/c:PEG_Merge_CMP/documentation">
+        <code>&lt;PEG_Merge_CMP&gt;</code></a> components for details about the "merge" feature.</p>
+    <br/>
+    </div>
+            
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+        
+    </aura:description>
+	
+</aura:documentation>

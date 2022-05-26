@@ -1,0 +1,117 @@
+<aura:component access="global"
+                description="Component displaying a custom tile with collapsible content.">
+	
+    <!-- Global Component Configuration -->
+    <aura:attribute name="label"       type="String"
+                    description="Component tile label."/>
+    <aura:attribute name="icon"        type="String"
+                    description="Component tile icon."/>
+    <!-- default="slds-icon-standard-account" -->
+    <aura:attribute name="color"       type="String"  
+                    description="Component color CSS."/>
+    <aura:attribute name="showBorder"  type="Boolean" default="false"
+                    description="Show border around component tile?"/>
+    <aura:attribute name="recordId"    type="String"  required="true"
+                    description="ID of the displayed record."/>
+    <aura:attribute name="sObjectName" type="String"  required="true"
+                    description="Object Name of the displayed record."/>
+    <aura:attribute name="columns"     type="Integer" required="1"
+                    description="Number of columns for the compact layout display."/>
+    
+    <!-- Expand / collapse Configuration -->
+    <aura:attribute name="isCollapsible" type="Boolean" default="false"
+                    description="Display an expand/collapse icon?"/>
+    <aura:attribute name="isExpanded"    type="Boolean" default="false"
+                    description="Display content card (default/current value)?"/>
+    
+    <!-- Component Display -->
+    <div class="{! (v.showBorder ? 'slds-box slds-box_x-small ' : '' )}">
+    
+    <lightning:tile label="" class="slds-p-around_x-small" >
+                          
+                    <!--  {!v.label}
+
+                    href="{! '/lightning/r/' + v.sObjectName + '/' + v.recordId + '/view' }"
+                    class="{! (v.showBorder ? 'slds-box slds-box_x-small ' : '' ) + 'slds-truncate'}">
+                      
+                      <aura:set attribute="label">
+                          <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+                            <h3 class="slds-tile__title slds-truncate">
+                                {!eachResult.Name}</h3>
+                            <div class="slds-shrink-none">
+                                <lightning:icon iconName="utility:open"
+                                                size="small"/>
+                            </div>
+                          </div>
+                      </aura:set>
+                      -->
+        
+          <aura:set attribute="media">
+
+                <lightning:buttonIcon iconName="{! v.isExpanded ? 'utility:chevrondown' : 'utility:chevronright' }"
+                                      variant="bare"
+                                      disabled="{! v.isCollapsible == 'false'}"
+                                      onclick="{! c.expandCollapse }"
+                                      alternativeText="Expand/collapse" />
+                
+                <aura:if isTrue="{#v.icon.length > 0}">
+                <lightning:icon iconName="{!v.icon}"
+                                size="small"/>
+                </aura:if>
+              
+          </aura:set>
+          <div class="slds-tile__detail">
+              <!-- slds-text-heading_small  -->
+          <div class="slds-truncate slds-m-right_large slds-m-vertical_xx-small slds-tile__title">
+              <ui:outputURL class="slds-text-heading_small"
+                                  label="{!v.label}"
+                                  value="e.force:navigateToSObject"
+                                  target="_self"
+                                  click="{!c.editObject}"
+                                  title="Open Object"/>
+          </div>
+          
+              <!--
+              <div style="position: absolute; top: 1.25em; left: -2.125em;width:2px;height:100%;"
+              v     class="{!v.color}" />
+              <div style="position: absolute; top: -1.7em; right: -0.25em;">
+              -->
+              <aura:if isTrue="{#v.color.length > 0}">
+              <div style="position: absolute; top: 2.2em; left: -2.125em;width:2px;height:calc(100% - 1.5em);"
+                   class="{!v.color}" />
+              </aura:if>
+              <div style="position: absolute; top: -0.3em; right: -0.2em;">
+                  <lightning:buttonMenu onselect="{! c.editObject }"
+                                        iconSize="small"
+                                        menuAlignment="right"
+                                        alternativeText="Show menu">
+                       <lightning:menuItem value="e.force:navigateToSObject" label="Open" />
+                       <lightning:menuItem value="e.force:editRecord" label="Edit" />
+                  </lightning:buttonMenu>
+                  <!--
+                  <lightning:buttonIcon iconName="utility:edit"
+                                        variant="container"
+                                        alternativeText="Edit" 
+                                        onclick="{!c.editObject}"/> 
+                   -->
+              </div>
+              
+                {!v.body}  
+          
+     
+     <aura:if isTrue="{!v.isExpanded}">
+       <div class="slds-p-left_small slds-m-top_small slds-theme_shade slds-text-body_small slds-hyphenate">
+       <lightning:recordForm
+                  recordId="{!v.recordId}"
+                  objectApiName="{!v.sObjectName}"
+                  layoutType="Compact"
+                  class=""
+                  mode="readonly" 
+                  columns="{!v.columns}"/>
+       </div>
+     </aura:if>
+     </div>
+     </lightning:tile>
+     </div>
+    
+</aura:component>

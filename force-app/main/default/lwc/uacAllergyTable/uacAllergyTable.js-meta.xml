@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Allergy Table</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="healthEvaluationId" type="String" label="Health Evaluation Id" role="inputOnly" description="Id of health evaluation record."/>
+            <property name="uacId" type="String" label="UAC Id" role="inputOnly" description="Id of UAC contact."/>
+            <property name="allergyReportedLabel" type="String" label="Allergy Reported Label" role="inputOnly" description="Label of the question."/>
+            <property name="HEvalRecordTypeName" type="String" label="Record Type" role="inputOnly" description="Record type of Health Evaluation."/>
+            <property name="allergiesReported" type="String" label="Allergies Reported?" description="Yes/No value for allergies reported."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

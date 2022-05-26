@@ -1,0 +1,22 @@
+<aura:component controller="PEG_Action_CTL"
+                access="global"
+                description="Utility Component enabling to execute an apex action (implementing the
+                             PEG_ActionHandler_SVC apex class and fetch the result in an asynchronous manner.">
+    
+    <!-- Method to execute a single action -->
+    <aura:method name="runAction"
+                 description="Method to trigger an apex action and fetch its result.">
+        
+        <aura:attribute name="action"    type="String" 
+                        description="Target URL for the callout." />
+        <aura:attribute name="target"    type="Object" 
+                        description="HTTP method to be used (GET, POST....)." />
+        <aura:attribute name="onSuccess" type="Function"
+                        description="Function called when receiving (asynchronously) the response to the request (as an Object)." />
+        <aura:attribute name="onError"   type="Function"
+                        description="Function called when receiving (asynchronously) an error to the request (as an error structure)."/> 
+        <aura:attribute name="mode"      type="String"   default="SObject"
+                        description="Format of the result returned by the action : SObject or String." />
+    </aura:method>
+    
+</aura:component>

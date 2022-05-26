@@ -1,0 +1,33 @@
+<!--
+  @File Name         : uacImagingStudyTBTable.html
+  @Description       : LWC for adding/updating/deleting ImagingStudy Lab Test records
+  @Group             : uacImagingStudyTBTable
+  @Author            : Ranjith kumar (AI-Vets)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 08-11-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-08-2020   Ranjith kumar (AI-Vets)   Initial Version
+-->
+<template>
+  <c-uac-flow-header title={tableTitle}>
+  </c-uac-flow-header>
+  <template for:each={healthEvalFields} for:item="fld">
+    <div class="slds-grid" key={fld.name}>
+      <div class="slds-col slds-size_1-of-2">
+        <c-uac-input type={fld.type} name={fld.name} label={fld.label} value={fld.value} options={fld.options}
+          required={fld.required} hide={fld.hide} onfieldchange={handleHealthEvalFieldChange}>
+        </c-uac-input>
+      </div>
+    </div>
+  </template>
+
+  <div class={tableSectionClass}>
+    <div class="slds-p-top_medium">{tableNote}</div>
+    <div class="uac-table-container">
+      <c-uac-table columns={fields} default-new-record={defaultNewRecord} onloadcomplete={handleLoad}
+        onsave={handleSave} ondelete={handleDelete} onfieldchange={handleFieldChange} onfieldclick={handleFieldClick}>
+      </c-uac-table>
+    </div>
+  </div>
+</template>

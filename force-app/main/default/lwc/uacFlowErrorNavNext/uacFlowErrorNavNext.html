@@ -1,0 +1,29 @@
+<!--
+  @File Name         : uacFlowErrorNavNext.html
+  @Description       : Used to display flow errors in modal
+  @Group             : uacFlowError
+  @Author            : Abhisek Pati (Deloitte)
+  @Last Modified By  : Abhisek Pati (Deloitte)
+  @Last Modified On  : 08-25-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-25-2020   Abhisek Pati (Deloitte)   Initial Version
+-->
+<template>
+    <template if:true={hasErrorMessage}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Error</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <p class="uac-error"><lightning-formatted-rich-text value={errorMessage}></lightning-formatted-rich-text></p>
+            </div>
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_brand" onclick={goNext}>Ok</button>
+            </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

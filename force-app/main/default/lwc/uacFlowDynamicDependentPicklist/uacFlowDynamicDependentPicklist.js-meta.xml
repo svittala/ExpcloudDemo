@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <masterLabel>Dynamic Dependent Picklist from Schema</masterLabel>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="objectApiName" label="Object API Name" type="String" role="inputOnly" description="API Name of the Object."/>
+            <property name="controllingPicklistApiName" label="Controlling Picklist API Name" role="inputOnly" type="String" description="API Name of Controlling  picklist field."/>
+            <property name="controllingPicklistLabel" label="Controlling Picklist Label" role="inputOnly" type="String" description="Controlling field label"/>
+            <property name="dependentPicklistApiName" label="Dependent Picklist API Name" role="inputOnly" type="String" description="API Name of Dependent picklist field."/>
+            <property name="dependentPicklistLabel" label="Dependent Picklist Label" role="inputOnly" type="String" description="Dependent field label."/>
+            <property name="required" label="Required" type="Boolean" role="inputOnly" default="false" description="Will prevent next page/finish if set to {!$GlobalConstant.True} and no values are selected."/>
+            <property name="controllingPicklistValue" label="Controlling Picklist Value" type="String" description="Controlling field value"/>
+            <property name="dependentPicklistValue" label="Dependent Picklist Value" type="String" description="Dependent picklist value"/>
+            <property name="recordTypeId" label="Record Type Id" type="String" description="Record Type Id of Record"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

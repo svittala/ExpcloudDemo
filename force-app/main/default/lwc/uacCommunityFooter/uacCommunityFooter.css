@@ -1,0 +1,13 @@
+.uac-footer {
+    width: 100%;
+    text-align: left;
+    padding: 30px 200px;
+    background-color: #172c3c;
+    color: #fff;
+    font-size: 20px;
+    font-family: "Source Sans", Arial, sans-serif;
+    font-weight: 600;
+    line-height: 18px;
+    bottom: -20px;
+    position: absolute;
+}

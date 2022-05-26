@@ -1,0 +1,44 @@
+<design:component label="PEG Custom SOSL Search" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="icon"
+                      label="Component Icon" />
+    <design:attribute name="showBorder"
+                      label="Show Border?" />
+    <design:attribute name="size"
+                      label="Card Width"
+                      description="Width of each result card, from 1 (1/12 of width) to 12 (full width)"/>
+    <design:attribute name="showCount"
+                      label="Show row count" />
+
+    <design:attribute name="showSearch"
+                      label="Show filter?"
+                      description="Displays a search value input (to be used as {{{Row}}} in the query)." />
+    
+    <design:attribute name="query"
+                      label="SOSL query template"
+                      description="Valid FIND... SOSL statement, with {{{xxxx}}} merge fields on User and current Object." />
+    <design:attribute name="displayStr"
+                      label="Configuration of data output in the result tiles."/>
+    <design:attribute name="tableDisplay"
+                      label="Display content in table mode?"
+                      description="Display content as HTML table or as horizontal list."/>
+    <design:attribute name="isCollapsible"
+                      label="Collapsible result table?"/>
+    <design:attribute name="isExpanded"
+                      label="Expanded by default?"
+                      description="(if collapsible)"/>
+    <design:attribute name="showQuery"
+                      label="Display SOSL (for debug)?" />
+    
+    <design:attribute name="isStorable"
+                      label="Use Storable Actions?"
+                      description="Use local browser cache on repeated similar queries."/>
+    <design:attribute name="isBackground"
+                      label="Send query in Background?"
+                      description="For long running SOQL queries."/>
+                  
+    <design:attribute name="tableActionStr"
+                      label="Header Actions"/>
+    
+</design:component>

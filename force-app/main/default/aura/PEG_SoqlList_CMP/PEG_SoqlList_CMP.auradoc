@@ -1,0 +1,328 @@
+<aura:documentation>
+	<aura:description>
+        
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_SoqlList_CMP&gt;</code> component may be used in any type of Lightning
+        page and is available directly in the App Builder (or Community Builder).
+        It enables to fetch any kind of data via a single SOQL query and to display them
+        as a data-table or data-tree (only one sub-level being possible due to SOQL limits)</p>
+    <p>It relies on the <code>&lt;c:PEG_SOQL_CMP&gt;</code> utility component to fetch data
+        via SOQL and on the <code>&lt;c:PEG_Merge_CMP&gt;</code> one to customize the SOQL query
+        depending on the current Object or User.</p>
+    <p>Most of its behaviour is configurable via simple App Builder configuration attributes
+        (title, icon...) and extensible in terms of actions available (both at row and global
+        levels. For each attribute, some additional help is provided to in information popup. 
+    </p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Baseline Usage</h4>
+    <p>In the most simple use case, the <code>&lt;c:PEG_SoqlList_CMP&gt;</code> may be used
+        with a simple SOQL query to fetch the data and the configuration of the table displaying
+        the results (see the standard <code>&lt;lightning:datatable&gt;</code> component for
+        more details about this configuration).</p>
+<pre>&lt;c:PEG_SoqlList_CMP
+    query='select Name,OwnerId from Account WITH SECURITY_ENFORCED LIMIT 10'
+    fields='[{"label":"Name", "fieldName": "Name", "type": "text", "sortable": "true"},
+             {"label": "OwnerId", "fieldName": "OwnerId", "type": "text", "sortable": "true"} ]'
+    title='Account List'
+    icon='standard:account' /&gt;</pre>
+        <b>Notes</b>
+        <ul>
+        <li>The <code>title</code> and <code>icon</code> attributes enable to configure the wrapping card.
+            The title may be localised using custom labels, by entering <code>$Label.c.CustomLabelName</code>
+            instead of a static string.</li>
+        <li>The <code>showBorder</code> attribute may also be used to enforce a visible frame around the card
+            (e.g. when in a subtab).</li>
+        <li>The <code>showCount</code> attribute enables to display, after the title, the actual number of rows
+            fetched.</li>
+        <li>The <code>tableHeight</code> attribute enables to set a max height for the result data table,
+            generating a local vertical scroll with fixed column headers. This height may be specified in
+            any CSS unit (e.g. vh, em, px).</li>
+        <li>The <code>showQuery</code> attribute is a debug option, enabling to display various parameters
+            (such as the query) in the card footer.</li>
+        </ul>
+    <br/>
+    </div>
+      
+    <div class="slds-m-top_large">
+    <h4>Managing Contextual Queries</h4>
+    <p>The SOQL query may be customized, leveraging the "merge" features provided by the
+        <code>&lt;c:PEG_Merge_CMP&gt;</code> utility component.</p>
+    <p>A wide range of contextual SOQL queries may then be configured, dynamically setting
+        <code>WHERE</code> clauses according to information from the current main Object 
+        (record Lightning page), the current User or even a custom session context.</p>
+<pre>&lt;c:PEG_SoqlList_CMP
+    query="select Name, StageName from Opportunity where ownerId = '{{{User.Id}}}' WITH SECURITY_ENFORCED"
+    fields='[{"label":"Stage", "fieldName": "StageName", "type": "text", "sortable": "true"},
+             {"label": "Count", "fieldName": "Nbr", "type": "number", "sortable": "true"} ]'
+    title='My Opportunities by Stage'
+    icon='standard:opportunity' /&gt;</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Using count() Queries</h4>
+    <p>The SOQL query may be actually use <code>count(xx) group by yy</code> statements
+        to compute and display various KPIs dynamically. In order for the results to be
+        displayed properly, it is recommended to explicitely name each computed column
+        (e.g. 'Nbr' in the example below).</p>
+<pre>&lt;c:PEG_SoqlList_CMP
+    query='select count(Id) Nbr, StageName from Opportunity WITH SECURITY_ENFORCED group by StageName'
+    fields='[{"label":"Stage", "fieldName": "StageName", "type": "text", "sortable": "true"},
+             {"label": "Count", "fieldName": "Nbr", "type": "number", "sortable": "true"} ]'
+    title='Opportunities by Stage'
+    icon='standard:opportunity' /&gt;</pre>
+    <p><code>group by rollup (yy)</code> statements are also supported but only
+        with a single grouping dimension. The <code>hasTotal</code> attribute should
+        be used to remove the resulting trailing line (which contains the 
+        rollup) and replace it with a summary line within the card footer,
+        leveraging the <code>totalStr</code> attribute indicating which summary
+        fields should be displayed.</p>
+<pre>&lt;c:PEG_SoqlList_CMP
+    query='select count(Id) Number, Max(Amount), StageName from Opportunity group by rollup(StageName)'
+    fields='[{"label":"Stage", "fieldName": "StageName", "type": "text", "sortable": "true"},
+             {"label": "Number", "fieldName": "Number", "type": "number", "sortable": "true"},
+             {"label": "Amount", "fieldName": "Amount", "type": "currency", "sortable": "true"}]'
+    title='Opportunities by Stage'
+    icon='standard:opportunity'
+    hasTotal="true"
+    totalStr="["Number","Amount"]" /&gt;</pre>
+    <br/>
+    </div>
+       
+    <div class="slds-m-top_large">
+    <h4>Collapsing the results</h4>
+    <p>The card is expanded and non-collapsible by default: it then displays the result data table
+        completely with all its lines (even if local vertical scrolling may be activated via the 
+        <code>tableHeight</code> attribute based on the desired max table height).</p>
+    <p>It may however be set to be collapsible via the <code>isCollapsible</code> attribute (by setting
+        it to true) and collapsed by default via the <code>isExpanded</code> attribute (by setting it to
+        false).</p>
+    <p>When collapsed, only the card header is displayed and the data table disappears.
+        Such a configuration still enables to display the number of items returned by the query in
+        the title (leveraging the <code>showCount</code> attribute) and only expand the card
+        content when necessary (saving display space).</p>
+     <p>In such a configuration, the card gets a slight additional margin on the left and
+        a small expand/collapse toggle button appears left to the Card title.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Activating Search</h4>
+    <p>The <code>&lt;c:PEG_SoqlList_CMP&gt;</code> component may provide a local search function to 
+        filter among the rows returned by the query. It may be activated via the <code>showSearch</code>
+        boolean attribute (by setting it to true).</p>
+    <p>This feature appears within the card header and behaves somewhat like the global search widget.
+        It enables to set a search scope (via a drop-down menu) and enter search keywords.</p>
+    <ul>
+    <li>The default scope is "All" but it may be modified the user to limit the search to one of
+        the table columns.</li>
+    <li>Multiple search terms may be input and only the records matching all these terms
+        in at least one of their fields (AND condition).</li>
+    <li>Search is done locally on the list of records (already) fetched from the database.</li>
+    <li>When using the "All" default scope, search is applied on all fields fetched from the
+        database, and not necessarily displayed in the data table.</li>
+    </ul>
+    <br/>
+    </div>
+       
+    <div class="slds-m-top_large">
+    <h4>Managing Relation Queries (flattening)</h4>
+    <p>The component supports SOQL relation statements (such as <code>Select Owner.Name,... from ...</code>)
+        but a small additional operation (JSON flattening)is required to let the resulting data be properly
+        displayed in the data table.</p>
+    <p>By default, this operation is deactivated to optimise performances and it needs to be 
+        reactivated explicitely by setting the <code>isFlatten</code> to true.</p>
+    <p>This operation replaces the <code>{"Name":"Account1","Owner":{"Name":"Owner1","Id":"xxxx"}}</code>
+        JSON object found within a standard SOQL result list by a new flat
+        <code>{"Name":"Account1","Owner.Name":"Owner1","Owner.Id":"xxxx"}</code> version of the same
+        JSON object. All fields of the resulting JSON objects may then be displayed in the 
+        underlying <code>&lt;lightning:datatable&gt;</code> component (which indeed cannot drill into
+        JSON sub-structures).</p>
+<pre>&lt;c:PEG_SoqlList_CMP
+    query='select Name,Owner.Name from Account WITH SECURITY_ENFORCED LIMIT 10'
+    fields='[{"label": "Name",  "fieldName": "Name", "type": "text", "sortable": "true"},
+                 {"label": "Owner", "fieldName": "Owner.Name", "type": "text", "sortable": "true"} ]'
+    title='Account List'
+    icon='standard:account'
+    isFlatten="true"/&gt;</pre>
+    <br/>
+    </div>
+
+    <div class="slds-m-top_large">
+    <h4>Displaying results in a Tree</h4>
+    <p>The SOQL query may be configured to display a data tree table instead of a standard
+        data table. This enables e.g. to display related Accounts with their sub-accounts,
+        or related accounts with their Oppotunities.</p>
+    <p>The idea is to be able to leverage SOQL sub-queries to fetch at once all the necessary
+        data. Such an approach has the limitations induced by SOQL (e.g. only one sub-level)</p>
+    <p>In order to configure the tree display, the <code>isTreeView</code> must be set to true
+        and the <code>treeFieldName</code> attribute with the list of names of the relations
+        (i.e. the JSON field in which the results of the subquery is stored).</p>
+<pre>&lt;c:PEG_SoqlList_CMP
+    query='select Name,OwnerId,(select Name,OwnerId from  ChildAccounts) from Account WITH SECURITY_ENFORCED LIMIT 10'
+    fields='[{"label": "Name",  "fieldName": "Name", "type": "text", "sortable": "true"},
+             {"label": "Owner", "fieldName": "OwnerId", "type": "text", "sortable": "true"} ]'
+    title='Account Hierarchy'
+    icon='standard:account'
+    isTreeView="true"
+    treeFieldName='["ChildAccounts"]'/&gt;</pre>
+    <p>Limitations:</p>
+    <ul>
+    <li>The number of rows displayed in the card header (if <code>showTotal</code> is set to true)
+        is then the number of root elements of the hierarchy, and not the total number of records
+        possibly displayed when expanding all sub-hierarchies.</li>
+    <li>Similarly, the Search feature only applies to root elements.</li>
+    </ul>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Activating Lazy/Infinite Loading</h4>
+    <p>The <code>&lt;c:PEG_SoqlList_CMP&gt;</code> component executes a single SOQL query
+        by default upon initialization. All the results are then fetched at once and displayed
+        in the data table.</p>
+    <p>In order to optimize performances, lazy/infinite loading may be configured on the
+        component. After having set the <code>isInfiniteLoad</code> attribute to true, results are
+        then loaded by "pages" (<code>pageSize</code> attribute indicating the number of rows of
+        each "page"), each new "page" being loaded as soon as the user scrolls down to a certain
+        distance (set vie the <code>loadMoreOffset</code> attribute, in pixel number) from the data
+        table bottom.</p>
+<pre>&lt;c:PEG_SoqlList_CMP
+    query='select Name,OwnerId from Account WITH SECURITY_ENFORCED order by Id'
+    fields='[{"label": "Name",  "fieldName": "Name", "type": "text", "sortable": "true"},
+             {"label": "Owner", "fieldName": "OwnerId", "type": "text", "sortable": "true"} ]'
+    title='Accounts'
+    icon='standard:account'
+    isInfiniteLoad="true"
+    pageSize="20"
+    loadMoreOffset="50"/&gt;</pre>
+    <p>Beware</p>
+    <ul>
+    <li>When activating the lazy/infinite loading feature, the SOQL request specified via the
+        <code>query</code> attribute should contain an <code>ORDER BY</code> statement and no
+        <code>LIMIT</code> nor <code>OFFSET</code> ones (the last two are indeed appended to the 
+        original query by the component to load each successive "page" of rows).</li>
+    <li>When search is activated and a filter is already applied to the already loaded rows,
+        the automatic load of the next "pages" is stopped. To resume with automatic loading
+        of the next "pages", first reset the search criteria to empty.</li>
+    <li>When displaying the number of rows (in the header), a "+" sign is automatically
+        appended to the current number of rows, as long as the last "page" has not been 
+        reached. This happens when the number of rows retrieved for a "page" is less than
+        its configured size.</li>
+    <li>When triggering a refresh on the component, the list of results restarts from the beginning,
+        i.e. from the first "page" of rows.</li>
+    </ul>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Adding Row Actions</h4>
+    <p>The component enables to include actions to be triggered at row level via buttons
+        or menus, e.g. to edit the current record or navigate to a related object.</p>
+    <p>All the possibilities provided by the standard <code>&lt;lightning:datatable&gt;</code>
+        component may be used to include the action within the data table : button, button-icon,
+        menu... and they should be part of the data-table column configuration (via the 
+        <code>fields</code>attribute).</p>
+    <p>The <code>rowActionStr</code> enables to define the Lightning event to actually
+        trigger for each action. All the standard contextual elements are available to customize the event parameters (i.e. information about the
+        current main object or the user, see section on SOQL query contextualisation) but the
+        component also provides the corresponding row as input data (via the <code>Row</code>
+        context object, see <code>&lt;c:PEG_Merge_CMP&gt;</code> component).</p>
+<pre>&lt;c:PEG_SoqlList_CMP
+    query='select Name,OwnerId from Account WITH SECURITY_ENFORCED LIMIT 10'
+    fields='[{"label":"Name", "fieldName": "Name", "type": "text", "sortable": "true"},
+             {"type":"button-icon","initialWidth":"50","typeAttributes":{"iconName":"utility:new_window","name":"Open","variant":"base"}},
+             {"type":"button","typeAttributes":{"label":"Edit",  "iconName":"utility:edit","name":"Edit","variant":"brand"}},
+             {"label": "OwnerId", "fieldName": "OwnerId", "type": "text", "sortable": "true"} ]'
+    title='Account List'
+    icon='standard:account'
+    rowActionStr='[ {"label":"Edit", "event":{"name":"e.force:editRecord", "params":{"recordId":"{{{Row.Id}}}"} } },
+                    {"label":"Open", "event":{"name":"e.force:navigateToSObject", "params":{"recordId":"{{{Row.Id}}}"} } } ]'/&gt;</pre>
+    <p>To implement direct links to target records in the data-table, the <code>button</code> type may
+        be used in the following way (registering <code>fieldName</code> twice, in the button label for
+        display and directly on the row for sorting). Beware that, when using such an approach, the link
+        appears with button coloring and has no truncation.</p>
+<pre>{"label":"Name", "fieldName": "Name", "type": "button", "sortable": "true",
+      "typeAttributes":{"label":{"fieldName": "Name"},"name":"Open","variant":"base"}}</pre>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Adding Header Actions</h4>
+    <p>The component uses a <code>&lt;c:PEG_ActionGroup_CMP&gt;</code> interaction component
+        to display a group of actions (buttons and menus) within the main card header.
+        This group is displayed between the search widgets (when activated, see corresponding
+        section) and the refresh button.</p>
+    <p>This component may be configured by setting the set of buttons/menus to be displayed,
+        with the Lightning events to be triggered for each of them. All the standard contextual
+        elements are available to customize the event parameters (i.e. information about the
+        current main object or the user, see section on SOQL query contextualisation) but the
+        component may also provide the list of selected rows as input (as a stringified JSON
+        list of records within the <code>SelectedRows</code> attribute of <code>Row</code>
+        context object, see <code>&lt;c:PEG_Merge_CMP&gt;</code> component).</p>
+ <pre>&lt;c:PEG_SoqlList_CMP
+    query='select Name,OwnerId from Account WITH SECURITY_ENFORCED LIMIT 10'
+    fields='[{"label":"Name", "fieldName": "Name", "type": "text", "sortable": "true"},
+             {"label": "OwnerId", "fieldName": "OwnerId", "type": "text", "sortable": "true"} ]'
+    title='Account List'
+    icon='standard:account'
+    maxRowSelection="5"
+    tableActionStr='[{"label":"Show","variant":"brand",
+                      "event":{"name":"e.force:showToast",
+                               "params":{"type":"error","title":"Success!",
+                               "message":"The User is {{{User.Name}}} and Object is {{{Object.Name}}} : selection is {{{Row.SelectedRows}}}" } } } ]' /&gt;</pre>    
+    <p>To activate row multiselection, the <code>maxRowSelection</code> should be set to a
+        max value. The default 0 value indeed deactivate the multi-selection feature and then
+        hides the selection checkboxes on the data table.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Bypassing Access Controls</h4>
+    <p>As the component relies on the <code>&lt;c:PEG_SOQL_CMP&gt;</code> utility component,
+        it applies systematically sharing rules (controls to records) and requires, by default,
+        the use of the <code>WITH SECURITY_ENFORCED</code> keyword in the configured SOQL query
+        to check access to fields and objects (FLS).</p>
+    <p>Two boolean flags are available to change this mechanism:</p>
+    <ul>
+       <li><code>bypassFLS</code> to bypass the FLS controls</li>
+       <li><code>bypassSharing</code> to bypass the Sharing controls.</li>
+    </ul>
+    <p>However, in order to be able to use these bypass options, a <code>queryType</code>
+        must be provided (see <code>&lt;c:PEG_SOQL_CMP&gt;</code> for details).</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Optimizing performances</h4>
+    <p>The underlying <code>&lt;c:PEG_SOQL_CMP&gt;</code> utility component provides some
+        technical settings to control the way SOQL queries are sent to the Salesforce server.</p>
+    <ul>
+    <li>The <code>isStorable</code> attribute enables to leverage the standard Lightning
+        cache and fetch data locally if the same query is sent twice in a relatively 
+        limited timeframe. When using the "refresh" button, this setting is bypassed
+        and the query is actually sent to the Salesforce server.</li>
+    <li>The <code>isBackground</code> attribute enables to send the query independentely
+        from all callouts generated by the current page. This is especially important when
+        the underlying query is long, in order not to block the rendering of the overall 
+        page whil waiting for the results of this query.</li>
+    </ul>
+    <br/>
+    </div>
+
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+        
+    </aura:description>
+</aura:documentation>

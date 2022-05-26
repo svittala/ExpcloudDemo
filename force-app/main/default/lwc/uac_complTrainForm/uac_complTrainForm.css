@@ -1,0 +1,29 @@
+.uac-form-input {
+    padding: 10px 15px;
+}
+.uac-success-message {
+    margin: 20px 10px;
+}
+.uac-spinner-padding {
+    margin: 100px 50px;
+}
+.uac-spinner-wrapper {
+    min-height: 400px;
+}
+.login-section {
+    padding: 25px 35px;
+    background-color: #e2eff7;
+}
+.upload-section {
+    background-color: white;
+}
+.header-text {
+    font-family:   "Merriweather", "Cambria", serif;
+    font-size:     18px;
+    color: #202020;
+    font-weight:   bold;
+}
+.file-upload {
+    margin-left: 5px;
+    padding-left: 10px;
+}

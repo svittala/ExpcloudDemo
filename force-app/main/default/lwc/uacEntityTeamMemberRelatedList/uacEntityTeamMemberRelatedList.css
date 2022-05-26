@@ -1,0 +1,10 @@
+.uac-wrapper {
+    border: 1px solid #dddbda;
+    border-radius: 5px;
+}
+.uac-header {
+    font-size: 14px !important;
+}
+.uac-button {
+    font-weight: 400 !important;
+}

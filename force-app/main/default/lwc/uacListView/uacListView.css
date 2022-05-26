@@ -1,0 +1,17 @@
+.uac-list-view {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.uac-list-view th {
+  white-space: break-spaces;
+  word-wrap: break-word;
+}
+
+.uac-list-view td.slds-cell-wrap {
+  min-width: 10rem;
+}
+
+.uac-list-view td.uac-button-col {
+  text-align: right;
+}

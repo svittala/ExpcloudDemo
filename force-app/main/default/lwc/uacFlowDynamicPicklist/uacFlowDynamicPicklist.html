@@ -1,0 +1,37 @@
+<template>
+    <div if:false={isMultipicklist} class="uac-picklist-wrapper">
+        <div if:true={helpTextBool} class="uac-picklist-wrapper">
+            <span style="display:inline-flex">
+            <p>{question}</p>
+            <lightning-helptext class="helpTextCSS" content={helpTextValue}></lightning-helptext>
+            </span>
+            <lightning-combobox name={question} value={selectedValue} options={picklistOptions}
+            required={required} onchange={handleChange} class="uac-picklist" disabled={isReadOnly}>
+            </lightning-combobox>
+        </div>
+        <div if:false={helpTextBool} class="uac-picklist-wrapper">
+        <lightning-combobox name={question} label={question} value={selectedValue} options={picklistOptions}
+            required={required} onchange={handleChange} class="uac-picklist" disabled={isReadOnly}>
+        </lightning-combobox>
+        </div>
+        
+    </div>
+    <div if:true={isMultipicklist} class="uac-picklist-wrapper">
+        <div if:true={helpTextBool} class="uac-picklist-wrapper">
+            <span style="display:inline-flex">
+            <p>{question}</p>
+            <lightning-helptext class="helpTextCSS" content={helpTextValue}></lightning-helptext>
+            </span>
+            <lightning-dual-listbox name={question} source-label="Available Options"
+                selected-label="Selected Options" options={picklistOptions} value={selectedValue} required={required}
+                onchange={handleChange} class="uac-picklist" disabled={isReadOnly}>
+            </lightning-dual-listbox>
+        </div>
+        <div if:false={helpTextBool} class="uac-picklist-wrapper">
+            <lightning-dual-listbox name={question} label={question} source-label="Available Options"
+                selected-label="Selected Options" options={picklistOptions} value={selectedValue} required={required}
+                onchange={handleChange} class="uac-picklist" disabled={isReadOnly}>
+            </lightning-dual-listbox>
+        </div>
+    </div>
+</template>

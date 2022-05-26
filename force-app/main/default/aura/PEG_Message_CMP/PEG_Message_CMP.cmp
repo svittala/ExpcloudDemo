@@ -1,0 +1,46 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                access="global"
+                description="Component presenting various kinds of messages on the screen (supports Custom Labels)." >
+    
+	<!-- Global component configuration -->
+    <aura:attribute name="title"      type="String"  access="global" 
+                    description="Component title." />
+    <aura:attribute name="message"    type="String"  access="global" 
+                    description="Component detailed message." />
+	<aura:attribute name="variant"    type="String"  access="global" 
+                    description="Component variant (info, success, warning or error)." />
+
+    <!-- Internal technical attributes -->
+    <aura:attribute name="configuration"  type="Object"  access="private" 
+                    default='{"iconName":"info_alt","iconVariant":"inverse","theme":"slds-theme_info"}'
+                    description="Component Display Parameters." />
+    
+    <!-- Component variant initialisation and change handling -->
+    <aura:handler name="init"   value="{!this}"      action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.variant}" action="{!c.updateConfiguration}"/>
+    <aura:handler name="change" value="{!v.title}"   action="{!c.updateTitle}"/>
+    <aura:handler name="change" value="{!v.message}" action="{!c.updateMessage}"/>
+   
+    <!-- Component display -->
+    <div class="slds-region_narrow slds-is-relative slds-p-horizontal_xx-small"
+         style="max-width:100% !important;">
+        <div class="{! 'slds-notify slds-notify_toast ' + v.configuration.theme}"
+             role="status">
+            <span class="slds-icon_container slds-m-right_small slds-no-flex slds-align-top"
+                  title="{!v.variant}">
+                <lightning:icon iconName="{! 'utility:' + v.configuration.iconName}"
+                                alternativeText="{!v.configuration.iconName}"
+                                variant="{!v.configuration.iconVariant}"  size="small" />
+            </span>
+            <div class="slds-notify__content" style="word-wrap: break-word !important;">
+                <h2 class="slds-text-heading_small" style="word-wrap: break-word !important;">
+                    <lightning:formattedText value="{!v.title}" />
+                </h2>
+                <p class="slds-text-body_regular">
+                    <lightning:formattedText value="{!v.message}" />  
+                </p>
+            </div>
+        </div>
+     </div>
+    
+</aura:component>

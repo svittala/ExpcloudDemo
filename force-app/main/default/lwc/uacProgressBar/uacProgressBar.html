@@ -1,0 +1,63 @@
+<!--
+  @File Name         : uacProgressBar.html
+  @Description       : LWC used to display progress indicator bar
+  @Group             : UAC_progressBar
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-09-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-17-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+    <template if:true={hasSection}>
+        <div class="slds-path slds-m-vertical_x-small">
+            <div class="slds-grid slds-path__track">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller" role="application">
+                        <div class="">
+                            <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal" aria-label="Progress Bar">
+                                <template for:each={lstSection} for:item="section">
+                                    <li class="slds-path__item uac-path__item" data-status={section.strStatus} data-selected={section.selected} role="presentation" key={section.strName}>
+                                        <template if:true={clickable}>
+                                            <a href="#" class="slds-path__link uac-path__link"
+                                                role="option"
+                                                title={section.strName}
+                                                data-section-name={section.strName}
+                                                data-flow-name={section.strFlowName}
+                                                onclick={handlePathClick}>
+                                                <span class="slds-path__stage" data-section-name={section.strName} data-flow-name={section.strFlowName}>
+                                                    <lightning-icon icon-name="utility:check"
+                                                        variant="inverse"
+                                                        size="x-small">
+                                                    </lightning-icon>
+                                                </span>
+                                                <span class="slds-path__title" data-section-name={section.strName} data-flow-name={section.strFlowName}>{section.strName}</span>
+                                            </a>
+                                        </template>
+                                        <template if:false={clickable}>
+                                            <div class="slds-path__link uac-path__link uac-path__link-disabled"
+                                                role="option"
+                                                title={section.strName}
+                                                data-section-name={section.strName}
+                                                data-flow-name={section.strFlowName}>
+                                                <span class="slds-path__stage" data-section-name={section.strName} data-flow-name={section.strFlowName}>
+                                                    <lightning-icon icon-name="utility:check"
+                                                        variant="inverse"
+                                                        size="x-small">
+                                                    </lightning-icon>
+                                                </span>
+                                                <span class="slds-path__title" data-section-name={section.strName} data-flow-name={section.strFlowName}>{section.strName}</span>
+                                            </div>
+                                        </template>
+
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

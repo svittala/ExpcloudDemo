@@ -1,0 +1,30 @@
+<!--
+  @File Name         : uacPrevTSTTBTable.html
+  @Description       : LWC for displaying previous TST TB table for Health Evaluation
+  @Group             : uacPrevTSTTBTable
+  @Author            : Karthi Subramanian (Deloitte)
+  @Last Modified By  : Karthi Subramanian (Deloitte)
+  @Last Modified On  : 08-21-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-21-2020   Karthi Subramanian (Deloitte)   Initial Version
+-->
+<template>
+
+    <div class="uac-table-container">
+
+      <template if:true={title}>
+        <c-uac-flow-header title={title}>
+        </c-uac-flow-header>
+      </template>
+
+      <c-uac-list-view
+        object-api-name={objectApiName}
+        columns={columns}
+        filter={filter}
+        disable-actions="true">
+      </c-uac-list-view>
+
+    </div>
+
+</template>

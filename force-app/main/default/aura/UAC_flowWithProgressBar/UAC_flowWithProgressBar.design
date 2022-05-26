@@ -1,0 +1,3 @@
+<design:component label="Flow with Progress Bar" >
+  <design:attribute name="relatedTo" label="Related To" description="Related to" required="true"/>
+</design:component>

@@ -1,0 +1,9 @@
+.THIS {
+}
+.THIS .mySelect{
+    display: inline-block;
+    margin-top: 0.5px;
+}
+.THIS .mySelect .slds-form-element__label {
+    display: none;
+}

@@ -1,0 +1,60 @@
+<template>
+    <div class="uac-wrapper" data-target-id="entry-team-member-related-list">
+        <lightning-card variant="narrow" class="uac-related-list" icon-name="standard:team_member">
+            <h1 slot="title" class="uac-header">Entry Team ({intNumberEntryTeamMembers})</h1>
+            <lightning-datatable if:true={isData} class="uac-data-table" resize-column-disabled hide-checkbox-column
+                data={lstEntryTeamMembers} columns={columns} key-field="idRecord" onrowaction={handleRowAction}>
+            </lightning-datatable>
+            <div slot="actions">
+                <lightning-button variant="neutral" class="uac-button" label="Add Member" title="Add Member"
+                    onclick={onAddMemberClick}>
+                </lightning-button>
+                <lightning-button-icon variant="neutral" class="uac-button" icon-name="utility:refresh" title="Refresh"
+                    onclick={onRefreshClick}></lightning-button-icon>
+            </div>
+        </lightning-card>
+    </div>
+    <c-uac-modal data-target-id="entry-team-member-modal-create" class="uac-modal" header="Search for and add member">
+        <div if:true={boolError} class="slds-text-color_error slds-m-bottom_small">
+            <p title={strErrorMessage}>{strErrorMessage}</p>
+        </div>
+        <lightning-record-edit-form object-api-name="Case" onload={onUserLookupLoad}>
+            <label class="slds-form-element__label" for="fieldid" title="User"><abbr class="slds-required"
+                    title="required">*
+                </abbr>User</label></label>
+            <lightning-input-field id="fieldid" class="uac-modal-input" required={boolTrue} variant="label-hidden"
+                field-name="UAC_person__c" onchange={handleUserLookupChange} disabled={boolFalse}>
+            </lightning-input-field>
+        </lightning-record-edit-form>
+        <lightning-combobox name="Role" class="uac-modal-input" label="Role" options={lstRolePicklistValues}
+            required={boolTrue} onchange={handleRoleChange} disabled={boolFalse}>
+        </lightning-combobox>
+        <div if:true={boolSavingRecord} class="slds-is-relative">
+            <lightning-spinner variant="brand" size="medium">
+            </lightning-spinner>
+        </div>
+        <div slot="footer">
+            <lightning-button label="Save" title="Save" variant="brand" disabled={boolSavingRecord}
+                onclick={handleSave}>
+            </lightning-button>
+            <lightning-button label="Cancel" title="Cancel" variant="neutral" disabled={boolSavingRecord}
+                onclick={handleCancelCreate}>
+            </lightning-button>
+        </div>
+    </c-uac-modal>
+    <c-uac-modal data-target-id="entry-team-member-modal-delete" class="uac-modal" header="Delete Entry Team Member">
+        <p title={strConfirmText} class="slds-p-around_medium">{strConfirmText}</p>
+        <div if:true={boolSavingRecord} class="slds-is-relative">
+            <lightning-spinner variant="brand" size="medium">
+            </lightning-spinner>
+        </div>
+        <div slot="footer">
+            <lightning-button label="Cancel" title="Cancel" variant="neutral" disabled={boolSavingRecord}
+                onclick={handleCancelDelete}>
+            </lightning-button>
+            <lightning-button label="Delete" title="Delete" variant="brand" disabled={boolSavingRecord}
+                onclick={handleConfirmDelete}>
+            </lightning-button>
+        </div>
+    </c-uac-modal>
+</template>

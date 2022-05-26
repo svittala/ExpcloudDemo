@@ -1,0 +1,83 @@
+<template>
+  <div data-target-id="checklist-comp">
+    <lightning-card variant="narrow" icon-name="standard:task">
+      <h1 slot="title" class="uac-header">{componentLabel}</h1>
+      <lightning-button if:false={formEditMode} label="Refresh" icon-name="utility:refresh" variant="border"
+        alternative-text="Refresh" title="Refresh" slot="actions" onclick={refreshData}></lightning-button>
+      <br />
+      <template if:false={loading}>
+        <div if:true={formEditMode} class="checklistCard">
+          <div class="form-padding-extra">
+            <div class="form-wrapper form-text slds-grid">
+              <div class="slds-col slds-size_1-of-3 slds-form-element__label">
+                Task
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                {formChecklistItem.subject}
+              </div>
+            </div>
+          </div>
+          <div class="form-padding-extra">
+            <div class="form-wrapper form-text slds-grid">
+              <div class="slds-col slds-size_1-of-3 slds-form-element__label">
+                Due Date
+              </div>
+              <div if:true={formChecklistItem.overdue} class="slds-col slds-size_1-of-2 text-overdue">
+                {formChecklistItem.reminderMessage}
+              </div>
+              <div if:false={formChecklistItem.overdue} class="slds-col slds-size_1-of-2">
+                {formChecklistItem.reminderMessage}
+              </div>
+            </div>
+          </div>
+          <div class="form-padding">
+            <div class="form-wrapper">
+              <lightning-combobox name="status" label="Status" value={formChecklistItem.status} options={picklistValues}
+                onchange={onpicklistChange} variant="label-inline"></lightning-combobox>
+            </div>
+          </div>
+          <div class="form-buttons slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-3"></div>
+            <lightning-button variant="brand-outline" label="Cancel" title="Cancel" onclick={onclickCloseEdit}
+              class="slds-m-left_x-small"></lightning-button>
+            <lightning-button variant="brand" label="Save" title="Save Status" onclick={onclickSave}
+              class="slds-m-left_x-small"></lightning-button>
+          </div>
+        </div>
+      </template>
+      <div if:false={loading}>
+        <template if:false={formEditMode} for:each={checklistData} for:item="checklistItem">
+          <div key={checklistItem.checklistId} data-itemid={checklistItem.checklistId} onmouseenter={showPencil}
+            onmouseleave={hidePencil}>
+            <div class="slds-grid checklistCard hover-card">
+              <div class="slds-col slds-size_1-of-8">
+                <lightning-icon icon-name={checklistItem.iconImage} alternative-text={checklistItem.status}
+                  title={checklistItem.status} size="xx-small">
+                </lightning-icon>
+                <image class="checklist-image" src={checklistItem.iconImage} alt={checklistItem.status} />
+              </div>
+              <div class="slds-col slds-size_3-of-5 align-middle cell-padding">
+                {checklistItem.subject}
+              </div>
+              <div if:true={checklistItem.overdue} class="slds-col slds-size_1-of-5 align-middle text-overdue">
+                {checklistItem.reminderMessage}
+              </div>
+              <div if:false={checklistItem.overdue} class="slds-col slds-size_1-of-5 align-middle">
+                {checklistItem.reminderMessage}
+              </div>
+              <div class="slds-col slds-size_1-of-12 button-icon-checklist">
+                <lightning-button-icon if:true={checklistItem.showPencil} data-itemid={checklistItem.checklistId}
+                  icon-name="utility:edit" variant="bare" alternative-text="Edit Status" class="slds-m-left_xx-small"
+                  title="Edit Status" onclick={onclickEdit}>
+                </lightning-button-icon>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div if:true={loading} class="spinner-holder">
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+      </div>
+    </lightning-card>
+  </div>
+</template>

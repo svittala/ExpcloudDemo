@@ -1,0 +1,86 @@
+<!--
+  @File Name         : uacRecordEditForm.html
+  @Description       : Generic record edit form
+  @Group             : uacRecordEditForm
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-03-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-20-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+  <template if:true={isLoading}>
+    <lightning-spinner alternative-text="Loading">
+    </lightning-spinner>
+  </template>
+
+  <template if:true={layoutLoaded}>
+    <lightning-record-edit-form class="uac-record-edit-form"
+      object-api-name={objectApiName}
+      record-id={recordId}
+      record-type-id={recordTypeId}
+      onload={handleLoad}
+      onsubmit={handleSubmit}
+      onerror={handleError}>
+
+      <template if:false={hideError}>
+        <lightning-messages>
+        </lightning-messages>
+      </template>
+
+      <slot name="form-top"></slot>
+
+      <template for:each={layout.sections} for:item="section">
+        <div key={section.id} class={section.className} data-hide={section.hide}>
+          <template if:true={section.useHeading}>
+            <c-uac-flow-header title={section.heading}>
+            </c-uac-flow-header>
+          </template>
+
+          <template for:each={section.layoutRows} for:item="row">
+            <div class="slds-grid slds-gutters" key={row.index}>
+              <template for:each={row.layoutItems} for:item="item">
+                <div class="slds-col slds-size_1-of-2" key={item.label}>
+                  <template for:each={item.layoutComponents} for:item="component">
+                    <template if:true={component.isField}>
+                      <div key={component.apiName}>
+                        <template if:true={component.override}>
+                          <c-uac-input data-id={component.apiName}
+                            label={item.label}
+                            required={item.required}
+                            name={component.override.name}
+                            type={component.override.type}
+                            options={component.override.options}
+                            value={component.value}
+                            onfieldchange={handleOverrideFieldChange}>
+                          </c-uac-input>
+                        </template>
+                        <div
+                          class={component.className}
+                          data-hide={component.hide}>
+                          <lightning-input-field
+                            variant="label-stacked"
+                            data-id={component.apiName}
+                            field-name={component.apiName}
+                            value={component.value}
+                            onchange={handleFieldChange}>
+                          </lightning-input-field>
+                        </div>
+                      </div>
+                    </template>
+                  </template>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <div slot="form-bottom"></div>
+
+      <button class="slds-hide uac-btn-submit" type="submit">Save</button>
+
+    </lightning-record-edit-form>
+  </template>
+</template>

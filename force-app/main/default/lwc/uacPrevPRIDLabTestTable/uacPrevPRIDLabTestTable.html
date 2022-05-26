@@ -1,0 +1,26 @@
+<!--
+  @File Name         : uacPrevPRIDLabTestTable.html
+  @Description       : LWC for displaying previous PRID Lab test table for Health Evaluation
+  @Group             : uacPrevPRIDLabTestTable
+  @Author            : Anupreeta Chakraborty (Deloitte)
+  @Last Modified By  : Anupreeta Chakraborty (Deloitte)
+  @Last Modified On  : 08-26-2020
+  Modifications Log
+  Ver   Date         Author                             Modification
+  1.0   08-26-2020   Anupreeta Chakraborty (Deloitte)   Initial Version
+-->
+<template>
+
+    <div class="uac-table-container">
+
+        <template if:true={title}>
+            <c-uac-flow-header title={title}>
+            </c-uac-flow-header>
+        </template>
+
+        <c-uac-list-view object-api-name={objectApiName} columns={columns} filter={filter} disable-actions="true">
+        </c-uac-list-view>
+
+    </div>
+
+</template>

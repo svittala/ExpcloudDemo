@@ -1,0 +1,22 @@
+<design:component label="PEG Chatter Groups" >
+        <design:attribute name="title"
+                          label="Component Title" />
+        <design:attribute name="icon"
+                          label="Component Icon" 
+                          description="e.g. standard:feed, see SLDS icons"/>
+        <design:attribute name="showBorder"
+                          label="Show Border?" />	
+        <design:attribute name="showPublisher"
+                          label="Show Chatter Publisher?" />
+        <design:attribute name="feedDesign"
+                          label="Feed Display Mode"
+                          datasource="DEFAULT,BROWSE"  />
+        <design:attribute name="feedHeight"
+                          label="Feed Height Limit" 
+                          datasource=",small,medium,large"/>
+        <design:attribute name="configStr"
+                          label="Group Names"
+                          description="Component configuration (as a JSON stringified list of individual Group names, possibly leveraging 'merge' fields)." />
+        <design:attribute name="showDebug"
+                          label="Show Debug?" />
+</design:component>

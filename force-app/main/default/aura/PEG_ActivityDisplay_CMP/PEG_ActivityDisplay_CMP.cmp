@@ -1,0 +1,126 @@
+<aura:component access="global"
+                description="Component displaying a single Task / Event record.">
+
+    <!-- Activity to display -->
+    <aura:attribute name="activity"  type="Object" required="true"
+                    description="Activity record to display."/>
+    
+    <!-- Display control configuration -->
+    <aura:attribute name="icon"  type="String" default="standard:event"
+                    description="Icon of the activity type (task, email, call, event)." />
+    <aura:attribute name="class"  type="String" default="slds-timeline__media_event"
+                    description="CSS class of the activity type (task, email, call, event)" />
+    <aura:attribute name="overdue"  type="Boolean" default="false"
+                    description="Flag indiquant si la date d'une Task non close est passée." />
+  
+    <aura:attribute name="actionMenu"   type="List"
+                    default='[]'/>
+    
+    <!-- Initialisation des paramètres de contrôle. -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Component initialisation." />
+    
+    <!-- Events -->
+    <aura:registerEvent name="menuCallback" type="ltng:sendMessage"
+                    description="Callback method to be called when an action is triggered." />
+
+    <!-- Activity Actual Display -->
+    <div class="slds-timeline__item"> 
+      <div class="slds-media">
+         <div class="slds-media__body">
+            <div class="{!'slds-media slds-timeline__media reducedSpacing ' + v.class}">
+               <div class="slds-media__figure slds-timeline__icon">
+                  <div class="{!'slds-icon_container ' + v.class}">
+                     <lightning:icon iconName="{!v.icon}" size="small" />
+                  </div>
+               </div>
+               <div class="slds-media__body">
+                 <lightning:layout multipleRows="true">
+                    <lightning:layoutItem flexibility="auto,shrink ">
+                        <div class="alignHorizontal slds-truncate_container_75">
+                            <aura:if isTrue="{!v.activity.TaskSubtype == 'Task'}">
+                            <ui:outputCheckbox class="slds-var-m-right_x-small alignHorizontal"
+                                               value="{!v.activity.IsClosed}" />
+                            </aura:if>
+                            
+                            <a class="slds-text-heading_small colorTextLink slds-var-m-right_x-small slds-truncate"
+                               onclick="{!c.navigateToObject}" title="{!v.activity.Id}">
+                                      {!v.activity.Subject}</a>
+                            
+                            <aura:if isTrue="{!v.activity.IsHighPriority}">
+                               <lightning:icon iconName="utility:priority"
+                                               class="alignHorizontal"
+                                               size="xx-small" variant="error"/>
+                            </aura:if>
+                         </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="no-flex" >
+                       <div>
+                       <aura:if isTrue="{!v.activity.TaskSubtype == null}">
+                         <lightning:formattedDateTime value="{!v.activity.StartDateTime}"
+                                                      hour="numeric" minute="numeric"/> | 
+                       </aura:if>
+                       <lightning:formattedDateTime value="{!v.activity.ActivityDate}"
+                                                    month="short" day="2-digit"
+                                                    class="{! 'dueDate slds-var-m-right_x-small ' + if(v.overdue,'slds-text-color_error','')}" />
+                       <c:PEG_ActionGroup_CMP actionList="{!v.actionMenu}"
+                                              callback="{!c.handleMenuAction}"/>
+                       </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12">
+                       <div>
+                        <p class="slds-truncate">{!v.activity.Description}</p>
+                        <ul class="slds-list_horizontal slds-wrap">
+                          <aura:if isTrue="{!v.activity.TaskSubtype == null}">
+                          <li class="slds-m-right_large">
+                              <span class="slds-text-title">pr&eacute;vu</span>
+                              <span class="slds-text-body_small slds-m-left_xx-small">
+                                  de <lightning:formattedDateTime value="{!v.activity.StartDateTime}"
+                                                                  hour="numeric" minute="numeric"/>
+                                  à <lightning:formattedDateTime value="{!v.activity.EndDateTime}"
+                                                                  hour="numeric" minute="numeric"/>
+                              </span>
+                          </li>
+                          </aura:if>
+                          <aura:if isTrue="{!v.activity.WhatId.length > 0}">
+                          <li class="slds-m-right_large">
+                              <span class="slds-text-title">pour</span>
+                              <span class="slds-text-body_small slds-m-left_xx-small">
+                                  <a class="colorTextLink" onclick="{!c.navigateToObject}" title="{!v.activity.WhatId}">
+                                      {!v.activity.What.Name}</a>
+                              </span>
+                          </li>
+                          </aura:if>
+                          <aura:if isTrue="{!v.activity.WhoId.length > 0}">
+                          <li class="slds-m-right_large">
+                              <span class="slds-text-title">avec</span>
+                              <span class="slds-text-body_small slds-m-left_xx-small">
+                                  <a class="colorTextLink" onclick="{!c.navigateToObject}" title="{!v.activity.WhoId}">
+                                      {!v.activity.Who.Name}</a>
+                              </span>
+                          </li>
+                          </aura:if>
+                          <li class="slds-m-right_large">
+                              <span class="slds-text-title">par</span>
+                              <span class="slds-text-body_small slds-m-left_xx-small">
+                                  <a class="colorTextLink" onclick="{!c.navigateToObject}" title="{!v.activity.OwnerId}">
+                                      {!v.activity.Owner.Name}</a>
+                            </span>
+                          </li>
+                          <aura:if isTrue="{!v.activity.Status.length > 0}">
+                          <li class="slds-m-right_large">
+                              <span class="slds-text-title">au statut</span>
+                              <span class="slds-text-body_small slds-m-left_xx-small">{!v.activity.Status}</span>
+                          </li>
+                          </aura:if>
+                        </ul>
+                     </div>
+                    </lightning:layoutItem>
+                 </lightning:layout>
+                </div>
+             </div>
+          </div>
+        </div>
+    </div>
+                                  
+</aura:component>

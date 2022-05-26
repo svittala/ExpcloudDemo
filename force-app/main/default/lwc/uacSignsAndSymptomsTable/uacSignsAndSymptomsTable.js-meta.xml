@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Sign And Symptoms Table</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="healthEvaluationId" type="String" label="Health Evaluation Id" role="inputOnly" description="Id of health evaluation record."/>
+            <property name="uacId" type="String" label="UAC Id" role="inputOnly" description="Id of UAC contact."/>
+            <property name="signAndSymptomsReported" type="String" label="Were any Signs/Symptoms Reported by the Minor or Observed by Program Staff or HCP?" description="Yes/No value for Sign And Symptoms reported."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

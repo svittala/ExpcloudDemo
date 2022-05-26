@@ -1,0 +1,42 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_CallOut_CMP&gt;</code> component is a pure utility
+        Lightning component. It provides a single method to execute a Web Service callout.</p>
+    <p>It enables to trigger any kind of REST service request (either a GET,
+        POST, PATCH...) to any URL (assuming it has been previously configured
+        as a Named Credential or at least registered as a Remote Site) with 
+        header or body parameters.</p>
+<pre>&lt;c:PEG_CallOut_CMP aura:id="calloutUtil" /&gt;</pre>
+    <p>The callout is performed asynchronously and the callback method (provided
+        as input parameter) is called when receiving the result (or the error).</p>
+<pre>component.find('calloutUtil').runCallOut(
+     'https://ws4covea.herokuapp.com/personne',
+     'POST',
+     '{"Content-Type","application/json;charset=UTF-8"}'
+     '{"lastname":"Smith","firstname":"John"},
+     function(calloutResult,calloutError) {
+          if (calloutResult) {
+              // process OK (in calloutResult object)
+              ...
+          } else {
+              // process KO (in calloutError object)
+              ...
+          }});</pre>
+    <p>The URL may also reference a configured <code>Named Credential</code>
+        by specifiying the targetURL as <code>callout:My_Named_Credential/some_path</code>.</p>
+    <br/>
+    </div>
+             
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

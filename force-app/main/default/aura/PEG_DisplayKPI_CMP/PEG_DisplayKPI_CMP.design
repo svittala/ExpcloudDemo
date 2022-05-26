@@ -1,0 +1,37 @@
+<design:component label="PEG KPI Display (single)">
+    
+	<design:attribute name="title"
+                      label="KPI Title"
+                      description="Title of the component (typically label of the KPI)." />
+    <design:attribute name="kpiField"
+                      label="KPI Field"
+                      description="API Name of the field containing the KPI value."
+                      datasource="apex://PEG_NumberFieldList_CTL" />
+    <design:attribute name="kpiFormat"
+                      label="KPI Format"
+                      default="decimal"
+                      description="Format of the KPI value."
+                      datasource="decimal,currency,percent"/>
+    <design:attribute name="labelField"
+                      label="Message Field"
+                      description="API Name of a (formula) field containing the KPI message displayed next to its value."
+                      datasource="apex://PEG_TextFieldList_CTL" />
+    <design:attribute name="mode"
+                      label="Display Mode"
+                      description="Graphical KPI display mode."
+                      datasource="ring,smiley,arrows,rating,thumb,strength,trend"/>
+
+    <design:attribute name="minValue"
+                      label="Min Value/Threshold"
+                      description="Minimal or lower threshold value of the KPI"/>
+    <design:attribute name="maxValue"
+                      label="Max Value/Threshold"
+                      description="Maximal or higher threshold value of the KPI"/>
+    <design:attribute name="isInverse"
+                      label="Inverse Colouring?"
+                      description="Flag to indicate if low to high KPI values go from Red to Green or the other way."/>
+      
+	<design:attribute name="isDebug"
+                      label="Show Debug?" />
+  
+</design:component>

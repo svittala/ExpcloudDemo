@@ -1,0 +1,54 @@
+<design:component label="PEG Custom Graphs" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="icon"
+                      label="Component Icon" />
+    <design:attribute name="showBorder"
+                      label="Show Border?" />
+    
+    <design:attribute name="graphType"
+                      label="Graph Type"
+                      description="Type of Chart to display (doughnut, pie, bar, horizontalBar)."/>
+
+    <design:attribute name="query"
+                      label="SOQL count group by Query"
+                      description="'group by' SOQL query to fetch graph data." />
+    
+    <design:attribute name="dimension"
+                      label="Main Dimension Field"
+                      description="Name of the field used as main dimension for Chart grouping."/>
+    <design:attribute name="dimensionLabel" 
+                      label="Main Dimension Field Label"
+                      description="Label of the main dimension field."/>
+    <design:attribute name="subDimension"
+                      label="Secondary Dimension Field"
+                      description="Name of the field used as secondary dimension for Chart grouping (stack bars)."/>
+    <design:attribute name="subDimensionLabel" 
+                      label="Second Dimension Field Label"
+                      description="Label of the secondary dimension field."/>       
+    <design:attribute name="measureStr"
+                      label="Measure Fields"
+                      description="List of SOQL count/sum fields to be used as measures, provided as a JSON string list."/>
+
+    <design:attribute name="cardActionStr"
+                      label="Card header Actions" />
+    
+    <design:attribute name="bypassFLS"
+                      label="Bypass FLS?" />
+    <design:attribute name="bypassSharing"
+                      label="Bypass Sharing?" />
+    <design:attribute name="queryType"
+                      label="Query Type"
+                      description="To authorize bypass, a valid PEG_Query__mdt devName should be provided." />
+    
+    <design:attribute name="isStorable"
+                      label="Use Storable Actions?"
+                      description="Use local browser cache on repeated similar queries."/>
+    <design:attribute name="isBackground"
+                      label="Send query in Background?"
+                      description="For long running SOQL queries."/>
+
+    <design:attribute name="showQuery"
+                      label="Display SOQL (for debug)?" />
+    
+</design:component>

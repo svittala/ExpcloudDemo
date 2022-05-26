@@ -1,0 +1,49 @@
+<!--
+  @description       : Used to display dynamic picklist in flows based on Schema.
+  @author            : Sachet Khanal (Deloitte)
+  @group             : uacFlowDynamicPicklist
+  @last modified on  : 11-13-2020
+  @last modified by  : Sachet Khanal (Deloitte)
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-10-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+    <div if:false={isMultipicklist} class="uac-picklist-wrapper">
+        <div if:false={isRadioButtonGroup}>
+            <lightning-combobox name={question} label={question} value={selectedValue} options={picklistOptions}
+                required={required} onchange={handleChange} class="uac-picklist inputCmp" disabled={isReadOnly}>
+            </lightning-combobox>
+        </div>
+        <div if:true={isRadioButtonGroup}>
+            <label class="slds-form-element__label">
+                <template if:true={required}>
+                    <span class="required">* </span>
+                </template>
+                {question}
+            </label>
+            <template if:true={radioButtonHelpTxt}>
+                <lightning-helptext content={radioButtonHelpTxt}  icon-name='info'></lightning-helptext>
+            </template>
+            <template if:false={required}>
+                <lightning-button-icon
+                    icon-name="utility:undo"
+                    alternative-text="Clear"
+                    variant="bare"
+                    size="small"
+                    onclick={handleClearClick}>
+                </lightning-button-icon>
+            </template>
+            <lightning-radio-group  name={question} label={question} value={selectedValue} options={picklistOptions}
+            variant="label-hidden" class="inputCmp"
+                required={required} onchange={handleChange} disabled={isReadOnly}>
+            </lightning-radio-group>
+        </div>
+    </div>
+    <div if:true={isMultipicklist} class="uac-picklist-wrapper inputCmp">
+        <lightning-dual-listbox name={question} label={question} source-label="Available Options"
+            selected-label="Selected Options" options={picklistOptions} value={selectedValue} required={required}
+            onchange={handleChange} class="uac-picklist" disabled={isReadOnly}>
+        </lightning-dual-listbox>
+    </div>
+</template>

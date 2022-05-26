@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Previously Entered Medications Table</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="healthEvaluationId" type="String" label="Health Evaluation Id" role="inputOnly" description="Health Evaluation Id" />
+            <property name="uacId" type="String" label="UAC Id" role="inputOnly" description="UAC Contact Id" />
+            <property name="showReasonForMedication" type="Boolean" label="Show Reason for Medication?" role="inputOnly" description="Show reason for Medication" default="false"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

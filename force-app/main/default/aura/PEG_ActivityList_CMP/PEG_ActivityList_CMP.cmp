@@ -1,0 +1,172 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component displaying a custom activity timeline." >
+	
+    <!-- Global Component Configuration -->
+    <aura:attribute name="title"      type="String"  default="Activity timeline"
+                    description="Component card title."/>
+    <aura:attribute name="icon"       type="String"  default="standard:task"
+                    description="Component card icon."/>
+    <aura:attribute name="showBorder" type="Boolean" default="false"
+                    description="Show border around component card?"/>
+    <aura:attribute name="showQuery"  type="Boolean" default="true"
+                    description="Show SOQL query (for debug)?"/>
+    
+    <!-- Task Query Configuration -->
+    <aura:attribute name="taskQuery"    type="String"
+                    default="SELECT Id, Subject, WhatId, What.Name, WhoId, Who.Name,
+                                    ActivityDate, OwnerId, Owner.Name, toLabel(Status),
+                                    TaskSubtype, Priority, IsHighPriority, IsClosed, Description
+                             FROM Task"
+                    description="SOQL query base used to retrieve Tasks (SELECT... FROM Task)." />
+     <aura:attribute name="taskScope"  type="String"
+                    default="WHERE ownerId = '{{{User.Id}}}' ORDER BY ActivityDate desc LIMIT 5"
+                    description="SOQL query complement to scope the Tasks to retrieve (WHERE, LIMIT, ORDER...)." />
+    
+    <aura:attribute name="eventQuery"    type="String"
+                    default="SELECT Id, Subject, WhatId, What.Name, WhoId, Who.Name,
+                                    ActivityDate, OwnerId, Owner.Name, Description,
+                                    StartDateTime, EndDateTime 
+                             FROM Event"
+                    description="SOQL query base used to retrieve Events (SELECT... FROM Event)." />
+     <aura:attribute name="eventScope"  type="String"
+                    default="WHERE ownerId = '{{{User.Id}}}' ORDER BY ActivityDate desc LIMIT 5"
+                    description="SOQL query complement to scope the Events to retrieve (WHERE, LIMIT, ORDER...)." />   
+     
+    <!-- Combined Activities to display -->
+    <aura:attribute name="results" type="Object"
+                    description="All activities combined and sorted by descending activity date." />
+    <aura:attribute name="fetchCount" type="Integer" default="2"
+                    description="Indicates the number of required loads remaining." />
+    
+    <!-- Server callout configuration -->
+    <aura:attribute name="bypassFLS" type="Boolean" default="false" 
+                    description="Bypass FLS when executing query." />
+    <aura:attribute name="bypassSharing"    type="Boolean" default="false" 
+                    description="Bypass Sharing when executing query." />
+    <aura:attribute name="queryType"        type="String"  default="" 
+                    description="When requesting a byPass, a valid queryType should be provided (see PEG_Query__mdt)." />
+    <aura:attribute name="isStorable"       type="Boolean" default="false" 
+                    description="Query action storable mode activation." />
+    <aura:attribute name="isBackground"     type="Boolean" default="false" 
+                    description="Query action background mode activation." />
+    
+    <!-- Actions configuration -->
+    <aura:attribute name="tableActionStr"  type="String"
+                    default='[ { "label":"Task", "icon":"add",
+                                 "event": { "name":"e.force:createRecord",
+                                            "params": { "entityApiName":"Task", "defaultFieldValues": { "Description":"{{{Context.Situation}}}" } } } },
+                               { "label":"Event", "icon":"add",
+                                 "event": { "name":"e.force:createRecord",
+                                            "params": { "entityApiName":"Event", "defaultFieldValues": { "Description":"{{{Context.situation}}}" } } } },
+                               { "label":"Calendar", "icon":"open",
+                                 "event": { "name":"e.force:navigateToObjectHome",
+                                            "params": { "scope":"Event" } } } ]'
+                    description="Header actions configuration (if any)." />
+    <aura:attribute name="tableActionJson"  type="List"
+                    default='[]'
+                    description="JSON conversion of header actions configuration." />
+    <aura:attribute name="rowActionStr"    type="String"
+                    default='[ { "type":"menu", "iconSize":"x-small", 
+                                 "items":[ { "label":"Edit",
+                                             "event":{ "name":"e.force:editRecord", "params":{ "recordId":"{{{Row.Id}}}" } } },
+                                           { "label":"Show", "variant":"brand",
+                                             "event":{ "name":"e.force:navigateToSObject", "params":{ "recordId":"{{{Row.Id}}}" } } } ] } ]'
+                    description="Row actions configuration (if any)."/>
+    <aura:attribute name="rowActionJson"   type="List"
+                    default='[]'
+                    description="JSON conversion of row actions configuration."/>
+
+    <!-- expand / Collapse -->
+    <aura:attribute name="isCollapsible"  type="Boolean" default="false"
+                    description="Card content collapsible?." />
+    <aura:attribute name="isExpanded"  type="Boolean" default="true"
+                    description="Card content expand status." />
+    
+    <!-- Initialisation-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Component initialization : Buildin of underlying SOQL queries." />
+    <aura:handler event="lightning:tabRefreshed" action="{!c.refreshList}"
+                  description="Refreshing of the event lists" />
+    
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    <c:PEG_SOQL_CMP  aura:id="soqlUtil"/>
+    <c:PEG_JSON_CMP  aura:id="jsonUtil"/>
+    
+    <lightning:card title="{!v.title + ' (' + v.results.length + ')' }"
+                    iconName="{#v.icon}"
+                    class="{# if(v.showBorder, 'slds-card_boundary', '') + if(v.isCollapsible,' slds-m-left_x-small','')}" >
+        
+        <aura:set attribute="actions">
+            
+            <aura:if isTrue="{!v.tableActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.tableActionJson}"
+                                   callback="{!c.handleTableAction}" />
+            </aura:if>
+            
+            <lightning:buttonGroup class="slds-col">
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border"
+                                  onclick="{!c.refreshList}"/>
+            </lightning:buttonGroup>
+        </aura:set>
+        
+        <aura:set attribute="footer">
+          <aura:if isTrue="{!v.showQuery}">
+              <lightning:tile label="SOQL queries" class="slds-text-align_left">
+              <div class="slds-tile__detail">
+              <dl class="slds-list_horizontal slds-wrap">
+              <aura:if isTrue="{!v.taskScope.length > 0}">
+                  <dt class="slds-item_label slds-truncate" title="Tasks">Tasks</dt>
+                  <dd class="slds-item_detail slds-text-align_left" title="Tasks Request">
+                      {!v.taskQuery + ' ' + v.taskScope} </dd>
+              </aura:if>
+              <aura:if isTrue="{!v.eventScope.length > 0}">
+                  <dt class="slds-item_label slds-truncate" title="Events">Events</dt>
+                  <dd class="slds-item_detail slds-text-align_left" title="Events Request">
+                      {!v.eventQuery + ' ' + v.eventScope}</dd>
+              </aura:if>
+              </dl>
+              </div>
+              </lightning:tile>
+          </aura:if>
+        </aura:set>
+   
+        <aura:if isTrue="{#v.isCollapsible}">
+        <div class="slds-is-relative">
+            <div style="position: absolute; top: -4.125em; left: -2.25em;">
+                <lightning:buttonStateful
+                         variant="text"
+                         iconNameWhenOff="utility:chevronright"
+                         iconNameWhenOn="utility:chevrondown"
+                         state="{!v.isExpanded}"
+                         class="slds-m-top_medium slds-m-left_small"
+                         onclick="{! c.expandCollapse }" />
+            </div>
+        </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.isExpanded}">
+        <aura:if isTrue="{!v.fetchCount == 0}">
+        <div class="{! 'slds-card__body slds-card__body_inner ' + if(v.showBorder, 'slds-border_top', '')}">
+   
+          <ul class="slds-timeline slds-m-vertical_medium">     
+            <aura:iteration items="{!v.results}" var="eachItem">
+              <li>
+                  <c:PEG_ActivityDisplay_CMP activity="{!eachItem}"
+                                             actionMenu="{!v.rowActionJson}"
+                                             menuCallback="{!c.handleRowAction}"/>
+              </li>
+            </aura:iteration>
+          </ul>
+        </div>
+        </aura:if>
+        </aura:if>
+    </lightning:card>
+
+</aura:component>

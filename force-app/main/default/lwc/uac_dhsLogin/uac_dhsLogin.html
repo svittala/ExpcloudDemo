@@ -1,0 +1,27 @@
+<!--
+  @Description        : LWC for Login landing page - ORRUAC 5269
+  @Author             : Piyush
+  @Last Modified On   : 02/23/2021
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0    02/23/2021     Piyush(Deloitte)           Initial Version
+-->
+<template>
+    <div class="login-wrapper">
+        <div class="login-title">
+            <img src={acfLogo} alt="ACF ORR Logo" title="ACF ORR Logo">
+        </div>      
+        <div class="uac-center">
+            <div class="slds-align_absolute-center">
+                <img src={commLogo} alt="PATH Logo" title="PATH Logo">
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-size_5-of-12 login-section">
+                    <h1 class="header-text">DHS Users Only</h1>
+                    <p class="login-button-description" title={buttonHelptextExt}>{buttonHelptextExt}</p>
+                    <a class="login-button" title="Login External" href={extPathUrl}>LOGIN</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

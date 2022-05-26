@@ -1,0 +1,17 @@
+<!--
+  @File Name         : uacPHIMedicationTable.html
+  @Description       : LWC for adding/updating/deleting Immunization records
+  @Group             : uacPHIMedTableParent
+  @Author            : Abhisek Pati (Deloitte)
+  @Last Modified By  : 
+  @Last Modified On  : 
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   10/7/2020    Sarang Padhye(Deloitte)   ORRUAC 2760
+-->
+<template>
+  <div if:true={loaded}>
+    <c-uac-medication-table-admission-assesment record-id={recordId} health-evaluation-id={healthEvaluationId}
+      uac-id={uacId}></c-uac-medication-table-admission-assesment>
+  </div>
+</template>

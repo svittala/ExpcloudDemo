@@ -1,0 +1,31 @@
+<!--
+  @File Name         : uacRiskBasedTestTable.html
+  @Description       : LWC for adding/updating/deleting Risk Based Lab Test records
+  @Group             : UAC_riskBasedTestTable
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-10-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-28-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+    <template if:true={alerts.length}>
+        <ul class="uac-alerts">
+            <template for:each={alerts} for:item="alert">
+                <li key={alert}><lightning-formatted-text value={alert}></lightning-formatted-text></div></li>
+            </template>
+        </ul>
+    </template>
+
+    <div class="">
+        <c-uac-table
+            columns={fields}
+            default-new-record={defaultNewRecord}
+            onloadcomplete={handleLoad}
+            onsave={handleSave}
+            ondelete={handleDelete}
+            onfieldchange={handleFieldChange}>
+        </c-uac-table>
+    </div>
+</template>

@@ -1,0 +1,134 @@
+<!--
+  @File Name         : uacInput.html
+  @Description       : Generic UAC input LWC
+  @Group             : uacInput
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 11-17-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-20-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+    <template if:false={hide}>
+        <template if:true={isButton}>
+            <button class="slds-button slds-button_bare" title={_value} onclick={onButtonClick}>
+                {_value}
+            </button>
+        </template>
+
+        <template if:true={isReadonly}>
+            <template if:true={isReadonlyText}>
+                <lightning-formatted-rich-text value={_value}></lightning-formatted-rich-text>
+            </template>
+            <template if:true={isReadonlyNumber}>
+                <lightning-formatted-number value={_value}></lightning-formatted-number>
+            </template>
+            <template if:true={isReadonlyPhone}>
+                <lightning-formatted-phone value={_value}></lightning-formatted-phone>
+            </template>
+            <template if:true={isReadonlyDate}>
+                <lightning-formatted-date-time value={_value}></lightning-formatted-date-time>
+            </template>
+        </template>
+
+        <template if:true={isInput}>
+            <template if:true={isPicklist}>
+                <lightning-combobox class="uac-input"
+                    name={name}
+                    label={label}
+                    variant={variant}
+                    value={_value}
+                    options={options}
+                    required={required}
+                    disabled={isPicklistDisabled}
+                    placeholder="--None--"
+                    field-level-help={helpText}
+                    onchange={handleChange}>
+                </lightning-combobox>
+            </template>
+            <template if:true={isMultiPicklist}>
+                <lightning-dual-listbox
+                    class="uac-input"
+                    name={name}
+                    label={label}
+                    value={_value}
+                    options={options}
+                    required={required}
+                    disabled={isPicklistDisabled}
+                    placeholder="--None--"
+                    field-level-help={helpText}
+                    onchange={handleChange}
+                    source-label="Available Options"
+                    selected-label="Selected Options">
+                </lightning-dual-listbox>
+            </template>
+            <template if:true={isRadio}>
+                <label class="slds-form-element__label">
+                    <template if:true={required}>
+                        <span class="required">* </span>
+                    </template>
+                    {label}
+                </label>
+                <template if:true={helpText}>
+                    <lightning-helptext content={helpText}></lightning-helptext>
+                </template>
+                <lightning-radio-group  class="uac-input"
+                    name={name}
+                    label={label}
+                    variant="label-hidden"
+                    value={_value}
+                    options={options}
+                    required={required}
+                    onchange={handleChange}
+                    disabled={isPicklistDisabled}>
+                </lightning-radio-group>
+            </template>
+            <template if:true={isTextArea}>
+                <lightning-textarea class="uac-input"
+                    name={name}
+                    label={label}
+                    variant={variant}
+                    value={_value}
+                    placeholder={placeholder}
+                    field-level-help={helpText}
+                    required={required}
+                    max-length={maxLength}
+                    disabled={disabled}
+                    onchange={handleChange}>
+                </lightning-textarea>
+            </template>
+            <template if:true={isCheckbox}>
+                <lightning-input class="uac-input"
+                    type={type}
+                    name={name}
+                    label={label}
+                    variant={variant}
+                    checked={_value}
+                    placeholder={placeholder}
+                    field-level-help={helpText}
+                    required={required}
+                    disabled={disabled}
+                    onchange={handleChange}>
+                </lightning-input>
+            </template>
+            <template if:true={isDefault}>
+                <lightning-input class="uac-input"
+                    type={type}
+                    name={name}
+                    label={label}
+                    variant={variant}
+                    value={_value}
+                    placeholder={placeholder}
+                    field-level-help={helpText}
+                    required={required}
+                    min={min}
+                    max={max}
+                    max-length={maxLength}
+                    disabled={disabled}
+                    onchange={handleChange}>
+                </lightning-input>
+            </template>
+        </template>
+    </template>
+</template>

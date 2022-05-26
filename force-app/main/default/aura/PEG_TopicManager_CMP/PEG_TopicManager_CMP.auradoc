@@ -1,0 +1,57 @@
+<aura:documentation>
+	<aura:description>
+      
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_TopicManager_CMP&gt;</code> component enables to manage
+        Topic assignments on Knowledge articles directly from the Lightning record
+        page, whatever the community (aka "Network"). It complements the standard
+        Topic component that ony enables to manage internal topics when on a CRM
+        page.</p>
+    <p><b>Warning</b>: This component only works with Knowledge article records,
+        although it may be displayed for any record page (due to a technical constraint
+        with the Knowledge__kav object in the component design file)</p>
+    <p>It presents all the communities for which the article has topics assigned,
+        each community being presented in a separate tile with a status icon and
+        the description (if any set) below its name.</p>
+    <p>For each community, it lists all the topics assigned to the article as
+        pills within a container and enables (if not in read-only mode) to:</p>
+    <ul>
+        <li>Add topics by selecting a network/community and a topic available, both
+        from picklists and clicking on an "add" icon button.</li>
+        <li>Remove topics by simply clicking on the "delete" icon button available on
+            each Topic pill next to the topic label.</li>
+    </ul>
+    <p>There is limited amount of configuration available:</p>
+    <ul>
+        <li><code>Title</code> and <code>Icon</code> of the component card container
+        (custom labels being usable for the title with the <code>$Label.c.LabelName</code>
+        syntax)</li>
+        <li><code>Show Border?</code> checkbox to add a wrapping border around the component card.</li>
+        <li><code>Read-Only?</code> checkbox to use the component in read-only mode (no add/remove available).</li>
+    </ul>
+    <p>This component relies on the following elements:</p>
+    <ul>
+        <li>The <a href="/docs/component-library/bundle/c:PEG_SOQL_CMP/documentation">
+        <code>PEG_SOQL_CMP</code></a> component to execute various SOQL queries 
+            and DMLs (inserts/deletes).</li>
+        <li>3 <code>PEG_Query</code> metadata values (the <code>PEG_Topic...</code> ones)
+            to register the needed SOQL queries.</li>
+        <li>3 <code>PEG_Topic...</code> custom labels for the "no topic" message or the 
+            network / topic picklists selectors.</li>
+    </ul>
+    <br/>
+    </div>
+
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2020</p>
+    </div>
+    </aura:description>
+</aura:documentation>

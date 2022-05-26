@@ -1,0 +1,48 @@
+<!--
+  @File Name         : uacIGRATBTable.html
+  @Description       : LWC for adding/updating/deleting IGRA Lab Test records
+  @Group             : uacIGRATBTable
+  @Author            : Karthi Subramanian (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-10-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-08-2020   Karthi Subramanian (Deloitte)   Initial Version
+-->
+<template>
+    <c-uac-flow-header title={tableTitle}>
+    </c-uac-flow-header>
+    <template if:true={alerts.length}>
+        <ul class="uac-alerts">
+            <template for:each={alerts} for:item="alert">
+                <li key={alert}><lightning-formatted-text value={alert}></lightning-formatted-text></div></li>
+            </template>
+        </ul>
+    </template>
+    <template for:each={healthEvalFields} for:item="fld">
+      <div class="slds-grid" key={fld.name}>
+        <div class="slds-col slds-size_1-of-2">
+            <c-uac-input
+              type={fld.type}
+              name={fld.name}
+              label={fld.label}
+              value={fld.value}
+              options={fld.options}
+              required={fld.required}
+              hide={fld.hide}
+              onfieldchange={handleHealthEvalFieldChange}>
+            </c-uac-input>
+        </div>
+      </div>
+    </template>
+    <div class={tableSectionClass}>
+      <div class="uac-table-container">
+          <c-uac-table
+              columns={fields}
+              default-new-record={defaultNewRecord}
+              onsave={handleSave}
+              ondelete={handleDelete}>
+          </c-uac-table>
+      </div>
+    </div>
+  </template>

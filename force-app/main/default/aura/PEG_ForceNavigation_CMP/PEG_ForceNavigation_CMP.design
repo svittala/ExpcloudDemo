@@ -1,0 +1,5 @@
+<design:component label="PEG Force Navigation">
+	<design:attribute name="targetString"
+                      label="Targets"
+                      description="List of fields to be used as targets (as JSON list)"/>
+</design:component>

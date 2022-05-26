@@ -1,0 +1,108 @@
+<aura:documentation>
+	<aura:description>
+      
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_ReportingHandler_CMP&gt;</code> component is basically a utility
+        component, meant to be included in the Lightning utility bar (or in the footer of
+        a Community). In the Utility bar, the component is automatically hidden and
+        runs in background.</p>
+    <p>It has no UI footprint and only enables to process various custom Lightning events, 
+        mainly to navigate towards Reports and Dashboards (Einstein Analytics included) by
+        their Developer names (enabling easily to transfer page metadata from Org to Org).</p>
+    <p>It handles standard <code>ltng:sendMessage</code> events on a set to predefined
+        channels:</p>
+    <ul>
+    <li><code>PEG_Dashboard</code> : opens a standard Dashboard in a new main tab given
+        its <code>DevName</code>.</li>
+    <li><code>PEG_Report</code> : opens a standard Report in a new main tab given
+        its <code>DevName</code>. Filter parameters may also be provided in the event.</li>
+    <li><code>PEG_Analytics</code> : opens an Einstein Analytics Dashboard in a new main
+        tab given its <code>DevName</code>.</li>
+    <li><code>PEG_Object</code> : enables to trigger any event from the toolbar, 
+        especially useful when wanting to force the navigation to a record in a main
+        tab instead of a subtab (in Lightning console mode).</li>
+    <li><code>PEG_PopUp</code> :  enables to open a popup containing any Lightning component
+        and its parameters, e.g. to execute mass update operations on a list.</li>
+    </ul>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Reporting Examples</h4>
+    <p>Using the <code>&lt;c:PEG_ActionGroupDisplay_CMP&gt;</code>, various options are
+        available to open Reports, Dashboards or Analytics dashboards from a button group
+        instanciated in a Lightning page (leveraging its <code>actionListStr</code> attribute).
+        The following example illustrates various possibilities:</p>
+<pre>[
+ { "label" : "Report",
+   "variant" : "brand",
+   "event" : { "name" : "e.ltng:sendMessage",
+               "params" : { "channel" : "PEG_Report",
+                            "message" : { "name" : "REPORT_NAME" } } } },
+ { "label" : "Dashboard",
+   "variant": "neutral",
+   "event": { "name" : "e.ltng:sendMessage",
+              "params" : { "channel" : "PEG_Dashboard",
+                           "message" : {"name" : "DASHBOARD_NAME" } } } },
+ { "type"  : "menu",
+   "items" : [ { "label" : "Wave",
+                 "event" : { "name" : "e.ltng:sendMessage",
+                             "params" : { "channel" : "PEG_Analytics",
+                                          "message" : { "name" : "WAVE_DASHBOARD_NAME"} } } },
+               { "label" : "Filtered Report",
+                 "event" : { "name" : "e.ltng:sendMessage",
+                             "params": { "channel" : "PEG_Report",
+                                         "message" : { "name" : "FILTER_REPORT_NAME",
+                                                       "filters" : {"fv0":"FILTER_VALUE"} } } } } ] }
+ ]</pre>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Additional Examples</h4>
+    <p>Similarly, the component may user the <code>PEG_Object</code> channel to force
+        an open from the utility bar (forcing to open the object tab according to the 
+        Lightning console configuration, and not as a subtab of the current tab).</p>
+<pre>[
+ { "label" : "Open",
+   "event" : { "name" : "e.ltng:sendMessage",
+               "params" : { "channel" : "PEG_Object",
+                            "message" : { "name" : "e.force:navigateToSObject",
+                                          "params" : { "recordId" : "RECORD_ID" } } } } }
+ ]</pre>
+    <p>It may also be used to trigger an operation in a popup, leveraging a custom 
+        Lightning component and providing parameters from the current object. In such
+        a case, the "message" should contain 3 attributes :</p>
+    <ul>
+    <li><code>name</code> : the name of the Lightning component to instantiate in the
+        popup.</li>
+    <li><code>header</code> : the header label of the popup.</li>
+    <li><code>params</code> :  the parameters to be provided to the Lightning component
+        at instantiation.</li>
+    </ul>
+ <pre>[
+ { "label" : "Action",
+   "event" : { "name" : "e.ltng:sendMessage",
+               "params" : { "channel" : "PEG_PopUp",
+                            "message":{"name" : "c:PEG_DISPLAY_CMP",
+                                       "header" : "Action to execute",
+                                       "params" : { "recordId" : "RECORD_ID",
+                                                    "fields" : [ "Name", "CreatedDate", "OwnerId" ],
+                                                    "sObjectName" : "RECORD_TYPE" } } } } }
+    
+ ]</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

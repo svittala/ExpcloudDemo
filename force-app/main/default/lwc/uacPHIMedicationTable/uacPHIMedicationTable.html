@@ -1,0 +1,35 @@
+<!--
+  @File Name         : uacPHIMedicationTable.html
+  @Description       : LWC for adding/updating/deleting Immunization records
+  @Group             : uacPHIMedicationTable
+  @Author            : Abhisek Pati (Deloitte)
+  @Last Modified By  : 
+  @Last Modified On  : 
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   09-17-2020   Abhisek Pati (Deloitte)   Initial Version
+-->
+<template>
+  <div class="slds-m-bottom_small">
+    <c-uac-input
+      type="radio"
+      name="medicationGiven"
+      label="Were Medications Given as a Part of this Evaluation?"
+      value={medicationGiven}
+      options={medicationGivenOptions}
+      required
+      onfieldchange={handleMedicationGivenChange}>
+    </c-uac-input>
+
+    <div class={tableContainerClass}>
+      <c-uac-table
+        columns={lstField}
+        default-new-record={defaultNewRecord}
+        onloadcomplete={handleLoad}
+        onsave={handleSave}
+        ondelete={handleDelete}
+        onfieldchange={handleFieldChange}>
+      </c-uac-table>
+    </div>
+  </div>
+</template>

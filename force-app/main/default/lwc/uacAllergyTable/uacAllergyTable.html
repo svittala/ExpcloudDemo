@@ -1,0 +1,33 @@
+<!--
+  @File Name         : uacAllergyTable.html
+  @Description       : Custom LWC table for editing allergy records.
+  @Group             : uacAllergyTable
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-09-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-21-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+  <div class="slds-m-bottom_small">
+    <c-uac-input
+      type="radio"
+      name="allergiesReported"
+      label={allergyReportedLabel}
+      value={allergiesReported}
+      options={allergyOptions}
+      required
+      onfieldchange={handleAllergyReportedChange}>
+    </c-uac-input>
+
+    <div class={tableContainerClass}>
+      <c-uac-table
+        columns={lstField}
+        default-new-record={defaultNewRecord}
+        onsave={handleSave}
+        ondelete={handleDelete}>
+      </c-uac-table>
+    </div>
+  </div>
+</template>

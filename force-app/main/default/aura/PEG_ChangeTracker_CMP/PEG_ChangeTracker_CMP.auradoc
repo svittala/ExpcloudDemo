@@ -1,0 +1,55 @@
+<aura:documentation>
+    <aura:description>
+	<div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_ChangeTracker_CMP&gt;</code> component enables to automatically
+        trigger an action upon initialisation or upon change in a set of fields tracked
+        on the current object and then updates the record with the data returned by this action
+        (via Lightning Data Service directly from the page where the component is displayed).</p>
+    <ul>
+        <li>The set of record fields to be tracked comes from a fieldset to be defined
+            on the Object and selected via the App Builder (beware that FLS are applied
+            and some fields may then be ignored).</li>
+        <li>The Action name should be an apex class implementing the <code>PEG_ActionHandler_SVC</code>
+            interface, receives the values of all the fields defined in the fieldset
+            (+ recordId and sObjectName) and should return a set of field values to be updated
+            on the record.</li>
+        <li>The component relies on the <a href="/docs/component-library/bundle/c:PEG_MessageDisplay_CMP/documentation">
+            <code>&lt;c:PEG_MessageDisplay_CMP&gt;</code></a> for error/warning display and options selection.</li>
+        <li>The component also relies on the <a href="/docs/component-library/bundle/c:PEG_MessageDisplay_CMP/documentation">
+            <code>&lt;c:PEG_Action_CMP&gt;</code></a> to trigger and handle apex actions.</li>
+    </ul>
+    <p>Warning: This component relies on the Lightning Data Service (LDS)
+       and therefore only works with objects supported by the <a href="/docs/component-library/bundle/force:recordData/documentation">
+        <code>force:recordData</code></a> standard component.</p>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Typical Implementation Example</h4>
+        <p>You may first define a boolean field on the record that would then
+           control the display of the <code>&lt;c:PEG_ChangeTracker_CMP&gt;</code>
+           via standard conditional display in the App Builder. E.g. this may be 
+           a boolean flag set via Trigger or Process Builder to tag that an Address
+           field has been modified on the record.</p>
+        <p>You may then define a fieldSet with all the fields you need to track the
+           change of or your action requires to operate properly. E.g. this may
+           be the Address field as well as an client external ID.</p>
+        <p>You may implement the apex Action, analysing the provided data, executing
+           some logic (including callouts if necessary) and returning a result as
+           a new set of record data or triggering an exception (there is a special
+           one to propose options, see <code>PEG_ActionHandler_SVC</code> for details.
+           If successful, it typically returns the controlling boolean flag with the 
+           value to hide the component.</p>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / Nov. 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

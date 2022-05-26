@@ -1,0 +1,19 @@
+.THIS .minTileSize{
+    min-width: 20em;
+    max-width: 100%;
+    /*max-width: 33.34vw;*/
+    /* max(20vw, 20em)*/
+}
+.THIS .mySearch{
+    display: inline-block;
+}
+.THIS .mySearch .slds-form-element__label {
+    display: none;
+}
+/*
+.THIS .mySearch .slds-form-element__control input {
+    border-top-left-radius:    0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-left-width: 0px !important;
+}
+*/

@@ -1,0 +1,16 @@
+<template>
+    <template if:true={showProgress}>
+        <lightning-progress-indicator current-step={status} type="path" variant="base">
+            <lightning-progress-step label="In Progress" value="In Progress"></lightning-progress-step>
+            <lightning-progress-step label="Supervisor Approved" value="Supervisor Approved"></lightning-progress-step>
+            <lightning-progress-step label="Ready for User Provisioning" value="Ready for User Provisioning"></lightning-progress-step>        
+            <lightning-progress-step label="User Provisioned" value="User Provisioned"></lightning-progress-step>
+        </lightning-progress-indicator>
+    </template>
+    <template if:true={showRejected}>
+        <lightning-progress-indicator current-step={status} type="path" variant="base">
+            <lightning-progress-step label="In Progress" value="In Progress"></lightning-progress-step>
+            <lightning-progress-step label="Supervisor Rejected" value="Supervisor Rejected"></lightning-progress-step>
+        </lightning-progress-indicator>
+    </template>
+</template>

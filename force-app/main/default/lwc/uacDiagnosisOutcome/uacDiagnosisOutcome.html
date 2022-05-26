@@ -1,0 +1,133 @@
+<!--
+  @File Name         : uacDiagnosisOutcome.html
+  @Description       : LWC for Diagnosis Outcome modal (ORRUAC-1974)
+  @Group             : uacForm
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 11-17-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-25-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+
+  <template if:true={isLoading}>
+    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+  </template>
+
+  <c-uac-modal class="uac-modal" header={title} size="medium" onclosedialog={handleClose}>
+
+    <template if:true={error}>
+      <div class="slds-notify_container slds-is-relative">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+          <div class="slds-notify__content">
+            <h2 class="slds-text-heading_small">{saveErrorTitle}</h2>
+            <lightning-formatted-rich-text value={error}>
+            </lightning-formatted-rich-text>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template if:true={initialized}>
+
+      <c-uac-flow-header title="Outcome">
+      </c-uac-flow-header>
+
+      <ul class="uac-help-text slds-m-bottom_small">
+        <template if:false={allowOnlyRuledOut}>
+          <li>Select <b>No Status Change of Evaluated Diagnosis</b> if the diagnosis under evaluation and corresponding status (e.g., {lblWorking}) are unchanged.</li>
+          <li>Select <b>Status Change of Evaluated Diagnosis</b> if the diagnosis under evaluation is unchanged, but the status changed (e.g., {lblWorking} to {lblFinal}).</li>
+        </template>
+        <li>Select <b>Diagnosis Ruled Out</b> if the diagnosis under evaluation was ruled out and no alternative diagnosis was made by the healthcare provider.</li>
+        <li>Select <b>Diagnosis Ruled Out, Replaced Existing Diagnosis</b> if the diagnosis under evaluation was ruled out and replaced with an alternative diagnosis made by the healthcare provider.</li>
+      </ul>
+
+      <template for:each={outcomeFields} for:item="fld">
+        <div class="slds-grid slds-var-m-vertical_small" key={fld.name}>
+          <div class="slds-col slds-size_1-of-2">
+            <c-uac-input type={fld.type} data-id={fld.name}
+              variant="label-stacked"
+              required={fld.required}
+              value={fld.value}
+              options={fld.options}
+              label={fld.label}
+              hide={fld.hide}
+              onfieldchange={handleOutcomeFieldChange}>
+            </c-uac-input>
+          </div>
+        </div>
+      </template>
+
+      <template if:true={showUpdateStatusTitle}>
+        <c-uac-flow-header title="Update Status">
+        </c-uac-flow-header>
+      </template>
+
+      <template if:true={updateDiagnosisStatus}>
+        <template for:each={diagnosisUpdateStatusSectionFields} for:item="fld">
+          <div class="slds-grid slds-var-m-vertical_small" key={fld.name}>
+            <div class="slds-col slds-size_1-of-2">
+              <c-uac-input type={fld.type} data-id={fld.name}
+                variant="label-stacked"
+                required={fld.required}
+                value={fld.value}
+                options={fld.options}
+                label={fld.label}
+                hide={fld.hide}
+                onfieldchange={handleDiagnosisStatusUpdateChange}>
+              </c-uac-input>
+            </div>
+          </div>
+        </template>
+      </template>
+
+      <template if:true={updateDiagnosisPlan}>
+        <c-uac-record-edit-form class="uac-diagnosis-plan-update-form"
+          record-id={associatedDiagnosisId}
+          record-type={associatedDiagnosisRecordType}
+          object-api-name={objDiagnosisApiName}
+          sections={sectionsForUpdateDiagnosisPlan}
+          onloadcomplete={handleUpdateDiagnosisPlanLoadComplete}
+          onfieldchange={handleDiagnosisFieldChange}
+          onsubmit={handleDiagnosisPlanSubmit}>
+        </c-uac-record-edit-form>
+      </template>
+
+      <template if:true={replaceDiagnosis}>
+        <c-uac-flow-header title="Replacement Diagnosis">
+        </c-uac-flow-header>
+
+        <template if:true={replacementDiagnosisRecordType}>
+          <c-uac-record-edit-form class="uac-diagnosis-replacement-form"
+            object-api-name={objDiagnosisApiName}
+            record-type={replacementDiagnosisRecordType}
+            exclude-fields={excludeFieldsForDiagnosisReplacement}
+            onloadcomplete={handleLoadComplete}
+            onfieldchange={handleDiagnosisFieldChange}
+            onsubmit={handleDiagnosisReplacementSubmit}>
+
+            <div slot="form-top">
+              <lightning-input-field field-name={fldDiagnosisAssociatedUAC} value={associatedUACId} class="slds-hide">
+              </lightning-input-field>
+              <lightning-input-field field-name={fldDiagnosisAssociatedHealthEval} value={associatedHealthEvaluationId} class="slds-hide">
+              </lightning-input-field>
+              <lightning-input-field field-name={fldDiagnosisParentDiagnosis} value={associatedDiagnosisId} class="slds-hide">
+              </lightning-input-field>
+            </div>
+
+          </c-uac-record-edit-form>
+        </template>
+      </template>
+
+      <br/><br/><br/><br/><br/><br/><br/>
+
+      <div slot="footer">
+        <button class="slds-button slds-button_neutral" onclick={handleClose}>Cancel</button>
+        <button class="slds-button slds-button_brand" onclick={handleSave}>Save</button>
+      </div>
+
+    </template>
+
+  </c-uac-modal>
+</template>

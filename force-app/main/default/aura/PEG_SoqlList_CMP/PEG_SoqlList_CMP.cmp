@@ -1,0 +1,290 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component able to present data table in a card with data fetched via a SOQL query (with merge fields based on current record / user)." >
+    
+    <!-- Global Component Parameters -->
+    <aura:attribute name="title"       type="String"  default="List Example"
+                    description="Component card title."/>
+    <aura:attribute name="icon"        type="String"  default="standard:picklist_type"
+                    description="Component card icon."/>
+    <aura:attribute name="showBorder"  type="Boolean" default="false"
+                    description="Show border around component card?"/>
+    <aura:attribute name="showCount"   type="Boolean" default="true"
+                    description="Show row count in title?"/>
+    <aura:attribute name="showQuery"   type="Boolean" default="false"
+                    description="Show SOQL query (for debug)?"/>
+    <aura:attribute name="tableHeight" type="String" default=""
+                    description="Height of the data-table (empty = no scroll)."/>
+    <!-- 15em -->
+    <!-- Data Management Parameters -->
+    <aura:attribute name="query"             type="String"
+                    default="SELECT Subject,Description FROM Task WHERE WhatId = '{{{recordId}}}' AND OwnerId='{{{User.Id}}}' WITH SECURITY_ENFORCED"
+                    description="Soql query to be used with merge fields in {{{xxx.xxx}}} format."/>
+    <aura:attribute name="queryError" type="Boolean" default="false" description="Error in query?" />
+    <aura:attribute name="queryErrorMessage" type="String" default="Error encountered while fetching data."
+        description="Error message in query" />
+    
+    <aura:attribute name="bypassFLS"  type="Boolean"  default="false" 
+                    description="Bypass FLS when executing query." />
+    <aura:attribute name="bypassSharing"     type="Boolean"  default="false" 
+                    description="Bypass Sharing when executing query." />
+    <aura:attribute name="queryType"         type="String"   default=""
+                    description="When requesting a byPass, a valid queryType should be provided (in PEG_Query__mdt)." />
+    <aura:attribute name="isStorable"        type="Boolean"  default="false" 
+                    description="Query action storable mode activation." />
+    <aura:attribute name="isBackground"      type="Boolean"  default="false" 
+                    description="Query action background mode activation." />
+    <aura:attribute name="isFlatten"         type="Boolean"  default="false"
+                    description="Flatten JSON structure of results (when fetching lookup info)?"/>
+
+    <aura:attribute name="showSearch"        type="Boolean" default="false"
+                    description="Displays a search utility in the header."/>
+    <aura:attribute name="searchString"      type="String"
+                    description="Search input string."/>
+    <aura:attribute name="searchScope"       type="string"  default="All" 
+                    description="Scope of the search (All or column name)."/>
+    
+    <aura:attribute name="maxRowSelection"   type="integer" default="0"
+                    description="Max number of rows selected (0 means no selection checkbox display)."/>
+    
+    <aura:attribute name="hasTotal"          type="Boolean" default="false"
+                    description="Considers last line as total (when using group by rollup SOQL)?"/>
+    <aura:attribute name="totalStr"  type="String"
+                    description="List of fields to display for the total line (if any)."/>
+
+    <aura:attribute name="isTreeView"        type="Boolean" default="false"
+                    description="Displays the results in a tree table instead of a list (when using subqueries)."/>
+    <aura:attribute name="treeFieldName"     type="String"
+                    description="In case of tree table display, JSON list with the names of the fields to be used for the sub-hierarchy." />
+        
+    <aura:attribute name="isInfiniteLoad"  type="Boolean" default="false"
+                    description="Sets the data-table in infinite loading mode (SOQL should not have LIMIT and OFFSET keywords)."/>
+    <aura:attribute name="pageSize"        type="Integer" default="50"
+                    description="Number of rows fetched by each query."/>
+    <aura:attribute name="loadMoreOffset"  type="Integer" default="20"
+                    description="Number of pixels from the table bottom at which the next load is triggered." />
+    <aura:attribute name="isOngoingLoad"   type="Boolean" default="false"
+                    description="In infinite load mode, tells if more rows are expected." />
+       
+    <aura:attribute name="fields"       type="String"
+                    default='[{"label":"Subject", "fieldName": "Subject", "type": "button", "sortable": "true",
+                               "typeAttributes":{"label":{"fieldName": "Subject"},"name":"Show","variant":"base"}},
+                              {"label": "Description", "fieldName": "Description", "type": "text", "sortable": "true"},
+                              {"type":"button","typeAttributes":{"label":"Edit","name":"Edit","variant":"brand"}}
+                             ]'
+                    description="Configuration of the output data table, following standard 'lightning:datatable' syntax." />
+    <aura:attribute name="fieldJson"   type="List"   
+                    description="JSON conversion of 'fields' attribute." />
+    <aura:attribute name="keyField"  type="String" default="Id"
+                    description="Unique identifier of an output table row, following standard 'lightning:datatable' syntax." />
+
+    <!-- Result holding -->
+    <aura:attribute name="results" type="Object"
+                    description="Results of the SOQL query (may then be filtered)." />
+    <aura:attribute name="resultsOrig" type="Object"
+                    description="Original list of results (before filtering)." />
+    <aura:attribute name="totals" type="List"
+                    description="Total line of the SOQL query (if hasTotal is true)." />
+    
+    <!-- Actions configuration -->
+    <aura:attribute name="tableActionStr"  type="String"
+                    default='[{"label":"Edit",
+                               "event":{"name":"e.force:editRecord","params":{"recordId":"{{{recordId}}}"}}},
+                              {"label":"Show","variant":"brand",
+                               "event":{"name":"e.force:showToast","params":{"type":"error","title":"Success!","message":"The User is {{{User.Name}}} in Department {{{User.Department}}}"}}}
+                             ]'
+                    description="Header actions configuration (if any)." />
+    <aura:attribute name="tableActionJson"  type="List"
+                    default='[]'  
+                    description="JSON conversion of header actions configuration." />
+    <aura:attribute name="rowActionStr"    type="String"
+                    default='[{"label":"Edit",
+                               "event":{"name":"e.force:editRecord","params":{"recordId":"{{{Row.Id}}}"}}},
+                              {"label":"Show","variant":"brand",
+                               "event":{"name":"e.force:navigateToSObject","params":{"recordId":"{{{Row.Id}}}"}}}
+                             ]'
+                    description="Row actions configuration (if any)."/>
+    <aura:attribute name="rowActionJson"   type="List"
+                    default='[]'
+                    description="JSON conversion of row actions configuration."/>
+       
+    <!-- expand / Collapse -->
+    <aura:attribute name="isCollapsible"  type="Boolean" default="false"
+                    description="Card content collapsible?." />
+    <aura:attribute name="isExpanded"  type="Boolean" default="true"
+                    description="Card content expand status." />
+    
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.initConfig}"
+                  description="Init of component : parsing and reset of attributes."/>
+    <aura:handler event="lightning:tabRefreshed" action="{!c.refreshList}"
+                  description="Refreshing of the SOQL list." />
+                   
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    <c:PEG_SOQL_CMP  aura:id="soqlUtil"/>
+    <c:PEG_JSON_CMP  aura:id="jsonUtil"/>
+    
+    <!-- Results display -->
+    <lightning:card title="{!v.title + if(v.showCount,' (' + v.results.length + if(v.isOngoingLoad,'+','') + ')','') }"
+                    iconName="{#v.icon}"
+                    class="{# if(v.showBorder, 'slds-card_boundary', '') + if(v.isCollapsible,' slds-m-left_x-small','') + ' background-grey'}" >
+
+        <aura:set attribute="actions">
+            
+            <aura:if isTrue="{#v.showSearch}">
+                
+            <lightning:buttonGroup class="slds-col slds-text-color_default">
+            <lightning:buttonMenu alternativeText="Scope selection menu"
+                                  value="{!v.searchScope}"
+                                  onselect="{!c.changeScope}"
+                                  label="{!v.searchScope}">
+              <lightning:menuItem value="All"
+                                  label="All"
+                                  checked="{! v.searchScope == 'All'}" />
+              <aura:iteration items="{!v.fieldJson}"
+                              var="eachField"
+                              indexVar="eachNbr" >
+              <aura:if isTrue="{!eachField.label.length > 0}">
+              <lightning:menuItem value="{!eachField.label}"
+                                  label="{!eachField.label}"
+                                  checked="{! eachField.label == v.searchScope }" />
+              </aura:if>
+              </aura:iteration>
+            </lightning:buttonMenu>
+            
+            <div onkeyup="{!c.filterList}" class="slds-button_last" >
+            <lightning:input class="mySearch"
+                             placeholder="Search"
+                             type="search"
+                             name="SearchString"
+                             value="{!v.searchString}"
+                             variant="label-hidden"
+                             onchange="{!c.resetSearch}" />
+            </div>
+            </lightning:buttonGroup>
+            </aura:if>
+                
+            <aura:if isTrue="{!v.tableActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.tableActionJson}"
+                                   callback="{!c.handleTableAction}" />
+            </aura:if>
+            
+            <lightning:buttonGroup class="slds-col">
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border"
+                                  onclick="{!c.refreshList}"/>
+            </lightning:buttonGroup>
+            
+        </aura:set>
+      
+        <aura:set attribute="footer">
+          <aura:if isTrue="{!v.isOngoingLoad}">
+              <div class="slds-align_absolute-center">
+                  <p>...</p>
+              </div>
+          </aura:if>
+          <aura:if isTrue="{#v.hasTotal}">
+            <lightning:tile label="" class="slds-text-align_left slds-align_absolute-center" >
+                <ul class="slds-list_horizontal slds-has-dividers_right slds-has-block-links_space">
+                    <!--
+                    <li class="slds-item slds-text-heading_medium">Totals</li>
+                    -->
+                <aura:iteration items="{!v.totals}" var="totalItem"> 
+                    <li class="slds-item slds-text-heading_small">{!totalItem.name} : {!totalItem.value}</li>
+                </aura:iteration> 
+                </ul>
+            </lightning:tile>
+          </aura:if>
+            
+          <aura:if isTrue="{#v.showQuery}">
+            <dl class="slds-list_horizontal slds-wrap">
+                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" >
+                    <lightning:icon iconName="utility:info_alt" alternativeText="Information" size="x-small" title="Information" /></dt>
+                <dd class="slds-item_detail slds-text-align_left" >
+                    <a href="/docs/component-library/bundle/c:PEG_SoqlList_CMP/documentation">
+                      Access documentation.</a></dd>
+                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="SOQL Template Label">
+                    SOQL Template</dt>
+                <dd class="slds-item_detail slds-text-align_left" title="SOQL Template Value">
+                    {#v.query}</dd>
+                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="SOQL Merged Label">
+                    SOQL Merged</dt>
+                <dd class="slds-item_detail slds-text-align_left" title="SOQL Merged Value">
+                    {!v.mergedQuery}</dd>
+                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="Table Fields Label">
+                    Data Table Fields</dt>
+                <dd class="slds-item_detail slds-text-align_left" title="Data table fields">
+                    {!v.fields}</dd>
+                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="Table height Label">
+                    Table height</dt>
+                <dd class="slds-item_detail slds-text-align_left" title="Table Height">
+                    {!v.tableHeight} // {! v.tableHeight.length > 0 ? 'height: ' + v.tableHeight : 'n/a'}</dd>
+                </dl>
+          </aura:if>
+        </aura:set>
+        
+        <aura:if isTrue="{#v.isCollapsible}">
+        <div class="slds-is-relative">
+            <div style="position: absolute; top: -4.125em; left: -2.25em;">
+                <lightning:buttonStateful
+                         variant="text"
+                         iconNameWhenOff="utility:chevronright"
+                         iconNameWhenOn="utility:chevrondown"
+                         state="{!v.isExpanded}"
+                         class="slds-m-top_medium slds-m-left_small"
+                         onclick="{! c.expandCollapse }" />
+            </div>
+        </div>
+        </aura:if>
+        <aura:if isTrue="{!v.queryError}">
+            <lightning:datatable aura:id="resultTable" columns="{!v.fieldJson}"
+                                        hideCheckboxColumn="{# ! v.maxRowSelection > 0}" keyField="Id"
+                                        />
+            <p style="padding: 10px;" class="slds-text-color_error" alt="{!v.queryErrorMessage}">{!v.queryErrorMessage}</p>
+        <aura:set attribute="else">
+        <aura:if isTrue="{!v.results.length > 0}">
+        <aura:if isTrue="{!v.isExpanded}">
+        
+        <!-- slds-card__body_inner -->
+        <div class="slds-card__body " style="{! v.tableHeight.length > 0 ? 'overflow-y: auto; max-height: ' + v.tableHeight + ' !important': ''}">
+          <!--{!v.body}-->
+          <aura:if isTrue="{!v.isTreeView}">
+              
+            <lightning:treeGrid  aura:id="resultTable"
+                                 columns="{! v.fieldJson}"
+                                 data="{! v.results}"
+                                 keyField="Id"
+                                 hideCheckboxColumn="true"
+                                 onsort="{!c.sortList}"
+                                 onrowaction="{! c.handleRowAction }" />
+              
+          <aura:set attribute="else">
+              
+            <lightning:datatable aura:id="resultTable"
+                                 columns="{!v.fieldJson}"
+                                 data="{!v.results}" 
+                                 keyField="Id"
+                                 hideCheckboxColumn="{# ! v.maxRowSelection > 0}"
+                                 maxRowSelection="{#v.maxRowSelection}"
+                                 onsort="{!c.sortList}"
+                                 onrowaction="{!c.handleRowAction}"
+                                 enableInfiniteLoading="{!v.isOngoingLoad}"
+                                 loadMoreOffset="{#v.loadMoreOffset}"
+                                 onloadmore="{!c.loadMoreData}" />
+
+          </aura:set>
+          </aura:if>
+        </div>
+        <!--minColumnWidth ="100" -->
+        </aura:if>
+        </aura:if>
+        </aura:set>
+        </aura:if>
+    </lightning:card>
+    
+</aura:component>

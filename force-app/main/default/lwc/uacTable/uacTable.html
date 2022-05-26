@@ -1,0 +1,153 @@
+<!--
+  @File Name         : uacTable.html
+  @Description       : Dynamic DataTable
+  @Group             : uacTable
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 08-11-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-21-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<template>
+    <div class="slds-grid slds-m-vertical_x-small slds-wrap">
+        <template for:each={errors} for:item="error">
+        <div class="slds-col slds-size_1-of-1 slds-m-vertical_x-small" key={error}>
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                <lightning-icon class="slds-m-right_x-small" variant="inverse"
+                    icon-name="utility:error"
+                    size="x-small">
+                </lightning-icon>
+                <lightning-formatted-rich-text value={error}>
+                </lightning-formatted-rich-text>
+            </div>
+        </div>
+        </template>
+        <div class="slds-col_bump-left">
+            <lightning-button-group>
+                <template if:false={disableAdd}>
+                    <lightning-button variant="neutral"
+                        icon-name="utility:add"
+                        label="Add"
+                        onclick={onAddClick}>
+                    </lightning-button>
+                </template>
+                <template if:true={hasUnsavedData}>
+                    <lightning-button variant="neutral"
+                        icon-name="utility:save"
+                        label="Save"
+                        onclick={onSaveClick}>
+                    </lightning-button>
+                    <lightning-button variant="neutral"
+                        label="Cancel"
+                        onclick={onCancelClick}>
+                    </lightning-button>
+                </template>
+            </lightning-button-group>
+        </div>
+    </div>
+
+    <table class="slds-table slds-table_bordered uac-data-table">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th scope="col" class="uac-icon-col">
+                    <div class="slds-truncate slds-assistive-text" title="Tag">Tag</div>
+                </th>
+                <template for:each={columns} for:item="fld">
+                <th scope="col" key={fld.name}>
+                    <div class="slds-wrap" title={fld.label}>{fld.label}</div>
+                </th>
+                </template>
+                <th scope="col" class="uac-button-col">
+                    <div class="slds-truncate slds-assistive-text" title="Actions">Actions</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <template if:true={isLoading}>
+                <tr class="slds-hide">
+                    <td><div class="slds-assistive-text">{lblLoading}</div></td>
+                    <template for:each={columns} for:item="fld">
+                        <td key={fld.name}><div class="slds-assistive-text">{lblLoading}</div></td>
+                    </template>
+                    <td><div class="slds-assistive-text">{lblLoading}</div></td>
+                </tr>
+                <tr>
+                    <td colspan={columnLength}>{lblLoading}</td>
+                </tr>
+            </template>
+            <template if:false={isLoading}>
+                <template if:false={data.length}>
+                    <tr class="slds-hide">
+                        <td><div class="slds-assistive-text">{lblNoData}</div></td>
+                        <template for:each={columns} for:item="fld">
+                            <td key={fld.name}><div class="slds-assistive-text">{lblNoData}</div></td>
+                        </template>
+                        <td><div class="slds-assistive-text">{lblNoData}</div></td>
+                    </tr>
+                    <tr>
+                        <td colspan={columnLength}>{lblNoData}</td>
+                    </tr>
+                </template>
+                <template for:each={data} for:item="row">
+                <tr key={row.index}>
+                    <td class="uac-icon-col">
+                        <template if:true={row.hasError}>
+                            <lightning-helptext icon-name="utility:warning" icon-variant="error"
+                                content="Error">
+                            </lightning-helptext>
+                        </template>
+                        <template if:false={row.hasError}>
+                        <template if:true={row.isUnsaved}>
+                            <lightning-helptext icon-name="utility:warning" icon-variant="warning"
+                                content="Unsaved">
+                            </lightning-helptext>
+                        </template>
+                        </template>
+                    </td>
+                    <template for:each={row.fields} for:item="fld" for:index="fieldIndex">
+                    <td key={fld.name} class="slds-cell-wrap">
+                        <c-uac-input class={fld.name} data-index={row.index} data-field-index={fieldIndex}
+                            name={fld.name}
+                            label={fld.label}
+                            type={fld.type}
+                            variant="label-hidden"
+                            required={fld.required}
+                            options={fld.options}
+                            controlling-value={fld.controllingValue}
+                            dependent-option-map={fld.dependentOptionMap}
+                            default-value={fld.defaultValue}
+                            hide={fld.hide}
+                            value={fld.value}
+                            disabled={fld.disabled}
+                            read-only={fld.readonly}
+                            min={fld.min}
+                            max={fld.max}
+                            is-button={fld.isButton}
+                            onfieldchange={handleChange}
+                            onfieldclick={handleFieldClick}>
+                        </c-uac-input>
+                    </td>
+                    </template>
+                    <td class="uac-button-col">
+                        <span>&nbsp;</span>
+                        <template if:false={disableDelete}>
+                            <template if:false={row.disableDelete}>
+                                <button class="slds-button slds-button_bare" data-index={row.index}
+                                    aria-label="Delete"
+                                    onclick={onDeleteClick}>
+                                    <lightning-icon data-index={row.index}
+                                        icon-name="action:delete"
+                                        size="x-small">
+                                    </lightning-icon>
+                                </button>
+                            </template>
+                        </template>
+                    </td>
+                </tr>
+                </template>
+            </template>
+        </tbody>
+    </table>
+</template>

@@ -1,0 +1,35 @@
+<template>
+    <template if:true={isParentLoaded}>
+        <div class="slds-card">
+            <div class="slds-grid slds-page-header">
+                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__figure stencil slds-avatar slds-avatar_small" aria-hidden="true"
+                        data-aura-rendered-by="634:0">
+                        <lightning-icon icon-name={icon} size="small"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <a class="slds-card__header-link baseCard__header-title-container" href="#">
+                                {title} ({count})
+                            </a>
+                        </h2>
+                    </div>
+                </header>
+                <div slot="actions" if:false={showLoadingSpinner}>
+                    <lightning-button-icon icon-name="utility:refresh" alternative-text="refresh" variant="border"
+                        onclick={handleRefresh}></lightning-button-icon>
+                </div>
+            </div>
+            <template if:true={showLoadingSpinner}>
+                <lightning-spinner alternative-text="Loading......" size="medium"></lightning-spinner>
+            </template>
+            <template if:true={isDataAvailable}>
+                <div if:false={showLoadingSpinner}>
+                    <lightning-datatable if:true={dataWrap} key-field="Id" data={dataWrap} hide-checkbox-column
+                        columns={SponAppColums}>
+                    </lightning-datatable>
+                </div>
+            </template>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,49 @@
+<!--
+  @File Name         : uacPaginator.html
+  @Description       : Used for client-side pagination for records
+  @Group             : uacPaginator
+  @Author            : Vijayakumar Pethanan (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-22-2020
+  Modifications Log
+  Ver   Date         Author                             Modification
+  1.0   09-22-2020   Vijayakumar Pethanan (Deloitte)    Initial Version
+  1.1   09-22-2020   Sachet Khanal (Deloitte)           Updating pagination control logic (bugfix)
+-->
+<template>
+    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+        <div class="slds-col"><!--RECORDS PER PAGE-->
+            <div class="slds-list_inline slds-p-bottom_xx-small customSelect">
+                <label class="slds-text-color_weak slds-p-horizontal_x-small" for="recordsPerPage">Records per page:</label>
+                <div class="slds-select_container">
+                    <select class="slds-select" id="recordsPerPage" onchange={handlePageSizeChange}>
+                        <template for:each={pageSizeOptions} for:item="option">
+                            <option key={option} value={option}>{option}</option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col"><!--PAGE NAVIGATION-->
+            <div class="slds-col slds-p-bottom_xx-small">
+                <template if:true={hasPrev}>
+                    <lightning-button-icon icon-name="utility:left" variant="bare" size="medium" alternative-text="Previous Page" onclick={previousPage}></lightning-button-icon>
+                </template>
+                <label class="slds-text-color_weak slds-p-horizontal_x-small" for="pageNum">Page:</label>
+                <input id="pageNum"
+                    type="number"
+                    value={pageNumber}
+                    maxlength="4"
+                    min="1"
+                    max={totalPages}
+                    onkeypress={handlePageNumberChange}
+                    class="customInput"
+                    title="Go to a Page"></input>
+                <span>&nbsp;of&nbsp;<b id="totalPages">{totalPages}</b></span>
+                <template if:true={hasNext}>
+                    <lightning-button-icon icon-name="utility:right" variant="bare" size="medium" alternative-text="Next Page" onclick={nextPage} class="slds-p-horizontal_x-small"></lightning-button-icon>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

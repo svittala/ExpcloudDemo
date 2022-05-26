@@ -1,0 +1,232 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component able to present data fetched via a callout to an external REST Web Service query (with merge fields based on current record / user)." >
+    
+    <!-- Global Component Parameters -->
+    <aura:attribute name="title"        type="String" 
+                    access="global"		default="Callout Example"
+                    description="Component card title."/>
+    <aura:attribute name="icon"         type="String"
+                    access="global"		default="standard:picklist_type"
+                    description="Component card icon."/>
+    <aura:attribute name="showBorder"   type="Boolean"
+                    access="global"		default="false"
+                    description="Show border around component card?"/>
+    <aura:attribute name="showDebug"    type="Boolean"
+                    access="global"		default="false"
+                    description="Show Debug Info?"/>
+    
+    <!-- Web Service CallOut Configuration -->   
+    <!-- callout:PEG_Web_Service/personnes https://ws4covea.herokuapp.com/personnes -->
+    <aura:attribute name="targetURL"    type="String"
+                    access="global"
+                    description="Target URL for the callout." />
+    <aura:attribute name="httpMethod"   type="String" 
+                    access="global"
+                    default="GET"
+                    description="HTTP method to be used (GET, POST....)." />
+    <aura:attribute name="headerParams" type="String" 
+                    access="global"
+                    default='{"Content-Type":"application/json;charset=UTF-8"}'
+                    description="Header parameters to be provided in the request, as a stringified JSON object." />
+    <aura:attribute name="requestBody"  type="String"
+                    access="global"
+                    description="Request body parameters, usually a stringified JSON Object." />
+    
+    <aura:attribute name="requestDone"  type="Boolean"
+                    access="private"	default="false"
+                    description="Status flag indicating that the request has been executed."/>
+    <aura:attribute name="isFlatten"    type="Boolean"
+                    access="global"		default="false"
+                    description="Flatten JSON structure of results (when fetching lookup info)?"/>
+    
+    
+    <!-- Result Display Configuration (Main Object) --> 
+    <aura:attribute name="showObject"   type="Boolean"
+                    access="global"		default="false"
+                    description="Flag to trigger the display of callout results as individual fields."/>
+    <aura:attribute name="fieldsStr"    type="String"
+                    access="global"
+                    description="Configuration of the individual fields to display (as a stringified JSON list)." />
+    <!--
+                    default='[{"label": "Name",  "fieldName": "name",   "type": "text", "size":"6"},
+                              {"label": "Total", "fieldName": "total", "type": "integer", "size":"3"},
+                              {"label": "Active","fieldName": "active", "type": "integer", "size":"3"}]'/>
+    -->
+    <aura:attribute name="fieldsJSON"   type="List"
+                    access="private"
+                    description="JSON conversion of the field list, with the 'value' attribute set after callout." />
+    
+    <!-- Result Display Configuration (List or Tree) -->
+    <aura:attribute name="showList"		type="Boolean"
+                    access="global"		default="true"
+                    description="Flag to trigger the display of callout results as data-table or data-tree."/>
+    <aura:attribute name="listField"	type="String"
+                    access="global"
+                    description="When set, indicates which field of the main result JSON object has to be used (otherwise, the result is assumed to be a list)." />
+    <aura:attribute name="isTreeView"	type="Boolean"
+                    access="global"		default="false"
+                    description="Displays the results in a tree table instead of a list (when using subqueries)."/>
+    <aura:attribute name="treeFields"	type="String"
+                    access="global"		default='["details"]'
+                    description="In case of tree table display, JSON list with the names of the fields to be used for the sub-hierarchy." />
+    <aura:attribute name="listStr"		type="String"
+                    access="global"
+                    description="Configuration of the data-table / data-tree to display (as a stringified JSON list)." />
+    <!--
+                    default='[{"label": "ID",    "fieldName": "id",     "type": "text", "sortable":true },
+                              {"label": "Name",  "fieldName": "name",   "type": "text", "sortable":true},
+                              {"label": "Status","fieldName": "status", "type": "text", "sortable":true}]'/>
+    -->
+    <aura:attribute name="listJSON"		type="List"
+                    access="private"
+                    description="JSON conversion of the list configuration." />
+    <aura:attribute name="results"		type="Object"
+                    access="private"
+                    description="JSON List / Tree data to be displayed (set when callout result received)." />
+    <aura:attribute name="keyField"		type="String"
+                    access="global"		default="id"
+                    description="Field enabling to uniquely identify each table/tree line." />
+
+    
+    <!-- Actions configuration -->
+    <aura:attribute name="tableActionStr"  type="String"
+                    access="global"
+                    description="Header actions configuration (if any)." />
+    <!--
+                    default='[{"label":"Edit",
+                               "event":{"name":"e.force:editRecord","params":{"recordId":"{{{recordId}}}"}}},
+                              {"label":"Show","variant":"brand",
+                               "event":{"name":"e.force:showToast","params":{"type":"error","title":"Success!","message":"The User is {{{User.Name}}} in Department {{{User.Department}}}"}}}
+                             ]' />
+    -->              
+    <aura:attribute name="tableActionJson"  type="List"
+                    access="private"		default='[]'  
+                    description="JSON conversion of header actions configuration." />
+    <aura:attribute name="rowActionStr"    type="String"
+                    access="global"
+                    description="Row actions configuration (if any)."/>
+    <!--
+                    default='[{"label":"Edit",
+                               "event":{"name":"e.force:editRecord","params":{"recordId":"{{{Row.Id}}}"}}},
+                              {"label":"Show","variant":"brand",
+                               "event":{"name":"e.force:navigateToSObject","params":{"recordId":"{{{Row.Id}}}"}}}
+                             ]' />
+    -->              
+    <aura:attribute name="rowActionJson"	type="List"
+                    access="private"		default='[]'
+                    description="JSON conversion of row actions configuration."/>
+
+    
+    <!-- Initialisation du composant -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Initialization of the component: generation of the callout." />
+    <aura:handler event="lightning:tabRefreshed" action="{!c.refreshData}"
+                  description="Refreshing of the component data fetched by callout." />
+
+    
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    <c:PEG_CallOut_CMP  aura:id="calloutUtil"/>
+    <c:PEG_JSON_CMP     aura:id="jsonUtil"/>
+    
+    
+    <!-- Results Display -->
+    <lightning:card title="{!v.title}"
+                    iconName="{!v.icon}"
+                    class="{! if(v.showBorder, 'slds-card_boundary', '')}" >
+        <aura:set attribute="actions">
+            
+            <aura:if isTrue="{!v.tableActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.tableActionJson}"
+                                   callback="{!c.handleTableAction}" />
+            </aura:if>
+            
+            <lightning:buttonGroup class="slds-col">
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border"
+                                  onclick="{!c.refreshData}"/>
+            </lightning:buttonGroup>
+            
+        </aura:set>
+
+        <aura:set attribute="footer">
+          <aura:if isTrue="{!v.showDebug}">
+            <dl class="slds-list_horizontal slds-wrap">
+            <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" >
+                <lightning:icon iconName="utility:info_alt" alternativeText="Information" size="x-small" title="Information" /></dt>
+            <dd class="slds-item_detail slds-text-align_left" >
+                <a href="/docs/component-library/bundle/c:PEG_CallOutDisplay_CMP/documentation">
+                  Access documentation.</a></dd>
+            <dt class="slds-item_label slds-text-color_weak"  title="Service">Target URL:</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="Service Name">{!v.targetURL}</dd>
+            <dt class="slds-item_label slds-text-color_weak"  title="URL">Method:</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="URL Parameters">{!v.httpMethod}</dd>
+            <dt class="slds-item_label slds-text-color_weak"  title="Header">Header:</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="Header Parameters">{!v.headerParams}</dd>
+            <dt class="slds-item_label slds-text-color_weak"  title="Body">Body:</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="Body Parameters">{!v.requestBody}</dd>
+            </dl>
+          </aura:if>
+        </aura:set>
+        
+        <div class="slds-card__body ">     
+        <aura:if isTrue="{!v.requestDone}">
+            
+        <aura:if isTrue="{#v.showObject}">
+           <lightning:layout horizontalAlign="end " multipleRows="true" >
+           <aura:iteration items="{!v.fieldsJSON}" var="fieldItem" >
+              <lightning:layoutItem size="{!fieldItem.size}"
+                                    flexibility="auto"
+                                    padding="horizontal-small"
+                                    class="slds-m-bottom_x-small" >
+                  <lightning:input type="{!fieldItem.type}"
+                                   label="{!fieldItem.label}"
+                                   value="{!fieldItem.value}"
+                                   readonly="true" />
+              </lightning:layoutItem>
+		   </aura:iteration>
+           </lightning:layout>
+        </aura:if>
+
+        <aura:if isTrue="{#v.showList}">
+          <aura:if isTrue="{#v.isTreeView}">
+            <lightning:treeGrid columns="{#v.listJSON}"
+                                data="{!v.results}"
+                                keyField="{#v.keyField}"
+                                hideCheckboxColumn="true"
+                                onrowaction="{!c.handleRowAction}"
+                                aura:id="resultTree" />
+              
+          <aura:set attribute="else">
+            <lightning:datatable columns="{#v.listJSON}"
+                                 data="{!v.results}"
+                                 keyField="{#v.keyField}"
+                                 hideCheckboxColumn="true"
+                                 onrowaction="{!c.handleRowAction}"
+                                 onsort="{!c.sortList}" 
+                                 aura:id="resultTable" />
+    
+          </aura:set>
+          </aura:if>
+        </aura:if>
+            
+            
+        <!-- Temporary spinner while waiting for callout results -->
+        <aura:set attribute="else">
+           <lightning:spinner variant="brand" size="large"
+                              alternativeText="waiting"
+                              class="slds-align_absolute-center" />
+        </aura:set>
+            
+        </aura:if>
+        </div>
+        
+  </lightning:card>
+    
+	
+</aura:component>

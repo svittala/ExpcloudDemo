@@ -1,0 +1,51 @@
+<!--
+  @File Name         : uacPRIDLabTestsTable.html
+  @Description       : LWC for adding/updating/deleting PRID Lab Test records
+  @Group             : UAC_PRIDLabTestTable
+  @Author            : Anupreeta Chakraborty (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-18-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   09-16-2020   Anupreeta Chakraborty (Deloitte)   Initial Version
+-->
+<template>
+
+  <template if:false={isIME}>
+    <c-uac-flow-header title={tableTitle}>
+    </c-uac-flow-header>
+  </template>
+
+  <template if:true={isLoading}>
+    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+  </template>
+
+  <template if:false={isIME}>
+    <template for:each={healthEvalFields} for:item="fld">
+      <div class={fld.containerClass} key={fld.name}>
+        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+          <c-uac-input
+            type={fld.type}
+            name={fld.name}
+            label={fld.label}
+            value={fld.value}
+            options={fld.options}
+            required
+            onfieldchange={handleHealthEvalFieldChange}>
+          </c-uac-input>
+        </div>
+      </div>
+    </template>
+  </template>
+
+  <div class="slds-m-bottom_small uac-table-container slds-hide">
+    <c-uac-table
+      columns={fields}
+      default-new-record={defaultNewRecord}
+      onloadcomplete={handleLoad}
+      onsave={handleSave}
+      ondelete={handleDelete}
+      onfieldchange={handleFieldChange}>
+    </c-uac-table>
+	</div>
+</template>

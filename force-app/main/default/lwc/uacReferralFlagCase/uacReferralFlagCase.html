@@ -1,0 +1,31 @@
+<!--
+  @File Name          : uacReferralFlagCase.html
+  @Description        : LWC for displaying Case Referral Flags
+  @Author             : Abhisek Pati (Deloitte)
+  @Group              : Referral Case - ORRUAC-43, 450, 39
+  @Last Modified By   : 
+  @Last Modified On   : 
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0     5/12/2020    Abhisek Pati (Deloitte)     Initial Version
+  1.1     6/2/2020     Abhisek Pati (Deloitte)     Added Flag for Aged Out
+  1.2     6/22/2020    Abhisek Pati (Deloitte)     Updated IHI fields - Medical History and Pregnant
+-->
+
+<template>
+    <lightning-card>
+        <div class="slds-text-title_bold slds-p-left_medium slds-p-right_medium" style = "font-size:16px;" title = "This panel displays important flags for this record.">
+            UC Referral Flags
+            <lightning-helptext content="Flags are automatically added based on information in the UC's record." class="slds-p-left_small helpTextAlign"></lightning-helptext>
+        </div>  
+        <div if:true={boolDataPresent}>
+        <!--Binding child generic Flags Widget component-->
+        <c-uac-generic-flags-widget fields={lstFlags}></c-uac-generic-flags-widget>  
+        </div>  
+        <div if:false={boolDataPresent}>
+            <div class="slds-p-around_medium lgc-bg" title = "No Flags are currently associated with this UC.">
+                No Flags are currently associated with this UC.
+            </div>
+        </div>
+    </lightning-card>
+</template>

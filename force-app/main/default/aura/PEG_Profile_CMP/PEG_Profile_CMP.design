@@ -1,0 +1,29 @@
+<design:component label="PEG Profile">
+    <design:attribute name="size"
+                      label="Size" 
+                      description="Size of the header and avatar images."
+                      datasource="medium,large"
+                      default="large" />
+    
+	<design:attribute name="background"
+                      label="Static Background" 
+                      description="URL of a static background resource, also used as default."/>
+    <design:attribute name="backgroundField"
+                      label="Dynamic Background"
+                      description="Name of the record field containing the URL for the background image (if dynamic)."
+                      datasource="apex://PEG_TextFieldList_CTL"/>
+    
+    <design:attribute name="avatar"
+                      label="Static Avatar"
+                      description="URL of a static avatar resource, also used as default."/>
+    <design:attribute name="avatarField"
+                      label="Dynamic Avatar"
+                      description="Name of the record field containing the URL for the avatar image (if dynamic)."
+                      datasource="apex://PEG_TextFieldList_CTL" />
+    
+    <design:attribute name="headerFieldsSet"
+                      label="Header Fields"
+                      description="Name of the FieldSet containing the fields displayed in the header. 1st field is the Title, 2nd is the badge."
+					  datasource="apex://PEG_FieldSetList_CTL" />
+    
+</design:component>

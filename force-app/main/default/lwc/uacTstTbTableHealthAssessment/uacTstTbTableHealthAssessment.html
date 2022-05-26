@@ -1,0 +1,44 @@
+<!--
+  @File Name         : uacTSTTBTableHealthAssessment.html
+  @Description       : Custom LWC table for TST records.
+  @Group             : uacTBLabTestTable
+  @Author            : Anupreeta Chakraborty (Deloitte)
+  @Last Modified By  : Anupreeta Chakraborty (Deloitte)
+  @Last Modified On  : 11-10-2020
+  Modifications Log
+  Ver   Date         Author                         Modification
+  1.0   11-09-2020   Anupreeta Chakraborty (Deloitte)  Initial Version
+-->
+
+<template>
+    <c-uac-flow-header title={tableTitle}>
+    </c-uac-flow-header>
+    <template for:each={healthEvalFields} for:item="fld">
+      <div class="slds-grid" key={fld.name}>
+        <div class="slds-col slds-size_1-of-2">
+            <c-uac-input
+              type={fld.type}
+              name={fld.name}
+              label={fld.label}
+              value={fld.value}
+              options={fld.options}
+              required={fld.required}
+              hide={fld.hide}
+              onfieldchange={handleHealthEvalFieldChange}>
+            </c-uac-input>
+        </div>
+      </div>
+    </template>
+    <div class={tableSectionClass}>
+      <div class="uac-table-container">
+          <c-uac-table
+              columns={fields}
+              default-new-record={defaultNewRecord}
+              onloadcomplete={handleLoad}
+              onsave={handleSave}
+              ondelete={handleDelete}
+              onfieldchange={handleFieldChange}>
+          </c-uac-table>
+      </div>
+    </div>
+  </template>

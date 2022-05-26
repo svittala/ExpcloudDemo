@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Previosly Entered PRID Test Table</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="healthEvaluationId" type="String" label="Id of Health Evaluation to show previously entered PRID lab test records for." description="Health Evaluation Id"/>
+            <property name="uacId" type="String" label="Id of UAC contact to show previously entered PRID lab test records for." description="UAC Contact Id"/>
+            <property name="title" type="String" label="title" description="Title of the Header"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

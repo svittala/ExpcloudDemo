@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <masterLabel>Dynamic Picklist from Schema</masterLabel>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="value" label="Value" type="String" description="The value of the picklist."/>
+            <property name="fieldName" label="Field (ObjectApiName.FieldApiName)" role="inputOnly" type="String" description="Name of picklist field."/>
+            <property name="recordTypeName" label="Record Type" role="inputOnly" type="String" description="Record Type"/>
+            <property name="excludeValues" label="Exclude Values" role="inputOnly" type="String[]" description="List of picklist values to exclude"/>
+            <property name="isMultipicklist" label="Is Multipicklist" role="inputOnly" type="Boolean" default="false" description="If set to {!$GlobalConstant.True}, will show a dual list box."/>
+            <property name="isRadioButtonGroup" label="Is Radio Button Group" role="inputOnly" type="Boolean" default="false" description="If set to {!$GlobalConstant.True}, will show as radio button group."/>
+            <property name="radioButtonHelpTxt" label="Help Text" role="inputOnly" type="String" description="If value set then helptext will be displayed"/>
+            <property name="question" label="Question" type="String" role="inputOnly" description="The label of the question"/>
+            <property name="required" label="Required" type="Boolean" role="inputOnly" default="false" description="Will prevent next page/finish if set to {!$GlobalConstant.True} and no values are selected."/>
+            <property name="isReadOnly" label="Read Only" type="Boolean" role="inputOnly" default="false" description="Will prevent editing if set to {!$GlobalConstant.True}"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

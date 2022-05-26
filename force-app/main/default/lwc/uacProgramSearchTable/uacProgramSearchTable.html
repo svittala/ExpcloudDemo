@@ -1,0 +1,16 @@
+<template>
+    <lightning-input type="text" label="Search Term" required={boolTrue} onchange={onChangeSearchKey} onblur={onBlur}
+        onkeypress={onEnterKey} disabled={disableSearchBox} class="program-search-input">
+    </lightning-input>
+    <div if:true={showTable} class="datatable-wrapper">
+        <lightning-datatable class="program-search-input" data={data} columns={columns} key-field="Id"
+            onrowselection={onSelect} sorted-by={sortedColumn} sorted-direction={sortedDirection} onsort={onSort}>
+        </lightning-datatable>
+    </div>
+    <div if:false={showTable}>
+        <div if:true={disableSearchBox}>
+            <lightning-spinner class="program-search-input" alternative-text="Loading" size="medium">
+            </lightning-spinner>
+        </div>
+    </div>
+</template>

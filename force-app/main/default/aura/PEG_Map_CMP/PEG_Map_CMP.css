@@ -1,0 +1,9 @@
+.THIS lightning-map {
+    overflow: none !important;
+}
+.THIS .slds-coordinates {
+    overflow: auto !important;
+    max-height: 41.25rem !important;
+    max-width: 400px !important;
+    position: relative;
+}

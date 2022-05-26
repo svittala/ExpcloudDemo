@@ -1,0 +1,36 @@
+<!--
+  @File Name         : uacSignAndSymptomsTable.html
+  @Description       : Custom LWC table for editing Sign And Symptoms  records.
+  @Group             : uacSignAndSymptomsTable
+  @Author            : Ranjith kumar (Ai-Vets)
+  @Last Modified By  : Karthi Subramanian (Deloitte)
+  @Last Modified On  : 08-19-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.1   08-19-2020   Karthi Subramanian    Updated Version
+-->
+<template>
+    <div class="slds-m-bottom_small">
+      <c-uac-input
+        type="radio"
+        name="signAndSymptomsReported"
+        label="Were any Signs/Symptoms Reported by the Minor or Observed by Program Staff or HCP?"
+        help-text="If Yes, check all applicable signs and symptoms and enter the date for each"
+        value={signAndSymptomsReported}
+        options={signAndSymptomsOptions}
+        required
+        onfieldchange={handleSignAndSymptomsReportedChange}>
+      </c-uac-input>
+  
+      <div class={tableContainerClass}>
+        <c-uac-table
+          columns={lstField}
+          default-new-record={defaultNewRecord}
+          onloadcomplete={handleLoad}
+          onsave={handleSave}
+          ondelete={handleDelete}
+          onfieldchange={handleFieldChange}>
+        </c-uac-table>
+      </div>
+    </div>
+  </template>

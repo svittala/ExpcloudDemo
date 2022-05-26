@@ -1,0 +1,50 @@
+li.uac-path__item,
+li.uac-path__item::before,
+li.uac-path__item::after {
+  background: #ecebea;
+  color: black;
+  font-weight: 700;
+  cursor: default;
+}
+
+.uac-path__link-disabled {
+  cursor: default;
+}
+
+a.uac-path__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+li.uac-path__item[data-status="Not Applicable"],
+li.uac-path__item[data-status="Not Applicable"]::before,
+li.uac-path__item[data-status="Not Applicable"]::after {
+  background: #c23934;
+  color: white;
+}
+
+li.uac-path__item[data-status="Pending"],
+li.uac-path__item[data-status="Pending"]::before,
+li.uac-path__item[data-status="Pending"]::after {
+  background: #ffb75d;
+}
+
+li.uac-path__item[data-status="In Progress"],
+li.uac-path__item[data-status="In Progress"]::before,
+li.uac-path__item[data-status="In Progress"]::after {
+  background: #ffb75d;
+}
+
+li.uac-path__item[data-status="Complete"],
+li.uac-path__item[data-status="Complete"]::before,
+li.uac-path__item[data-status="Complete"]::after {
+  background: #04844b;
+  color: white;
+}
+
+li.slds-path__item[data-selected="true"],
+li.slds-path__item[data-selected="true"]::before,
+li.slds-path__item[data-selected="true"]::after {
+  background: #005fb2;
+  color: white;
+}

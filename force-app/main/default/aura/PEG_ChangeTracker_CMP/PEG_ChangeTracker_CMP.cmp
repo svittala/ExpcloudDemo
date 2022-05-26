@@ -1,0 +1,94 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                controller="PEG_Configuration_CTL"
+                description="Component tracking changes on a set of fields, calling an action and saving the resulting changes if OK.">
+<!--
+@author P-E GROS
+@date   Nov. 2019
+
+Legal Notice
+This code is the property of Salesforce.com and is protected by U.S. and International
+copyright laws. Reproduction, distribution without written permission of Salesforce is
+strictly prohibited. In particular this code has been delivered by Salesforce.com for
+its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+re-used, reproduced or distributed for any other purposes.
+-->
+    
+    <!-- Component Configuration -->
+    <aura:attribute name="trackedFieldset"	type="String"
+                    access="global"
+                    description="Fieldset containing the fields to be tracked."/>
+    <aura:attribute name="actionName"           type="String"  access="global" 
+                    description="Apex action called upon tracked change." />
+
+    <!-- Technical Parameters -->    
+    <aura:attribute name="title"			type="String"
+                    access="private"
+                    description="Title of the card"/>
+    <aura:attribute name="trackedFields"	type="List"
+                    access="private"
+                    description="List of tracked fields from the fieldset."/>
+	<aura:attribute name="actionResult"		type="Object"
+                    access="private"
+                    description="Message of the last action triggered."/>
+      
+    <!-- LDS Operation -->
+    <aura:attribute name="recordObject"      type="Object"  access="private"
+                    description="Current Record data fetched via LDS." />
+	<aura:attribute name="recordFields"      type="Object"  access="private"
+                    description="Current Record data fetched via LDS (alternate format)."/>
+	<aura:attribute name="ldsError"          type="String"  access="private"
+                    description="LDS Record Data load error."/>    
+    
+    
+	<!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Initialisation of the Component."/>
+    
+    <!-- LDS Record Field Loading and Tracking -->
+    <aura:if isTrue="{!v.trackedFields.length > 0}">
+    <force:recordData aura:id="ldsUtil" 
+        fields="{!v.trackedFields}" 
+		recordId="{!v.recordId}"  
+		targetError="{!v.ldsError}"
+		targetRecord="{!v.recordObject}"
+		targetFields="{!v.recordFields}"
+		recordUpdated="{!c.handleUpdates}"
+        mode="EDIT" />
+    </aura:if>
+    
+    <!-- Lightning Component utilities used -->
+    <c:PEG_Action_CMP aura:id="actionUtil" />
+    
+    <!-- Message Display -->
+    <aura:if isTrue="{!v.actionResult.display}">
+        <!-- <lightning:card title="{!v.title}" iconName="standard:invocable_action" -->
+        <div class="{! 'slds-theme_' + v.actionResult.variant}">
+        <c:PEG_MessageDisplay_CMP	title="{!v.title}"
+                            message="{!v.actionResult.message}"
+                            error="{!v.actionResult.error}"
+                            variant="{!v.actionResult.variant}"/>
+        
+        <aura:if isTrue="{! v.actionResult.optionsList.length > 0}">
+            <!-- class="slds-box slds-box_x-small slds-theme_warning slds-m-bottom_medium slds-m-horizontal_xx-small" --> 
+            <div class="slds-var-p-around_medium slds-var-p-top_none" >
+				<lightning:select name="OptionsSelector"
+                                  variant="label-inline"
+                                  label="Options"
+                                  aura:id = "OptionsSelector"
+                                  onchange = "{! c.handleOptionSelect}"
+                                  class="slds-form-element_horizontal slds-is-editing slds-has-error slds-m-bottom_none" >
+          			<option value="">....</option>
+                    <aura:iteration var = "optionItem"
+                                    indexVar = "optionIndex"
+                                    items = "{! v.actionResult.optionsList}">
+          				<option value = "{!optionIndex}">{!optionItem.label}</option>
+          			</aura:iteration>
+				</lightning:select>
+			</div>
+		</aura:if>
+        </div>
+    </aura:if>
+    
+	
+</aura:component>

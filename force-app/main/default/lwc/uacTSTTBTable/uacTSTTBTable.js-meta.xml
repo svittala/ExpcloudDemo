@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>TST Test Table</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="healthEvaluationRecord" type="@salesforce/schema/UAC_healthEvaluation__c" label="Health Evaluation Record" description="Health Evaluation Record"/>
+            <property name="validationRan" type="Boolean" label="Validation Ran?" description="Has validation ran?"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

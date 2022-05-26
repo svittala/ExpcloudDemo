@@ -1,0 +1,23 @@
+<!--
+  @File Name         : uacConfirmatoryLabTestTable.html
+  @Description       : LWC for adding/updating/deleting Confirmatory Lab Test records
+  @Group             : UAC_confirmatoryLabTestTable
+  @Author            : Anupreeta Chakraborty (Deloitte)
+  @Last Modified By  : Anupreeta Chakraborty (Deloitte)
+  @Last Modified On  : 08-3-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   08-03-2020   Anupreeta Chakraborty (Deloitte)   Initial Version
+-->
+<template>
+    <div class="uac-table-container">
+        <c-uac-table
+            columns={fields}
+            default-new-record={defaultNewRecord}
+            onloadcomplete={handleLoad}
+            onsave={handleSave}
+            ondelete={handleDelete}
+            onfieldchange={handleFieldChange}>
+        </c-uac-table>
+    </div>
+</template>

@@ -1,0 +1,7 @@
+<design:component label="Template with 2 foldable side sections">
+    <flexipage:template >
+        <flexipage:region name="left"      defaultWidth="SMALL" />
+        <flexipage:region name="middle"    defaultWidth="MEDIUM" />
+        <flexipage:region name="right"     defaultWidth="SMALL" />
+    </flexipage:template>
+</design:component>

@@ -1,0 +1,40 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>    
+    <p>The <code>&lt;c:PEG_ActionGroup_CMP&gt;</code> is a utility component enabling
+        to display a group of actions (as buttons or menus) and trigger a callback
+        method when one of them is clicked.</p>
+    <p>It is typically used in the <code>&lt;c:PEG_ActionGroupDisplay_CMP&gt;</code>
+        component to be instantiated within Lightning pages via the App Builder or
+        the <code>&lt;c:PEG_SoqlList_CMP&gt;</code> component to add header actions
+        to a list table.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Usage</h4>
+    <p>Basically, two elements should be provided when instantiating the
+        <code>&lt;c:PEG_ActionGroup_CMP&gt;</code> in another one:</p>
+    <ul>
+    <li><code>actionList</code> with the JSON array of actions to be displayed.</li>
+    <li><code>callback</code> with a javascript handler method.</li>
+    </ul>
+<pre>&lt;c:PEG_ActionGroup_CMP actionList='{!v.actionListJson}'
+                       callback='{!c.handleAction}' /&gt;</pre>
+    <p>In the action handler, the JSON object corresponding to the action triggered
+        as-is as the message of the callback parameters.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

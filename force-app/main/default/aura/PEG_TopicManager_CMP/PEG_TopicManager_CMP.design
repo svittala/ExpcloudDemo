@@ -1,0 +1,15 @@
+<design:component label="PEG Topic Manager">
+    <design:attribute name="title"
+                      label="Component Title"
+                      default="Topics"
+                      description="Custom labels supported as $Label.c.xxx"/>
+    <design:attribute name="icon"
+                      label="Component Icon"
+                      default="standard:topic"/>
+    <design:attribute name="isReadOnly"
+                      label="Read-Only?"
+                      default="true"/>
+    <design:attribute name="showBorder"
+                      label="Show Border?"
+                      default="false"/>
+</design:component>

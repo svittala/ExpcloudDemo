@@ -1,0 +1,34 @@
+<aura:documentation>
+    <aura:description>
+	<div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_FieldSetDisplay_CMP&gt;</code> component enables to display
+        a set of fields of the current record in various ways, i.e. horizontal list,
+        vertical list or definition list (with or without labels depending on the case).</p>
+    <ul>
+        <li>The set of fields may be defined by selecting one of the FieldSets defined
+            on the current object from the App Builder.</li>
+        <li>Beware that FLS are applied and that any unauthorized field
+        is removed from the list.</li>
+        <li>3 modes are available depending on the preferred layout.</li>
+        <li>A title may be shown, presenting the label of the FieldSet.</li>
+        <li>Additional CSS classes (selected from the SLDS) may be specified to
+            adapt the containing div element (e.g. to play with margins, background...).</li>
+    </ul>
+    <p>Warning: This component relies on the Lightning Data Service (LDS)
+       and therefore only works with objects supported by the
+       <a href="/docs/component-library/bundle/lightning:recordViewForm/documentation">
+       <code>lightning:recordViewForm</code></a> standard component.</p>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / Feb. 2020</p>
+    </div>
+    </aura:description>
+</aura:documentation>

@@ -1,0 +1,43 @@
+<!--
+  @File Name         : uacApplicationNumberSearch.html
+  @Description       : Search A# from contact object and display result
+  @Group             : uacPrevConfirmatoryLabTestTable
+  @Author            : Vijayakumar Pethanan (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-17-2020
+  Modifications Log
+  Ver   Date         Author                             Modification
+  1.0   09-09-2020   Vijayakumar Pethanan (Deloitte)    Initial Version
+-->
+<template>
+    <lightning-layout multiple-rows="true">
+        <lightning-layout-item size="12" small-device-size="10" medium-device-size="8" large-device-size="6"
+            class="slds-m-top_small">
+            <div class="slds-form-element">
+                <div class="slds-form-element__control c-uac-inputA">
+                    <lightning-input name="A#" label="A#" value={applicationNumber} max-length="10"
+                        pattern="[a-zA-Z0-9]+"
+                        message-when-value-missing="Please enter a valid 10 digit A# to perform the search."
+                        message-when-pattern-mismatch="Please enter a valid 10 digit A# to perform the search." required>
+                    </lightning-input>
+                </div>
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+            class="slds-m-top_x-large slds-m-left_small">
+            <lightning-button label="Search" variant="brand" onclick={handleSearch}></lightning-button>
+
+        </lightning-layout-item>
+    </lightning-layout><br />
+
+    <template if:true={isshowResult}>
+        <lightning-datatable data={uacAnumberList} columns={columns} key-field="id"
+         onrowselection={handleRowSelection}>
+        </lightning-datatable>
+    </template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+
+
+</template>

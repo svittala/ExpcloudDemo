@@ -1,0 +1,52 @@
+<design:component label="PEG Add 2 Campaign">
+    <design:attribute name="title"
+                      label="Component Title"
+                      default="Campaign Targeting"
+                      description="Title to display (supports custom labels as $Label.c.LabelName)." />
+    <design:attribute name="icon"
+                      label="Component Icon"
+                      default="standard:dashboard_ea"
+                      description="Icon name to display." />
+    <design:attribute name="dashboardHeight"
+                      label="Dashboard Height"
+                      default="300"
+                      description="Display Height in pixels." />
+    
+    <design:attribute name="dashboardName"
+                      label="Dashboard Name"
+                      description="Developer Name of the dashboard to display." />
+    <design:attribute name="datasetName"
+                      label="Dataset Name"
+                      description="Developer Name of the dataset to use to extract members (optional, 1st dataset of the dataset being used by default)." />
+    <design:attribute name="idFieldName"
+                      label="ID Field Name"
+                      default="Id"
+                      description="API Name of the dataset field containing the member ID." />
+    <design:attribute name="useGroup"
+                      label='Use "Group By?"'
+                      default="false"
+                      description='Flag to add a "group by" saql statement to fetch the member IDs (if the dataset has multiple lines with the same member ID).' />
+    
+    <design:attribute name="memberType"
+                      label="Member Type"
+                      description="Type of Campaign Member"
+                      default="Contact"
+                      datasource="Contact,Lead"/>
+    <design:attribute name="actionLabel"
+                      label="Action Label"
+                      default="Add"
+                      description="Label for the 'add' button (supports custom labels as $Label.c.LabelName)." />
+    <design:attribute name="refreshTab"
+                      label="Refresh Tab after Add?"
+                      default="false"
+                      description="Flag to trigger a tab refresh after addition of new campaign members."/>
+		      
+    <design:attribute name="showDebug"
+                      label="Show Debug?"
+                      default="false"
+                      description="Provides debug information in the component footer." />
+
+	<sfdc:objects>
+        <sfdc:object>Campaign</sfdc:object>
+    </sfdc:objects>
+</design:component>

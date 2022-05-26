@@ -1,0 +1,24 @@
+<!--
+  @File Name         : uacPhysicalExamTable.html
+  @Description       : Custom LWC table for editing allergy records.
+  @Group             : uacPhysicalExamTable
+  @Author            : Karthi Subramanian (Deloitte)
+  @Last Modified By  : Karthi Subramanian (Deloitte)
+  @Last Modified On  : 07-26-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   07-26-2020   Karthi Subramanian (Deloitte)   Initial Version
+  1.1   11-18-2020   Abhisek Pati (Deloitte)     ORRUAC-4230 Added Logic for Other
+-->
+<template>
+      <div class={tableContainerClass}>
+        <c-uac-table
+          columns={lstField}
+          disable-add={disableAdd}
+          disable-delete={disableDelete}
+          onloadcomplete={handleLoad}
+          onsave={handleSave}
+          onfieldchange={handleFieldChange}>
+        </c-uac-table>
+      </div>
+  </template>

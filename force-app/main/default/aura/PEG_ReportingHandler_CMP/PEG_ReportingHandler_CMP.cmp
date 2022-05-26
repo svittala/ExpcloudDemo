@@ -1,0 +1,26 @@
+<aura:component implements="lightning:backgroundUtilityItem,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                access="global">
+	
+    <!-- Main event handling -->
+    <aura:attribute name="isConsole"  type="Boolean" default="false"
+                    description="Flag to indicate if the component is in console or standard mode."/>
+    
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Init of component: determination of console/standard mode."/>
+    
+    <!-- Main event handling -->
+    <aura:handler event="ltng:sendMessage"
+                  action="{!c.handleMessage}"/>
+    
+    <!-- Utility components -->
+    <wave:sdk                 aura:id="analyticsSdk"/>
+    <c:PEG_SOQL_CMP           aura:id="soqlUtil"/>
+    <c:PEG_Context_CMP        aura:id="contextMgr"/>
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <lightning:quickActionAPI aura:id="quickActionAPI"/>
+    <lightning:navigation     aura:id="navService"/>
+    <lightning:workspaceAPI   aura:id="workspaceUtil"/>
+      
+</aura:component>
