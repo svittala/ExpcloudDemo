@@ -1,0 +1,170 @@
+<aura:component implements="flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:hasRecordId"
+                access="global"
+                description="Component enabling to list and managed all Topics of a given Knowledge Article.">
+   	
+<!--
+@author P-E GROS
+@date   April 2020
+
+Legal Notice
+This code is the property of Salesforce.com and is protected by U.S. and International
+copyright laws. Reproduction, distribution without written permission of Salesforce is
+strictly prohibited. In particular this code has been delivered by Salesforce.com for
+its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+re-used, reproduced or distributed for any other purposes.
+-->
+    
+    <!-- Global Component Configuration -->
+    <aura:attribute name="title"		type="String"
+                    access="global"
+                    description="Component Card Title." />
+    <aura:attribute name="icon"			type="String"
+                    access="global"
+                    description="Component Card Icon." />
+    <aura:attribute name="showBorder"	type="Boolean"
+                    access="global"
+                    description="Flag to display a component card border (or not)." />
+    <aura:attribute name="isReadOnly"	type="Boolean"
+                    access="global"
+                    description="Flag to set the component in read-only mode." />
+    
+    <!-- Data List fetched via SOQL -->
+    <aura:attribute name="networkList"	type="List"
+                    access="private"
+                    description="List of Networks defined on the Org." />
+    <aura:attribute name="assignmentList"	type="List"
+                    access="private"
+                    description="List of Topics already assigned to the Article." />
+    <aura:attribute name="topicList"		type="List"
+                    access="private"
+                    description="List of Topics available for the selected Network." />
+
+    <aura:attribute name="displayList"		type="List"
+                    access="private"
+                    description="List of Networks and assigned Topics for prepared for pill display." />
+    
+    <!-- Misc technical atttributes  -->    
+    <aura:attribute name="soqlError"		type="String"
+                    access="private"
+                    description="Component SOQL query error." />
+    <aura:attribute name="isReady"		type="Boolean"
+                    access="private"		default="false"
+                    description="Boolean flag indicating that no remote operation is ongoing." />
+    
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.handleInit}"
+                  description="Init of component : fetching of all required data."/>
+    
+    <!-- Utilities  -->
+    <c:PEG_SOQL_CMP  aura:id="soqlUtil"/>
+    
+    
+    <!-- Component Display -->
+    <lightning:messages />
+    <lightning:card title="{!v.title}" iconName="{#v.icon}" 
+                    class="{# if(v.showBorder, 'slds-card_boundary', '')}" >
+        <aura:set attribute="actions">
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border-filled"
+                                  onclick="{!c.refreshLists}"/>
+        </aura:set>
+        
+        <!-- Topic selector for addition -->
+        <aura:set attribute="footer">
+            <aura:if isTrue="{# !v.isReadOnly}">
+            <lightning:layout pullToBoundary="small"
+                              verticalAlign="end">
+                
+            <lightning:layoutItem flexibility="auto"	padding="horizontal-small" >
+            <lightning:select name="networkSelect"
+                              label="{#$Label.c.PEG_TopicNetworkLabel}"
+                              aura:id="networkSelect"
+                              onchange="{!c.handleSelectNetwork}" 
+                              class="slds-text-align_left" >
+              <option value="">...</option>
+              <aura:iteration items="{!v.networkList}" var="eachNw">
+                 <option value="{!eachNw.Id}">{!eachNw.Name}</option>
+              </aura:iteration>
+            </lightning:select>
+            </lightning:layoutItem>
+                
+            <lightning:layoutItem flexibility="auto"	padding="horizontal-small">
+            <lightning:select name="topicSelect"
+                              label="{#$Label.c.PEG_TopicLabel}"
+                              aura:id="topicSelect"
+                              class="slds-text-align_left" >
+                              <!--onchange="{! c.onTopicSelect }" -->
+                <option value="">...</option>
+              <aura:iteration items="{!v.topicList}" var="eachTopic">
+                 <option value="{!eachTopic.Id}">{!eachTopic.Name}</option>
+              </aura:iteration>
+            </lightning:select>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem flexibility="no-shrink,no-grow"
+                                  padding="horizontal-small">
+            <lightning:buttonIcon iconName="utility:add"
+                                  variant="brand"
+                                  alternativeText="Add"
+                                  title="Add"
+                                  onclick="{!c.handleAddTopic}"/>
+            </lightning:layoutItem>
+            </lightning:layout>
+            </aura:if>
+        </aura:set>
+        
+        <!-- Assigned Topics Display -->
+    	<div class="slds-card__body slds-card__body_inner">
+    	<aura:if isTrue="{!v.displayList.length > 0}">
+        <ul class="slds-has-dividers_around-space">
+    	<aura:iteration items="{!v.displayList}" var="eachNetwork">
+            <li class="slds-item">
+        	<lightning:tile label="{!eachNetwork.Name + ' (' + eachNetwork.topics.length + ')'}"
+                            title="{!eachNetwork.Status}"
+                        	class="slds-m-bottom_xx-small">
+                
+                <aura:set attribute="media">
+            		<lightning:icon iconName="{!eachNetwork.Icon}"
+                                    variant="{!eachNetwork.Variant}"
+                                    size="x-small" />
+        		</aura:set>
+                
+        		<div class="slds-tile__detail">
+                <p class="slds-truncate slds-var-p-bottom_xx-small">
+                    <lightning:formattedText	value="{!eachNetwork.Description}"
+                                            	title="{!eachNetwork.Description}"/>
+                </p>
+           		<lightning:pillContainer	items="{!eachNetwork.topics}"
+                                         	singleLine="false"
+                                    		onitemremove="{!c.handleRemoveTopic}" />
+        		</div>
+        	</lightning:tile>
+            </li>
+    	</aura:iteration>
+        </ul>
+            
+        <!-- No Topic Assigned Case Handling -->
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.isReady}">
+                <c:PEG_Message_CMP	title="{#$Label.c.PEG_TopicNoneMessage}"
+                           			variant="info" />
+            </aura:if>
+        </aura:set>
+    	</aura:if>
+    	
+        <!-- Error display -->
+        <aura:if isTrue="{!v.soqlError.length > 0}">
+            <c:PEG_Message_CMP	title="Problem"
+                           		message="{!v.soqlError}"
+                           		variant="warning" />
+        </aura:if>
+        </div>
+        
+        <!-- Spinner temporary display -->
+        <aura:if isTrue="{! !v.isReady}">
+            <lightning:spinner alternativeText="Loading" size="small" />
+		</aura:if>
+    </lightning:card>
+    
+</aura:component>

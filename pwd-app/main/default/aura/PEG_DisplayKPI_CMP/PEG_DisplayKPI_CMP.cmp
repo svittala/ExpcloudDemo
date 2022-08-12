@@ -1,0 +1,170 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component displaying a single numeric KPI on a record page.">
+
+<!-- 
+* @author P-E GROS
+* @date   Mar. 2020
+
+Legal Notice
+This code is the property of Salesforce.com and is protected by U.S. and International
+copyright laws. Reproduction, distribution without written permission of Salesforce is
+strictly prohibited. In particular this code has been delivered by Salesforce.com for
+its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+re-used, reproduced or distributed for any other purposes.
+-->
+    
+    
+    <!-- Global component configuration -->
+    <aura:attribute name="title"		type="String"	access="global" 
+                    description="Title of the component (typically label of the KPI)." />
+    <aura:attribute name="kpiField"		type="String"	access="global" 
+                    description="API Name of the field containing the KPI value." />
+    <aura:attribute name="kpiFormat"	type="String"	access="global" 
+                    default="decimal"
+                    description="Format of the KPI value (decimal, currency, percent)." />
+    <aura:attribute name="labelField"	type="String"	access="global" 
+                    description="API Name of a (formula) field containing the KPI message displayed next to its value" />
+    <aura:attribute name="mode"			type="String"	access="global"
+                    description="Graphical KPI display mode (ring,smiley,arrows,rating,thumb,strength,trend)" />
+    
+    <aura:attribute name="minValue"		type="Integer"	access="global" 
+                    default="0"
+                    description="Minimal or lower threshold value of the KPI"/>
+    <aura:attribute name="maxValue"		type="Integer"	access="global"
+                    default="100"
+                    description="Maximal or higher threshold value of the KPI"/>
+    <aura:attribute name="isInverse"	type="Boolean"	access="global"
+                    default="false"
+                    description="Flag to indicate if low to high KPI values go from Red to Green or the other way."/>
+      
+	<aura:attribute name="isDebug"		type="Boolean"	access="global"
+                    default="false"
+                    description="Flag to display debug information." />
+    
+    <!-- LDS Operation -->
+    <aura:attribute name="fieldList"		type="List"		access="private"
+                    description="List of fields API names to load (KPI and label)."/>
+    <aura:attribute name="recordObject"		type="Object"	access="private"
+                    description="Current Record data fetched via LDS." />
+	<aura:attribute name="recordFields"		type="Object"	access="private"
+                    description="Current Record data fetched via LDS (alternate format)."/>
+	<aura:attribute name="ldsError"			type="String"	access="private"
+                    description="LDS Record Data load error."/> 
+    
+    <!-- Internal display technical attributes -->
+    <aura:attribute name="displayData"		type="Object"	access="private"
+                    description="Display data."/>
+    <aura:attribute name="isReady"			type="Boolean"	access="private"
+                    default="false"
+                    description="Flag indicating that all data for display has been fetched."/>
+    
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Initialisation of the Component."/>
+    
+    <!-- LDS Data fetch (and updates handling) -->
+    <aura:if isTrue="{!v.fieldList.length > 0}">
+    <force:recordData aura:id="ldsUtil" 
+        fields="{!v.fieldList}" 
+		recordId="{!v.recordId}"  
+		targetError="{!v.ldsError}"
+		targetRecord="{!v.recordObject}"
+		targetFields="{!v.recordFields}"
+		recordUpdated="{!c.handleUpdates}"
+        mode="EDIT" />
+    </aura:if>
+    
+    <!-- Component Display -->
+
+    <article class="slds-card">
+    <div class="slds-card__body slds-card__body_inner">
+    <aura:if isTrue="{!v.isReady}">
+        <!-- Ready Component Display -->
+
+    	<article class="slds-tile slds-media slds-media_center">
+        	<!-- Graphical widget -->
+                <aura:if isTrue="{#v.mode == 'ring'}">
+                    <div class="slds-media__figure">
+                        <!-- size="large" -->
+                    <lightning:progressRing value="{!v.displayData.kpiRatio}"
+                                            variant="{!v.displayData.variant}"/>
+                    </div>
+                <!-- isInverse={isInverse} -->
+                <aura:set attribute="else">
+                    <div class="slds-media__figure">
+                	<aura:if isTrue="{# or(v.mode == 'strength', v.mode == 'trend')}">    
+                    <lightning:dynamicIcon	type="{!v.displayData.icon}"
+                            				option="{! '' + v.displayData.variant}"
+                                           	alternative-text="Dynamic Icon Display" />
+                	<aura:set attribute="else">
+                    <lightning:icon	iconName="{!v.displayData.icon}"
+                        			variant="{!v.displayData.variant}"
+                        			size="small"
+                                    alternative-text="Icon Display" />
+                    
+                	</aura:set>
+                	</aura:if>
+                    </div>
+    			</aura:set>
+                </aura:if>
+    		
+                
+            <!-- KPI details -->
+    		<div class="slds-media__body">
+                <h2 class="slds-text-title" style="word-wrap: break-word !important;">
+					<lightning:formattedText value="{!v.title}"  />
+                </h2>
+        		<div class="slds-grid slds-gutters slds-gutters_x-small slds-grid_vertical-align-center">
+                    <div	class="slds-col slds-col_bump-left slds-shrink-none slds-grow-none" 
+                            style='min-width:20%;'>
+                		<h2 class="slds-text-heading_small slds-truncate">
+                            <lightning:formattedNumber	value="{!v.displayData.kpiValue}"
+                                                        style="{!v.kpiFormat}" />
+                        </h2>
+                    </div>
+                    <div    class="slds-col slds-col_bump-left slds-has-flexi-truncate">
+                        <p	class="slds-text-body_small slds-truncate" >
+                            <lightning:formattedText	value="{!v.displayData.labelValue}"
+                                                     	title="{!v.displayData.labelValue}"
+                                                     	class="slds-has-flexi-truncate"/>
+                        </p>
+                    </div>
+                </div>
+    		</div>
+    	</article>
+        
+    <aura:set attribute="else">
+        <!-- Loading Component Display -->
+        <lightning:spinner alternativeText="Loading" size="small" />
+    </aura:set>
+    </aura:if>
+    </div>
+
+    <aura:if isTrue="{!v.isDebug}"> 
+        <footer class="slds-card__footer">
+        <dl class="slds-dl_horizontal slds-text-align_left">
+            <dt class="slds-dl_horizontal__label">Mode:</dt>
+            <dd class="slds-dl_horizontal__detail">{!v.mode}</dd> 
+            <dt class="slds-dl_horizontal__label">Title:</dt>
+            <dd class="slds-dl_horizontal__detail">{!v.title}</dd>
+            <dt class="slds-dl_horizontal__label">KPI:</dt>
+            <dd class="slds-dl_horizontal__detail">{!v.displayData.kpiValue}</dd>
+            <dt class="slds-dl_horizontal__label">KPI Ratio:</dt>
+            <dd class="slds-dl_horizontal__detail">{!v.displayData.kpiRatio}</dd>
+            <dt class="slds-dl_horizontal__label">Min KPI:</dt>
+            <dd class="slds-dl_horizontal__detail">{!v.minValue}</dd>
+            <dt class="slds-dl_horizontal__label">Max KPI:</dt>
+            <dd class="slds-dl_horizontal__detail">{!v.maxValue}</dd>
+            <dt class="slds-dl_horizontal__label">Label:</dt>
+            <dd class="slds-dl_horizontal__detail slds-truncate">{!v.displayData.labelValue}</dd>
+            <dt class="slds-dl_horizontal__label">Icon:</dt>
+            <dd class="slds-dl_horizontal__detail">{!v.displayData.icon}</dd>
+            <dt class="slds-dl_horizontal__label">Variant:</dt>
+            <dd class="slds-dl_horizontal__detail">{!v.displayData.variant}</dd>
+        </dl>
+        </footer>
+    </aura:if>
+    </article>
+    
+</aura:component>

@@ -1,0 +1,14 @@
+<design:component label="Header with Photo, Subheader and Three Regions">
+    <flexipage:template>
+        <flexipage:region name="photo" label="Photo" defaultWidth="SMALL"/>
+        <flexipage:region name="header" label="Header" defaultWidth="MEDIUM"/>
+        <flexipage:region name="subheader" label="Subheader" defaultWidth="MEDIUM"/>        
+        <flexipage:region name="mainRegion1" label="Left bar" defaultWidth="MEDIUM"/>
+        <flexipage:region name="mainRegion2" label="Mid bar" defaultWidth="MEDIUM"/>
+        <flexipage:region name="mainRegion3" label="Right bar" defaultWidth="MEDIUM"/>        
+    </flexipage:template>
+    <design:supportedFormFactors>
+        <design:supportedFormFactor type="Small"/>
+        <design:supportedFormFactor type="Large"/>
+    </design:supportedFormFactors>
+</design:component>

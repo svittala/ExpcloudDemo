@@ -1,0 +1,39 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_Action_CMP&gt;</code> component is a pure utility
+       Lightning component. It provides a single method to execute an apex action.</p>
+    <p>It enables to trigger any the executeAction apex action on any custom apex class
+        implementing the <code>PEG_ActionHandler_SVC</code> interface.</p>
+    <p>Additional parameters may be also provided as a single SObject.</p>
+    <p>Result is returned via the onSuccess callback in case of success or the
+        onError one in case of failure.</p>
+    <p>The component should be instantiated in the parent Lightning component as follows:</p>
+<pre>&lt;c:PEG_Action_CMP aura:id="actionUtil" /&gt;</pre>
+    <p>The action may then be triggered the following way:</p>
+<pre>component.find('actionUtil').runAction(
+     'myApexActionClassName',
+     {"sObjectType":"mySObjectName","id":"myRecordId"},
+     function(result) {
+          // process OK (in result object)
+          ...
+     },
+     function(error) {
+          // process KO (in calloutError object)
+          ...
+    }});</pre>
+    <br/>
+    </div>
+           
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / August 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

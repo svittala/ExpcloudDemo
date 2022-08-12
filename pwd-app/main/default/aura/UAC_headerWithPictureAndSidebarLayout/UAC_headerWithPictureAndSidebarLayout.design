@@ -1,0 +1,12 @@
+<design:component label="Header with Photo and Sidebar">
+    <flexipage:template>
+        <flexipage:region name="photo" label="Photo" defaultWidth="SMALL"/>
+        <flexipage:region name="header" label="Header" defaultWidth="MEDIUM"/>
+        <flexipage:region name="main" label="Main" defaultWidth="MEDIUM"/>
+        <flexipage:region name="sidebar" label="Sidebar" defaultWidth="SMALL"/>
+    </flexipage:template>
+    <design:supportedFormFactors>
+        <design:supportedFormFactor type="Small"/>
+        <design:supportedFormFactor type="Large"/>
+    </design:supportedFormFactors>
+</design:component>

@@ -9,7 +9,7 @@
 global without sharing class UAC_flowContactQuery {
 
    /**
-   * @description Invocable method to query UAC Contact/Profile
+   * @description sfdble method to query UAC Contact/Profile
    * @author Vaibhav Kudesia (Deloitte) | 02/10/2021
    * @param List<Request>
    * @return List<Response>

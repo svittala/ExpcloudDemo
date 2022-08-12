@@ -1,0 +1,96 @@
+<aura:documentation>
+    <aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_Graphs_CMP&gt;</code> component may be used in any type of
+        Lightning page and is available directly in the App Builder (or Community Builder).
+        It enables to display a simple bar or doughnut/pie Graph based on in a custom
+        SOQL query.</p>
+    <p>It relies on the open-source <code>graph.js</code> library to display graphs
+        as similar as possible as the ones found in the standard Lightning Reports
+        and Dashboards.</p>
+    <p>For doughnut/pie chart, only one aggregation dimension may be used (i.e. <code>XXX</code>
+        in a <code>...GROUP BY XXX...</code> SOQL query), each measure (i.e. <code>Count()</code>,
+        <code>Sum()</code>, <code>Max()</code>... statement in a SOQL query) being displayed in a
+        separate chart.</p>
+    <p>For (vertical or horizontal) bar chart, one or two dimensions may be used. When a
+        main and a secondary dimensions are used (i.e. <code>XXX</code> and <code>YYY</code>
+        in a <code>...GROUP BY XXX, YYY...</code> SOQL query), the main one is used for
+        stacking measures in a bar chart split by the secondary one.</p>
+    <p>Multiple configuration options are available as in the <code>&lt;c:PEG_SoqlList_CMP&gt;</code>
+        component (global card display, header actions, SOQL execution tuning...).</p>
+    <p>For the SOQL query, the context merging provided by the <code>&lt;c:PEG_Merge_CMP&gt;</code>
+        component may be used to refine its <code>WHERE</code> filtering clause.</p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Pie/Doughnut Chart Usage</h4>
+    <p>In the most simple use case, the <code>&lt;c:PEG_Graphs_CMP&gt;</code> may be used
+        to display various measures split by a same dimension.</p>
+<pre>&lt;c:PEG_Graphs_CMP
+    query='select Status, COUNT(Id) Number, COUNT_DISTINCT(AccountId) Accounts from Case WITH SECURITY_ENFORCED Group by Status'
+    graphType='pie'
+    dimension='Status'
+    dimensionLabel='Status'
+    measureStr='["Number","Accounts"]'
+    title='Case KPIs'
+    icon='standard:case'
+    /&gt;</pre>
+        <b>Notes</b>
+        <ul>
+            <li>The secondary dimension (<code>subDimension</code>) fields should
+                then be left blank.</li>
+            <li>Alternatively, the <code>graphType</code> attribute may be set to
+                <code>doughnut</code>.</li>
+            <li>In the SOQL query, measures should be explicitely named (e.g. 
+                <code>Accounts</code> in the <code>Count_Distinct(AccountId) Accounts</code>
+                SOQL clause above) in order to be identified in the <code>measureStr</code>
+                attribute.</li>
+        </ul>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Bar Chart Usage</h4>
+    <p>The <code>&lt;c:PEG_Graphs_CMP&gt;</code> may also be used to display to
+        display various measures split by up to two dimensions.</p>
+<pre>&lt;c:PEG_Graphs_CMP
+    query='select StageName, Type, count(Id) Number, sum(Amount) Amount from Opportunity WITH SECURITY_ENFORCED Group by StageName, Type'
+    graphType='bar'
+    dimension='Type'
+    dimensionLabel='Type'
+    subDimension='StageName'
+    subDimensionLabel='StageName'
+    measureStr='["Number","Amount"]'
+    title='Opportunity KPIs'
+    icon='standard:opportunity'
+    /&gt;</pre>
+        <b>Notes</b>
+        <ul>
+            <li>The secondary dimension (<code>subDimension</code>) fields are
+                optional. It must only be used in case of a SOQL grouping by 2
+                dimension fields. Bar charts display properly also with only
+                one dimension (in which case, no stacking occurs).</li>
+            <li>Alternatively, the <code>graphType</code> attribute may be set to
+                <code>horizontalBar</code> or <code>line</code>.</li>
+            <li>In the SOQL query, measures should be explicitely named (e.g. 
+                <code>Accounts</code> in the <code>Count_Distinct(AccountId) Accounts</code>
+                SOQL clause above) in order to be identified in the <code>measureStr</code>
+                attribute.</li>
+        </ul>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+        
+    </aura:description>
+</aura:documentation>

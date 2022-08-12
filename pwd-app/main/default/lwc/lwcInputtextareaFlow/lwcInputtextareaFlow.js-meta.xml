@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>LWC for LargeText Input</masterLabel>
+    <description>This component can be used in flows to support validation and conditional setting of 'Required' attribute</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="value" label="Value" type="String" description="The value of the longText field."/>
+            <property name="label" label="Field Label" role="inputOnly" type="String" description="Name of LongText field."/>
+            <property name="required" label="Required" type="Boolean" role="inputOnly" default="false" description="Will prevent next page/finish if set to {!$GlobalConstant.True} and no values are selected."/>
+            <property name="isReadOnly" label="Read Only" type="Boolean" role="inputOnly" default="false" description="Will prevent editing if set to {!$GlobalConstant.True}"/>
+            <property name="errorString" label="Error String" type="String" role="inputOnly" default="this cannot be blank" description="Give an error messsage"/>
+            <property name="placeholder" label="Placeholder String" type="String" role="inputOnly" default="Type here.." description="Give a place holder string"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

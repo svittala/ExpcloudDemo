@@ -1,0 +1,42 @@
+<design:component label="PEG KPI Display (multiple)" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="icon"
+                      label="Component Icon" />
+    <design:attribute name="showBorder"
+                      label="Show Border?" />
+    
+	<design:attribute name="columns"
+                      label="Nbr of KPI groups per row"/>
+    <design:attribute name="kpiColumns"
+                      label="Nbr of KPIs per row within a group"/>
+    <design:attribute name="iconSize"
+                      label="Icon Size"/>
+    <design:attribute name="badgeDisplay"
+                      label="Display KPIs as badges?"
+                      description="(vs sub-tiles)"/>
+    
+    <design:attribute name="kpiConfigStr"
+                      label="KPI Configuration"/>
+    
+    <design:attribute name="tableActionStr"
+                      label="Header Actions"/>
+    <design:attribute name="kpiActionStr"
+                      label="KPI Actions"/>
+    
+    <design:attribute name="bypassFLS"
+                      label="Bypass FLS?" />
+    <design:attribute name="bypassSharing"
+                      label="Bypass Sharing?" />
+    <design:attribute name="queryType"
+                      label="Query Type"
+                      description="To authorize bypass, a valid PEG_Query__mdt devName should be provided." />
+    
+    <design:attribute name="isStorable"
+                      label="Use Storable Actions?"
+                      description="Use local browser cache on repeated similar queries."/>
+    <design:attribute name="isBackground"
+                      label="Send query in Background?"
+                      description="For long running SOQL queries."/>
+    
+</design:component>

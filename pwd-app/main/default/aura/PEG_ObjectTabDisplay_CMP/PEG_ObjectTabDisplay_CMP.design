@@ -1,0 +1,19 @@
+<design:component label="PEG Object Tab Display" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="icon"
+                      label="Component Icon" />
+    <design:attribute name="showBorder"
+                      label="Show Border?" />
+
+    <design:attribute name="fieldStr"
+                      label="Tab / field configuration"
+                      description="Should be a valid JSON structure."/>
+    <design:attribute name="useLDS"
+                      label="Use LDS (or SOQL) for data fetch ?"
+                      description="Lightning Data Service record:form may be used only on some objects / field types."/>
+    <design:attribute name="soqlQuery"
+                      label="SOQL query to use"
+                      description="If not using LDS. Retrieved data may then be used as {{{Row....}}} merge fields in configuration."/>
+    
+</design:component>

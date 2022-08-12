@@ -1,0 +1,96 @@
+<aura:documentation>
+	<aura:description>
+
+	<div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_ToDoList_CMP&gt;</code> component may be used in any type of
+        Lightning page and is available directly in the App Builder (or Community Builder).
+        It enables to display a time-line with a wide variety of objects retrieved via
+        custom SOQL queries and ordered by a date field.</p>
+    <p>Its look is similar to the standard activity timeline, but it offers the ability
+        to display any object (e.g. lead, case, opportunity) instead of only Tasks and 
+        Events.</p>
+    <p>The set of information displayed for each object is configurable, as well as the
+        ability to expand the associated compact layout of it (if the Lightning Data Service,
+        a.k.a. LDS, supports it. See <code>lightning:recordform</code> component for details).</p>
+    <p>It relies on the <code>&lt;c:PEG_SOQL_CMP&gt;</code> utility component to fetch data
+        via SOQL and on the <code>&lt;c:PEG_Merge_CMP&gt;</code> one to customize the SOQL
+        queries depending on the current Object or User.</p>
+    <p>Most of its behaviour is configurable via simple App Builder configuration attributes
+        (title, icon...). </p>
+    <p>Notes:</p>
+    <ul>
+    <li>This component does not support lazy loading and the total number of elements
+        returned by all the queries should remain relativey limited (e.g. 10s of records).</li>
+    <li>The number of queries sent should also remain limited to reduce display latency.</li>
+    </ul>
+    <br/>
+    </div>
+     
+    <div class="slds-m-top_large">
+    <h4>Data Fetch Configuration</h4>
+    <p>The <code>queryListStr</code> configuration parameter enables to control the
+        set of data fetched from the Salesforce database as well as its display</p>
+    <p>It should contain a JSON array of JSON objects with the following fields:</p>
+    <ul>
+        <li><code>name</code>: Type of the Object displayed (SObject API Name)</li>
+        <li><code>isCollapsible</code>: Boolean flag to display an expandable compact
+        layout in the object tile (should be set to false for all object types not
+        supported by the LDS).</li>
+        <li><code>columns</code>: If the compact layout is displayed, number of
+        columns on which the fields should be displayed.</li>
+        <li><code>sortBy</code>: API name of the field to be used for global ordering
+        of the displayed time-line (for the considered object type).</li>
+        <li><code>color</code>: SLDS class to be used to color the time-line, usually
+        the standard color fcorrresponding to the Object type (optional).</li>
+        <li><code>icon</code>: SLDS Name of the icon to be used for each record of the
+        object type (should usually be the one corresponding to the Object type, optional).</li>
+        <li><code>query</code>: SOQL query to be used.</li>
+        <li><code>display</code>: JSON object defining the field to be used as title
+        for each record tile of this Object type, as well as the list of fields to 
+        be displayed by default (i.e. out of the compact layout mentioned above).</li>
+    </ul>
+    <pre>[
+  { "name":"Opportunity", "sortBy":"CreatedDate",
+    "isCollapsible":"true", "columns":"2",
+    "color":"slds-icon-standard-opportunity", "icon":"standard:opportunity",
+    "query":"select Name, StageName, CreatedDate from Opportunity WITH SECURITY_ENFORCED order by CreatedDate desc limit 5",
+    "display": { "title":"Name",
+                 "content": [ { "label":"Stage", "value":"StageName", "type":"text"},
+                              { "label":"Created on", "value":"CreatedDate", "type":"date"} ] } },
+  { "name":"Case", "sortBy":"CreatedDate", 
+    "isCollapsible":"true", "columns":"2",
+    "color":"slds-icon-standard-case", "icon":"standard:case",
+    "query":"select Subject, Status, CreatedDate from Case WITH SECURITY_ENFORCED order by CreatedDate desc limit 4",
+    "display": { "title":"Subject",
+                 "content": [ { "label":"Created on", "value":"CreatedDate", "type":"date"},
+                              { "label":"Status", "value":"Status", "type":"text"} ] } },
+  { "name":"Task", "sortBy":"ActivityDate",
+    "isCollapsible":"false", 
+    "color":"slds-icon-standard-task", "icon":"standard:task",
+    "query":"select Subject, CreatedDate, ActivityDate from Task WITH SECURITY_ENFORCED order by ActivityDate desc limit 6",
+    "display": { "title":"Subject",
+                 "content": [ { "label":"Created on", "value":"CreatedDate", "type":"date"},
+                              { "label":"Due on", "value":"ActivityDate", "type":"date"} ] } },
+  { "name":"Event", "sortBy":"ActivityDate",
+    "isCollapsible":"false",
+    "color":"slds-icon-standard-event", "icon":"standard:event",
+    "query":"select Subject, CreatedDate, ActivityDate from Event WITH SECURITY_ENFORCED order by ActivityDate desc limit 3",
+    "display": { "title":"Subject",
+                 "content": [ {"label":"Created on", "value":"CreatedDate", "type":"date"},
+                              {"label":"Scheduled on", "value":"ActivityDate", "type":"date"} ] } }
+]</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

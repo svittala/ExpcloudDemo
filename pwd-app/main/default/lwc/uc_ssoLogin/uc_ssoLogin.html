@@ -1,0 +1,111 @@
+<!--
+  @Description        : LWC for Login landing page - ORRUAC 5269
+  @Author             : Piyush
+  @Last Modified On   : 02-01-2022
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0    02/23/2021     Piyush(Deloitte)           Initial Version
+-->
+<template>
+    <div class="login-wrapper">
+        <div class="login-title">
+            <img src={acfLogo} alt="ACF ORR Logo" title="ACF ORR Logo">
+        </div>
+        <div class="uac-center">
+            <div class="slds-align_absolute-center">
+                <div class="slds-col slds-size_6-of-12 login-section">
+                    <center>
+                        <h1 class="login-header-text">Login</h1>
+                    </center>
+                    <div class="slds-box">
+                        <h2 class="header-text">Non-HHS Users
+                            <a style="float: right;" class="slds-button slds-button_brand" title="Login External XMS"
+                                href={extPathUrl}>Continue</a>
+                        </h2>
+                        <br>Access Portal or Path with single sign on using Login.gov<br>
+                        <i>
+                            <br> Hints:
+                            <ol>
+                                <li>Use this option if your email address does not end in hhs.gov</li>
+                                <li>Use this option if you are contractor supporting HHS</li>
+                            </ol>
+                        </i>
+                    </div>
+                    <div class="slds-box">
+                        <h2 class="header-text">HHS Users
+                            <a style="float: right;" class="slds-button slds-button_brand" title="Login Internal AMS"
+                                href={intPathUrl}>Continue</a>
+                        </h2>
+                        <p class="login-button-description">Access Portal or Path with single sign on<br>
+                            <i><br> Hint:Use this option if your email address ends in hhs.gov</i>
+                        </p>
+                    </div>
+                    <a href="https://uacdev2.apincloud.com/SAMLSignIn.aspx">
+                        &#10216; Back to Portal</a>
+                </div>
+            </div>
+            <div class="slds-col slds-size_10-of-12 footnote">
+                <br>
+                <h1 class="need-header-text">Need Help?</h1>
+                <br>
+                <p>Review the questions below and reach out to the Help Desk if you still need assistance</p>
+                <br>
+                <p><b>Portal</b>: Call 210-858-8304 or Email <a href="uachelpdesk@ap-in.com">uachelpdesk@ap-in.com</a>
+                </p>
+                <br>
+                <p><b>Path</b>: Call 123-456-7890 or Email <a
+                        href="pathhelpdesk@acf.hhs.gov">pathhelpdesk@acf.hhs.gov</a></p>
+                <br>
+                <p><b>Why can't i use my regular Portal User ID and password?</b></p>
+                <br>
+                <p>You will be able to use your regular Portal User ID and password until March 2022
+                    (update with exact date once available). After that date, all Portal users will transition to a
+                    more secure login method utilizing Single Sign On (SSO), which will better safeguard the information
+                    of
+                    children in ORR care. It will also allow you to access Portal and Path with one sec of credentials.
+                </p>
+                <br>
+                <p><b>Which login option should i choose?</b></p>
+                <br>
+                <p>Choose the "Non-HHS users" option if you are a contractor supporting the Department of Health and
+                    Human
+                    Services (HHS), or if your email address does not end in hhs.gov.</p>
+                <p>
+                    Choose the "HHS users" option if you are a government employee and your email address ends in
+                    hhs.gov.
+                </p>
+                <br>
+            </div>
+            <div class="slds-col slds-size_10-of-12 footnote">
+                <br>
+                <h1 style="color:red;" class="sponsor-header-text">For Parents/Sponsors of Unaccompanied Children</h1>
+                <br>
+                <p><b>Sponsors:</b> To expedite sponsorship, please print and complete the Family Renuification Packet
+                    and
+                    related documents available below in English or Spanish. Have the required documentation ready and
+                    available when you are contacted by your assigned Case Manager.
+                    *Please note that there is no need to log in to this website in order to view, and print the
+                    required documents.</p>
+                <br>
+                <p><b>Patrocinadores:</b> para agilzar el proceso de patrocinar a un menor, por favor imprima, y
+                    complete la
+                    Solicitud de Reunificación Familiar y documentos adjuntos, disponibles en inglés o español. Tenga
+                    toda la documentación lista y disponible para cuando su trabajador social lo contacte. *Tenga en
+                    cuenta, que no hay necesidad de ingresar/inscribirse a esta página de internet para poder ver e
+                    imprimir los documentos requeridos.</p>
+                <br>
+                <lightning-icon icon-name="utility:download" alternative-text="Download"></lightning-icon>&nbsp;
+                <a href="https://uacpath--sprintqa--c.visualforce.com/resource/1643730036000/FRPEnligsh?">FRP
+                    English.zip</a>
+                <br>
+                <lightning-icon icon-name="utility:download" alternative-text="Download"></lightning-icon>&nbsp;
+                <a href="https://uacpath--sprintqa--c.visualforce.com/resource/1643731972000/SpanishZip1?">FRP
+                    Spanish-Part-1.zip</a>&nbsp;
+                <a href="https://uacpath--sprintqa--c.visualforce.com/resource/1643731993000/SpanishZip2?">FRP
+                    Spanish-Part-2.zip</a>
+
+            </div>
+        </div>
+
+    </div>
+</template>

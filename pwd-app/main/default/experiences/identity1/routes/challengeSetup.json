@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "78481ae1-a06b-4eea-94bf-761907b9fa50",
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "configurationTags" : [ ],
+  "id" : "3e99bc04-b906-4a55-bef3-482bb9697196",
+  "label" : "ChallengeSetup",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-challengesetup",
+  "type" : "route",
+  "urlPrefix" : "challengesetup"
+}

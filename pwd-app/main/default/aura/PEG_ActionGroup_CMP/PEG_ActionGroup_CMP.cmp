@@ -1,0 +1,115 @@
+<aura:component access="global"
+                description="Component presenting a button and menu group.">
+    
+	<aura:attribute name="actionList"      type="List"
+                    description="List of Actions to be included."/>
+    <aura:attribute name="actionTriggered" type="Object"
+                    description="Action actually triggered (within list provided)."/>
+    <aura:attribute name="isVertical"      type="Boolean" default="false"
+                    description="Tells whether the different should be displayed vertically."/>
+    
+    <!-- Events -->
+    <aura:registerEvent name="callback" type="ltng:sendMessage"
+                    description="Callback method to be called when an action is triggered." />
+
+    <!-- Component init -->
+    <aura:handler name="init" value="{!this}" action="{!c.actionInit}"
+                  description="Component Init"/>
+    
+    <!-- Component content --> 
+    
+    <aura:if isTrue="{#v.isVertical}">
+        <ul class="slds-has-block-links_space">
+        <aura:iteration items="{!v.actionList}" var="eachAction" >
+            <li class="">
+            <aura:if isTrue="{!eachAction.type == 'button'}"> 
+                 <aura:if isTrue="{!eachAction.icon.length >0}">
+                    <lightning:button label="{!eachAction.label}"
+                                      iconName="{! 'utility:' + eachAction.icon}"
+                                      class="{!eachAction.isLast ? 'slds-button_last' : ''}"
+                                      name="{!eachAction.name}"
+                                      value="{!eachAction}"
+                                      variant="{!eachAction.variant}"
+                                      onclick="{!c.requestAction}" />
+                 <aura:set attribute="else">
+                     <lightning:button label="{!eachAction.label}"
+                                       class="{!eachAction.isLast ? 'slds-button_last' : ''}"
+                                       name="{!eachAction.name}"
+                                       value="{!eachAction}"
+                                       variant="{!eachAction.variant}"
+                                       onclick="{!c.requestAction}" />
+                     </aura:set>
+                 </aura:if>
+            <aura:set attribute="else">
+                     <lightning:buttonMenu menuAlignment="left"
+                                           iconSize="{!eachAction.iconSize}"
+                                           label="{!eachAction.label}"
+                                           variant="{!eachAction.variant}"
+                                           class="{!eachAction.isLast ? 'slds-button_last' : ''}"
+                                           onselect="{!c.requestAction}" >
+                     
+                     <aura:iteration items="{!eachAction.items}" var="eachMenuItem">
+                         <aura:if isTrue="{!eachMenuItem.icon.length >0}">
+                            <lightning:menuItem label="{!eachMenuItem.label}"
+                                                iconName="{! 'utility:' + eachMenuItem.icon}"
+                                                value="{!eachMenuItem}" />
+                         <aura:set attribute="else">
+                            <lightning:menuItem label="{!eachMenuItem.label}"                                 
+                                                value="{!eachMenuItem}" />
+                         </aura:set>
+                         </aura:if>
+                     </aura:iteration>
+                     </lightning:buttonMenu>
+                 </aura:set>
+            </aura:if>
+            </li>
+        </aura:iteration>
+        </ul>
+    <aura:set attribute="else">
+    <lightning:buttonGroup class="slds-col">
+        
+        <aura:iteration items="{!v.actionList}" var="eachAction" >
+            <aura:if isTrue="{!eachAction.type == 'button'}"> 
+                 <aura:if isTrue="{!eachAction.icon.length >0}">
+                    <lightning:button label="{!eachAction.label}"
+                                      iconName="{! 'utility:' + eachAction.icon}"
+                                      class="{!eachAction.isLast ? 'slds-button_last' : ''}"
+                                      name="{!eachAction.name}"
+                                      value="{!eachAction}"
+                                      variant="{!eachAction.variant}"
+                                      onclick="{!c.requestAction}" />
+                 <aura:set attribute="else">
+                     <lightning:button label="{!eachAction.label}"
+                                       class="{!eachAction.isLast ? 'slds-button_last' : ''}"
+                                       name="{!eachAction.name}"
+                                       value="{!eachAction}"
+                                       variant="{!eachAction.variant}"
+                                       onclick="{!c.requestAction}" />
+                     </aura:set>
+                 </aura:if>
+            <aura:set attribute="else">
+                     <lightning:buttonMenu menuAlignment="right"
+                                           iconSize="{!eachAction.iconSize}"
+                                           label="{!eachAction.label}"
+                                           class="{!eachAction.isLast ? 'slds-button_last' : ''}"
+                                           onselect="{!c.requestAction}" >
+                     
+                     <aura:iteration items="{!eachAction.items}" var="eachMenuItem">
+                         <aura:if isTrue="{!eachMenuItem.icon.length >0}">
+                            <lightning:menuItem label="{!eachMenuItem.label}"
+                                                iconName="{! 'utility:' + eachMenuItem.icon}"
+                                                value="{!eachMenuItem}" />
+                         <aura:set attribute="else">
+                            <lightning:menuItem label="{!eachMenuItem.label}"                                 
+                                                value="{!eachMenuItem}" />
+                         </aura:set>
+                         </aura:if>
+                     </aura:iteration>
+                     </lightning:buttonMenu>
+                 </aura:set>
+            </aura:if>
+        </aura:iteration>
+        
+    </lightning:buttonGroup>
+    </aura:set></aura:if>
+</aura:component>

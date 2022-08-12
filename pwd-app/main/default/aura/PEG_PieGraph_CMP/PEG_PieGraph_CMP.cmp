@@ -1,0 +1,38 @@
+<aura:component access="global" 
+                description="Lightning Component to display a pie of doughnut graph." >
+	
+    <!-- Global component configuration -->
+    <aura:attribute name="graphType"    type="String" 
+                    default="pie"
+                    description="Type of Chart to display (doughnut, pie)."/>
+    <aura:attribute name="title"        type="String" 
+                    description="Title of the graph."/>
+    <!--
+    <aura:attribute name="height"       type="Integer"  default="50"
+                    description="Height of the card" />
+    -->
+    <!-- Global component configuration  (input) -->
+    <aura:attribute name="dimension"    type="String" 
+                    description="Name of the dimension field (for grouping)."/>
+    <aura:attribute name="measure"     type="List" 
+                    description="Name of the measure field (for grouping)."/>
+    <aura:attribute name="data"         type="Object" required="true"
+                    description="List of measure and dimension values."/>
+    
+    <!-- Component initialization -->
+    <ltng:require scripts="{!$Resource.PEG_ChartJs}"
+                  afterScriptsLoaded="{!c.initGraph}"/>
+    
+    <!-- Utility Components -->
+    <c:PEG_JSON_CMP  aura:id="jsonUtil"/>
+    
+    <!-- Component Display -->
+    <div class="chart-container"       style="position: relative; width:100%; height:auto;">
+    <canvas aura:id="GraphCanvas"      class="slds-align_absolute-center"
+            aria-label="Graph Display" role="img" />
+    </div>
+    <!--        height="{!v.height}"   width="{!v.height}"   />  -->
+ 
+    <!-- 100%  -->
+    
+</aura:component>

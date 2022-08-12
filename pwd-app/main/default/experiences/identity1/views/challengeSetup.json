@@ -1,0 +1,71 @@
+{
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "componentName" : "siteforce:dynamicLayout",
+  "id" : "78481ae1-a06b-4eea-94bf-761907b9fa50",
+  "label" : "ChallengeSetup",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "489f9f24-1140-4473-9e6a-db6fbc7329b8",
+          "columns" : [ {
+            "UUID" : "4b4ff3d6-0234-4441-98a6-3493fcb2104c",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "489f9f24-1140-4473-9e6a-db6fbc7329b8",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "height" : "600",
+            "pageName" : "ChallengeSetup",
+            "recordId" : "{!recordId}"
+          },
+          "componentName" : "forceCommunity:visualforcePage",
+          "id" : "dd3c392c-4905-4ea8-a332-df3f0df4e624",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "4b4ff3d6-0234-4441-98a6-3493fcb2104c",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "9e6cd699-6902-47a9-a8ce-69525b3bab7a",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "ChallengeSetup"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "af96e607-56cf-4a80-ba66-00c365ea291a",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "d1e96ba5-4a55-4eeb-884d-9be252853cae",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "evUDUS2Pg3NapzCcdcufD7rZxDGax5",
+  "type" : "view",
+  "viewType" : "custom-challengesetup"
+}

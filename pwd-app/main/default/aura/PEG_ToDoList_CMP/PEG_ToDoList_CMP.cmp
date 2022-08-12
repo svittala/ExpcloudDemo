@@ -1,0 +1,263 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component displaying a custom to-do list based on multiple objects.">
+
+    <!-- Global Component Configuration -->
+    <aura:attribute name="title"      type="String"  default="Activités en cours"
+                    description="Component card title."/>
+    <aura:attribute name="icon"       type="String"  default="standard:timesheet"
+                    description="Component card icon."/>
+    <aura:attribute name="showBorder" type="Boolean" default="false"
+                    description="Show border around component card?"/>
+    <aura:attribute name="showQuery"  type="Boolean" default="false"
+                    description="Show SOQL query (for debug)?"/>
+     
+    <!-- Task Query Configuration -->
+    <aura:attribute name="queryListStr"    type="String"
+                    default='
+[{"name":"Opportunity","columns":"2","isCollapsible":"true","sortBy":"CreatedDate",
+  "color":"slds-icon-standard-opportunity","icon":"standard:opportunity",
+  "query":"select Name, StageName, CreatedDate from Opportunity WITH SECURITY_ENFORCED order by CreatedDate desc limit 5",
+  "display":{"title":"Name", "content":
+      [{"label":"Stage","value":"StageName","type":"text"},
+       {"label":"Created on","value":"CreatedDate","type":"date"}]}},
+ {"name":"Case","columns":"2","isCollapsible":"true","sortBy":"CreatedDate",
+  "color":"slds-icon-standard-case","icon":"standard:case",
+  "query":"select Subject, Status, CreatedDate from Case WITH SECURITY_ENFORCED order by CreatedDate desc limit 4",
+  "display":{"title":"Subject","content":
+      [{"label":"Created on","value":"CreatedDate","type":"date"},
+        {"label":"Status","value":"Status","type":"text"}]}},
+ {"name":"Task","columns":"2","isCollapsible":"false","sortBy":"ActivityDate",
+  "color":"slds-icon-standard-task","icon":"standard:task",
+  "query":"select Subject, CreatedDate, ActivityDate from Task WITH SECURITY_ENFORCED order by ActivityDate desc limit 6",
+  "display":{"title":"Subject","content":
+      [{"label":"Created on","value":"CreatedDate","type":"date"},
+       {"label":"Due on","value":"ActivityDate","type":"date"}]}},
+ {"name":"Event","columns":"2","isCollapsible":"false","sortBy":"ActivityDate",
+  "color":"slds-icon-standard-event","icon":"standard:event",
+  "query":"select Subject, CreatedDate, ActivityDate from Event WITH SECURITY_ENFORCED order by ActivityDate desc limit 3",
+  "display":{"title":"Subject","content":
+      [{"label":"Created on","value":"CreatedDate","type":"date"},
+       {"label":"Scheduled on","value":"ActivityDate","type":"date"}]}}]'
+                    description="SOQL query list configuration as string to support App builder configuration." />
+                    <!--
+                    default='[{"name":"Account","columns":"2","isCollapsible":"true", 
+                                      "color":"slds-icon-standard-account","icon":"standard:account",
+                                      "query":"select Name, CreatedDate from Account where ParentId = '{{{recordId}}}'",
+                                      "display":{"title":"Name","content":[{"label":"Created on","value":"CreatedDate","type":"date"}]}},
+                              {"name":"ContentNote","columns":"1","isCollapsible":"true",
+                                      "color":"slds-icon-standard-note","icon":"standard:note",
+                                      "query":"select Title, CreatedDate from ContentNote order by CreatedDate desc limit 5",
+                                      "display":{"title":"Title","content":[{"label":"Created on","value":"CreatedDate","type":"date"}]}},
+                              {"name":"RecordAction","columns":"1","isCollapsible":"false",
+                                      "color":"slds-icon-standard-action-list-component","icon":"standard:action_list_component",
+                                      "query":"select ActionDefinition, CreatedDate from RecordAction limit 30",
+                                      "display":{"title":"ActionDefinition","content":[{"label":"Created on","value":"CreatedDate","type":"date"}]}},
+                              {"name":"Opportunity","columns":"1","isCollapsible":"true",
+                                      "color":"slds-icon-standard-opportunity","icon":"standard:opportunity",
+                                      "query":"select Name, StageName, CreatedDate from Opportunity where AccountId = '{{{recordId}}}'",
+                                      "display":{"title":"Name","content":[{"label":"Stage","value":"StageName","type":"text"},{"label":"Created on","value":"CreatedDate","type":"date"}]}},
+                              {"name":"Lead","columns":"1","isCollapsible":"true",
+                                      "color":"slds-icon-standard-lead","icon":"standard:lead",
+                                      "query":"select Name, CreatedDate from Lead order by CreatedDate desc limit 12",
+                                      "display":{"title":"Name","content":[{"label":"Created on","value":"CreatedDate","type":"date"}]}},
+                              {"name":"Case","columns":"1","isCollapsible":"true",
+                                      "color":"slds-icon-standard-case","icon":"standard:case",
+                                      "query":"select Subject, Status, CreatedDate from Case where AccountId = '{{{recordId}}}'",
+                                      "display":{"title":"Subject","content":[{"label":"Created on","value":"CreatedDate","type":"date"},{"label":"Status","value":"Status","type":"text"}]}},
+                              {"name":"Task","columns":"1","isCollapsible":"false",
+                                      "color":"slds-icon-standard-task","icon":"standard:task",
+                                      "query":"select Subject, CreatedDate from Task where WhatId = '{{{recordId}}}'",
+                                      "display":{"title":"Subject","content":[{"label":"Created on","value":"CreatedDate","type":"date"}]}},
+                              {"name":"Event","columns":"1","isCollapsible":"false",
+                                      "color":"slds-icon-standard-event","icon":"standard:event",
+                                      "query":"select Subject, CreatedDate from Event where WhatId = '{{{recordId}}}'",
+                                      "display":{"title":"Subject","content":[{"label":"Created on","value":"CreatedDate","type":"date"}]}}]'
+                    -->
+                    
+    <aura:attribute name="queryListJson"  type="Object"
+                    description="JSON parsing of string input equivalent"/>
+    <aura:attribute name="tableDisplay" type="boolean" default="false" 
+                    description="Display content in table mode?"/>
+    
+    <aura:attribute name="queryCount"     type="Integer"   default="100"
+                    description="Number of remaining SOQL queries to process." />
+    <aura:attribute name="queryResults"   type="Object"
+                    description="Unified List of results (possibly filtered)."/>
+    <aura:attribute name="queryResultsOrig" type="Object"
+                    description="Original list of results (before filtering)." />
+    
+    <!-- Result Filtering & sorting -->
+    <aura:attribute name="displayScope" type="string"  default="All" 
+                    description="Scope of the display ('All' or object name)."/>
+    <aura:attribute name="isAscending"    type="Boolean"   default="false" 
+                    description="Flag to track that sorting is in ascending mode." />
+    
+    <!-- Server callout configuration -->
+    <aura:attribute name="bypassFLS" type="Boolean" default="false" 
+                    description="Bypass FLS when executing query." />
+    <aura:attribute name="bypassSharing"    type="Boolean" default="false" 
+                    description="Bypass Sharing when executing query." />
+    <aura:attribute name="queryType"        type="String"  default="" 
+                    description="When requesting a byPass, a valid queryType should be provided (see PEG_Query__mdt)." />
+
+    <aura:attribute name="isStorable"   type="Boolean" default="false" 
+                    description="Query action storable mode activation." />
+    <aura:attribute name="isBackground" type="Boolean" default="false" 
+                    description="Query action background mode activation." />
+    
+    <!-- Actions configuration -->
+    <aura:attribute name="tableActionStr"  type="String"
+                    default='
+[ { "label":"Lead", "icon":"add",
+    "event": { "name":"e.force:createRecord",
+               "params": { "entityApiName":"Lead", "defaultFieldValues": { } } } },
+  { "label":"Opportunity", "icon":"add",
+    "event": { "name":"e.force:createRecord",
+               "params": { "entityApiName":"Opportunity", "defaultFieldValues": { } } } },
+  { "label":"Case", "icon":"add",
+    "event": { "name":"e.force:createRecord",
+               "params": { "entityApiName":"Case", "defaultFieldValues": { } } } } ]'
+                    description="Header actions configuration (if any)." />
+    <aura:attribute name="tableActionJson"  type="List"
+                    default='[]'
+                    description="JSON conversion of header actions configuration." />
+    
+    <!-- Initialisation-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Initialization of the component: generation of the underlying SOQL queries." />
+    <aura:handler event="lightning:tabRefreshed" action="{!c.refreshList}"
+                  description="Refreshing of the underlying SOQL queries." />
+    
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    <c:PEG_SOQL_CMP  aura:id="soqlUtil"/>
+    <c:PEG_JSON_CMP  aura:id="jsonUtil"/>
+    
+    <!-- Component Display (v.queryListJson) -->
+    <lightning:card title="{!v.title + ' (' + v.queryResults.length + ')' }"
+                    iconName="{#v.icon}"
+                    class="{# if(v.showBorder, 'slds-card_boundary', '') + if(v.isCollapsible,' slds-m-left_x-small','')}" >
+        
+        <aura:set attribute="actions">
+            
+            <aura:if isTrue="{!v.tableActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.tableActionJson}"
+                                   callback="{!c.handleTableAction}" />
+            </aura:if>
+            
+            <!-- {! v.isAscending ? 'utility:arrowup' : 'utility:arrowdown' } -->
+            <lightning:buttonGroup class="slds-col">
+            <aura:if isTrue="{!v.queryListJson.length > 1}">
+            <lightning:buttonMenu alternativeText="Object selection menu"
+                                  value="{!v.displayScope}"
+                                  onselect="{!c.changeDisplayScope}"
+                                  label="{!v.displayScope}">
+              <lightning:menuItem value="All"
+                                  label="All"
+                                  checked="{! v.displayScope == 'All' }" />
+              <aura:iteration items="{!v.queryListJson}"
+                              var="eachObject" >
+              <lightning:menuItem value="{!eachObject.name}"
+                                  label="{!eachObject.name}"
+                                  checked="{! eachObject.name == v.displayScope }" />
+              </aura:iteration>
+            </lightning:buttonMenu>
+            </aura:if>
+            <lightning:buttonIcon iconName="{! 'utility:' + (v.isAscending ? 'arrowup' : 'arrowdown') }"
+                                  variant="border"
+                                  onclick="{! c.changeSort }"
+                                  alternativeText="Sort" />
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border"
+                                  class="slds-button_last"
+                                  onclick="{!c.refreshList}"/>
+            </lightning:buttonGroup>
+        </aura:set>
+        
+        <aura:set attribute="footer">
+        <aura:if isTrue="{!v.showQuery}">
+            <lightning:tile label="SOQL queries" class="slds-text-align_left">
+                <div class="slds-tile__detail">
+                    <dl class="slds-list_horizontal slds-wrap">
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" >
+                            <lightning:icon iconName="utility:info_alt" alternativeText="Information" size="x-small" title="Information" /></dt>
+                        <dd class="slds-item_detail slds-text-align_left" >
+                            <a href="/docs/component-library/bundle/c:PEG_ToDoList_CMP/documentation">
+                                Access documentation.</a></dd>
+                        <dt class="slds-item_label slds-truncate" title="Query">Query Configuration</dt>
+                        <dd class="slds-item_detail slds-text-align_left" title="Tasks Request">
+                            {!v.queryListStr} </dd>
+                    </dl>
+                </div>
+            </lightning:tile>
+        </aura:if>
+        </aura:set>
+    
+        <div class="{! 'slds-card__body slds-card__body_inner ' + if(v.showBorder, 'slds-border_top', '')}"> 
+          <lightning:layout pullToBoundary="small" multipleRows="true" class="slds-p-vertical_small" >
+                  <aura:iteration items="{!v.queryResults}" var="eachResult">
+                      <!-- padding="around-small" mediumDeviceSize="6" largeDeviceSize="4" size="12" padding="around-small"  padding="around-small"
+                           label="{!eachResult.Name + eachResult.Subject + eachResult.Title + eachResult.ActionDefinition}" -->
+                      <lightning:layoutItem size="12" >
+                      <c:PEG_CollapsedTile_CMP
+                          label="{!eachResult.title}"
+                          icon="{!eachResult.icon}"
+                          recordId="{!eachResult.Id}"
+                          sObjectName="{!eachResult.sObjectName}"
+                          columns="{!eachResult.columns}"
+                          showBorder="false"
+                          isCollapsible="{!eachResult.isCollapsible}"
+                          isExpanded="false"
+                          color="{!eachResult.color}">
+                          
+                          <!-- Tile content -->
+                 <aura:if isTrue="{#v.tableDisplay}">
+                     <!-- Table mode -->
+                     <table>
+                     <aura:iteration items="{!eachResult.content}" var="eachContent">                 
+                     <tr>
+                       <td class="slds-dl_horizontal__label slds-text-color_weak slds-truncate">
+                           {!eachContent.label}</td>
+                       <td class="slds-dl_horizontal__detail">
+                       <aura:if isTrue="{!eachContent.type == 'date'}">
+                           <lightning:formattedDateTime value="{!eachContent.value}"/>
+                       <aura:set attribute="else">
+                           <lightning:formattedText     value="{!eachContent.value}"/>
+                       </aura:set>
+                       </aura:if>
+                       </td>
+                    </tr>
+                    </aura:iteration>
+                    </table>
+                <aura:set attribute="else"> 
+                    <!-- UL mode -->
+                          <ul class="slds-list_horizontal slds-list_horizontal slds-has-dividers_left slds-wrap"> 
+                          <aura:iteration items="{!eachResult.content}" var="eachContent">                 
+                          <li class="slds-item ">
+                              <!-- slds-m-around_xx-small slds-m-left_x-small -->
+                              <span class="slds-text-body_small slds-text-color_weak slds-m-right_xx-small">
+                                  {!eachContent.label}:</span>
+                              <aura:if isTrue="{!eachContent.type == 'date'}">
+                                  <lightning:formattedDateTime value="{!eachContent.value}"/>
+                              <aura:set attribute="else">
+                                  <lightning:formattedText value="{!eachContent.value}"/>
+                              </aura:set>
+                              </aura:if>
+                          </li>
+                          </aura:iteration>
+                          </ul>
+                  </aura:set>
+                  </aura:if>
+                  </c:PEG_CollapsedTile_CMP>
+                  </lightning:layoutItem>
+                  </aura:iteration>
+                  </lightning:layout>
+                  </div>
+            </lightning:card>
+            
+</aura:component>

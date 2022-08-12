@@ -1,0 +1,67 @@
+{
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "componentName" : "siteforce:dynamicLayout",
+  "id" : "63889e00-baac-456a-a614-2d183a931926",
+  "label" : "testmenu",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "cf67e867-f425-42dd-945f-1a7601a1ba9e",
+          "columns" : [ {
+            "UUID" : "374c0c4c-bb6d-42e1-bd87-7f4cea7c6c5d",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "cf67e867-f425-42dd-945f-1a7601a1ba9e",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : { },
+          "componentName" : "c:menuComponent",
+          "id" : "fb148782-0ea9-4d07-beb6-4a26d06c3e29",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "374c0c4c-bb6d-42e1-bd87-7f4cea7c6c5d",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "a45a0726-81d5-4edd-8916-0c868f4e5754",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "testmenu"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "f9439541-15ca-4763-bd60-7a6268eedc78",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "3db70faf-7c5b-4bcb-81a7-be0a1efe9f1d",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "x86985uRmJeadzhpVVCyDMhUpK1xOH",
+  "type" : "view",
+  "viewType" : "custom-testmenu"
+}

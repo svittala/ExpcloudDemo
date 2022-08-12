@@ -1,0 +1,4 @@
+<design:component label="MFI Login Form v2">
+    <design:attribute name="email" />
+    <design:attribute name="submitButtonLabel"/>
+  </design:component>

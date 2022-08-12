@@ -1,0 +1,23 @@
+<design:component label="PEG Object Card" >
+	<design:attribute name="title"
+                      label="Card Title" />
+    <design:attribute name="icon"
+                      label="Card Icon" />
+    <design:attribute name="showBorder"
+                      label="Show card border?" />
+    
+    <design:attribute name="targetIdField"
+                      label="ID field for target in {{{...}}} format." />
+    <design:attribute name="targetObjName"
+                      label="Object name for target." />
+    <design:attribute name="fieldStr"
+                      label="Fields to display" 
+                      description='Structure JSON [{"icon":"standard:account","field":"Name"},{...}...]'/>
+    
+    <design:attribute name="columns"
+                      label="Nbr of columns" />
+    <design:attribute name="mode"
+                      label="Mode (edit, view, readonly)" />
+    <design:attribute name="objActionStr"
+                      label="Actions" />
+</design:component>

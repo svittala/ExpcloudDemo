@@ -1,0 +1,79 @@
+<aura:component   access="global"
+                  description="Component enabling mass edit of a provided list of objects." >
+	
+    <!-- Global Component Configuration -->
+    <aura:attribute name="records"      type="String"
+                    description="Stringified list of records to edit."/>
+    <aura:attribute name="recordList"   type="List"
+                    description="JSON List of records to edit."/>
+    <aura:attribute name="targetValues" type="Object"
+                    description="Object storing target values --> ."/>
+    <aura:attribute name="fields"       type="List"
+                    description="List of fields to edit."/>
+    <aura:attribute name="sObjectName"  type="String" 
+                    description="Name of the Object type to be edited."/>
+    <aura:attribute name="message"      type="Object"
+                    description="Object used to display contextual info about the mass update." />
+    
+    <!-- Initialisation-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"
+                  description="Initialisation du composant : construction de la requête SOQL." />
+    
+    <!-- Component content -->
+    <!--
+    <div>
+    <p>{!v.recordList.length} records.</p>
+    <p>{!v.fields.length} fields.</p>
+    <p>{!v.sObjectName} object.</p>
+    </div>
+    -->
+    <ui:message title="{!v.message.title}" severity="{!v.message.severity}"
+                closable="false" >
+			    {!v.message.content}
+	</ui:message>
+    
+    <aura:if isTrue="{!v.recordList.length > 0}">
+    <aura:if isTrue="{!v.message.severity != 'confirm'}">
+    <lightning:recordEditForm aura:id="record-edit-form"
+                              recordTypeId="{#v.targetValues.RecordTypeId}"
+                              objectApiName="{!v.sObjectName}"
+                              onsubmit="{!c.handleSubmit}"
+                              onload="{!c.handleLoad}">
+        <lightning:messages/>
+        <aura:iteration items="{!v.fields}" var="eachField"> 
+
+            <lightning:inputField aura:id="{!'field-' + eachField}"
+                                  fieldName="{!eachField}"
+                                  onchange="{!c.handleFieldChange}" />
+        </aura:iteration>
+        
+        <lightning:buttonGroup class="slds-m-top_small slds-align_absolute-center" >
+        <lightning:button
+            label="Cancel"
+            onclick="{!c.cancelOperation}">
+        </lightning:button>
+        <lightning:button
+            type="submit"
+            variant="brand"
+            label="Save">
+        </lightning:button>
+        </lightning:buttonGroup>
+    </lightning:recordEditForm>
+        
+    <aura:set attribute="else">
+        <lightning:buttonGroup class="slds-m-top_small slds-align_absolute-center" >
+        <lightning:button
+            label="Close"
+            onclick="{!c.cancelOperation}">
+        </lightning:button>
+        </lightning:buttonGroup>
+    </aura:set>
+        
+    </aura:if>
+    </aura:if>
+    
+    <c:PEG_SOQL_CMP  aura:id="soqlUtil"/>
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <lightning:overlayLibrary aura:id="overlayLibrary"/>
+	
+</aura:component>

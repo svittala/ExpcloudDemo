@@ -1,0 +1,26 @@
+<!--
+  @File Name          : UAC_headerSplitWithSingleRegion
+  @Description        : Lightning layout template with single main section and split header.
+  @Author             : James Qian (Deloitte)
+  @Group              : UAC_designTemplate
+  @Last Modified By   : James Qian (Deloitte)
+  @Last Modified On   : 08/19/2020
+-->
+<aura:component implements="lightning:recordHomeTemplate" description="Split Header with Single Region">
+    <aura:attribute name="header" type="Aura.Component[]" description="Header region" />
+    <aura:attribute name="splitHeader" type="Aura.Component[]" description="Split Header region" />
+    <aura:attribute name="main" type="Aura.Component[]" description="Main region" />
+    <lightning:layout class="slds-wrap">
+        <lightning:layoutItem size="9" padding="around-small">
+            {!v.header}
+        </lightning:layoutItem>
+        <lightning:layoutItem size="3" flexibility="shrink" padding="around-small">
+            {!v.splitHeader}
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layout class="slds-wrap">
+        <lightning:layoutItem size="12" mediumDeviceSize="12" flexibility="grow" padding="around-small">
+            {!v.main}
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

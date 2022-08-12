@@ -1,0 +1,74 @@
+body {
+    background-size: cover; 
+    background-color: #f5f5f5;   
+    /*background-image: url("/resource/loginBackground"); /*choose image from static resource*/
+}
+
+.center {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-button {
+
+    background-color: #336a90;   
+    color: rgb(255, 255, 255);
+    text-align: center;
+    display: inline-block;
+    padding: 0.5rem;
+    font-size: 20px;
+    font-family: Arial;
+    font-weight: bold;
+}
+
+.main-heading {
+
+    font-size: 14px;
+    color: rgb(14, 7, 7);
+}
+
+.sub-heading {
+
+    font-size: 14px;
+    color: rgb(23, 20, 20);
+}
+
+.input-icon {
+
+    position: absolute;
+    margin: 0.9rem 0.7rem;
+}
+
+.input-element {
+
+    padding: 0.5rem 0rem 0.5rem 2rem;
+    font-size: 14px;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.forgot-password-text {
+
+    color: #CCBFBF;
+    font-size: 14px;
+    text-align: left;
+}
+
+.register-text {
+
+    color: #CCBFBF;
+    font-size: 14px;
+    float: right;
+}
+
+.error {
+
+    text-align: center;
+    word-break: break-word;
+    max-width: 20rem;
+    color: #ff9e9e;
+}

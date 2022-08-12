@@ -1,0 +1,13 @@
+<aura:component controller="SelfRegPassWLessController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+<aura:attribute name="verificationId" type="String" />
+<aura:attribute name="controllerMessage" type="String" />
+<h1>{!v.controllerMessage}</h1>
+<Input EMAIL>
+<lightning:button label="Enter Email for SelfRegistration" onclick="{!c.handleSendEmail}"/><br />
+<Input CODE>
+<lightning:button label="Verify the RegCode for SelfRegistration" onclick="{!c.handleRegVerify}"/><br />
+<Input CODE>
+<lightning:button label="Enter UserId for Login" onclick="{!c.handleLogin}"/><br />
+<Input logincode>
+<lightning:button label="Verify the logincode" onclick="{!c.handleLoginVerify}"/><br />
+</aura:component>	

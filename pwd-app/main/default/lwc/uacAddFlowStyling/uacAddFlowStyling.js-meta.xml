@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Add Styling</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="targetId" label="CSS ID" type="String" role="inputOnly" description="The ID on the page to target."/>
+            <property name="styling" label="CSS" type="String" role="inputOnly" description="The CSS to apply."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

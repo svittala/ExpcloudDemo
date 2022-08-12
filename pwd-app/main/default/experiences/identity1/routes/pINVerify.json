@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "659a2bb7-1e28-47fc-a0ba-26fca585b44f",
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "configurationTags" : [ ],
+  "id" : "4ccc21bc-2c02-4cf8-bd2c-40a529f64432",
+  "label" : "PINVerify",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-pinverify",
+  "type" : "route",
+  "urlPrefix" : "pinverify"
+}

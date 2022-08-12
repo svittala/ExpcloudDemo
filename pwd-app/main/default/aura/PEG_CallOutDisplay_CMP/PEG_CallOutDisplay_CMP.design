@@ -1,0 +1,57 @@
+<design:component label="PEG Callout Display" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="icon"
+                      label="Component Icon" />
+    <design:attribute name="showBorder"
+                      label="Show Border?" />
+    <design:attribute name="showDebug"
+                      label="Show Debug Info?" />
+	
+    <design:attribute name="targetURL"  
+                      label="Web Service URL"
+                      description="Target URL for the callout." />
+    <design:attribute name="httpMethod"
+                      label="HTTP Method" 
+                      description="HTTP method to be used (GET, POST....)." />
+    <design:attribute name="headerParams"
+                      label="Header Parameters" 
+                      description="Header parameters to be provided in the request, as a stringified JSON object." />
+    <design:attribute name="requestBody"
+                      label="Request Body" />
+    <design:attribute name="isFlatten"
+                      label="Flatten results?"
+                      description="To be able to display in the data table fields within JSON sub-structures (e.g. xxx__r.yyy__c related fields)"/>
+
+    <design:attribute name="showObject"
+                      label="Display Fields?"
+                      description="Flag to trigger the display of callout results as individual fields."/>
+    <design:attribute name="fieldsStr"
+                      label="Object Fields to Display"
+                      description="Configuration of the individual fields to display (as a stringified JSON list)." />
+    
+    <design:attribute name="showList"
+                      label="Display List?"
+                      description="Flag to trigger the display of callout results as data-table or data-tree."/>
+    <design:attribute name="listField"
+                      label="List Field Name"
+                      description="When set, indicates which field of the main result JSON object has to be used (otherwise, the result is assumed to be a list)." />
+    <design:attribute name="isTreeView"
+                      label="Display as Tree?"
+                      description="When using subqueries, enables to display results as tree-table instead of standard data-table." />
+    <design:attribute name="treeFields"
+                      label="Sub-hierarchy fields"
+                      description='JSON list with the names of the fields providing access to the sub-hierarchy.' />
+    <design:attribute name="listStr"
+                      label="Table Configuration"
+                      description="Configuration of the result data table, following the format expected by the standard 'lightning:datatable' component." />
+    <design:attribute name="keyField"
+                      label="Row Identifier"
+                      description="Name of the field identifying a table row." />
+
+    
+    <design:attribute name="tableActionStr"
+                      label="Header Actions"/>
+    <design:attribute name="rowActionStr"
+                      label="Row Actions"/>
+</design:component>

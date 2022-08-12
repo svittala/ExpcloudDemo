@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "6e367e56-f5a5-400f-9390-9da1416bc8b5",
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "configurationTags" : [ ],
+  "id" : "3434caef-5276-46af-870d-7e62345f2a14",
+  "label" : "pwless2",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-pwless2",
+  "type" : "route",
+  "urlPrefix" : "pwless2"
+}

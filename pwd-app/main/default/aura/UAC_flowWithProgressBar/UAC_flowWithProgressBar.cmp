@@ -1,0 +1,59 @@
+<!--
+  @File Name         : UAC_flowWithProgressBar.cmp
+  @Description       : Aura component for displaying flow with progress bar navigation.
+  @Group             : UAC_flowWithProgressBar
+  @Author            : Sachet Khanal (Deloitte)
+  @Last Modified By  : Sachet Khanal (Deloitte)
+  @Last Modified On  : 09-09-2020
+  Modifications Log
+  Ver   Date         Author                     Modification
+  1.0   09-08-2020   Sachet Khanal (Deloitte)   Initial Version
+-->
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId">
+  <aura:attribute name="relatedTo" type="String" description="Progress Bar Related To"/>
+  <aura:attribute name="currentSection" type="String" description="Currently selected section on Progress Bar" />
+  <aura:attribute name="clickedSection" type="String" description="Name of section clicked on Progress Bar" />
+  <aura:attribute name="clickedFlowName" type="String" description="API Name of flow clicked on Progress Bar" />
+  <aura:attribute name="flowFinished" type="Boolean" description="Flow finished status" default="true" />
+  <aura:attribute name="showModal" type="Boolean" description="Show confirmation modal?" default="false" />
+
+  <div class="uac-container">
+    <c:uacProgressBar aura:id="progressBar"
+      recordId="{!v.recordId}"
+      relatedTo="{!v.relatedTo}"
+      currentSection="{!v.currentSection}"
+      clickable="true"
+      onsectionclick="{!c.sectionClick}"
+    />
+
+    <div aura:id="flowContainer" />
+  </div>
+
+  <aura:if isTrue="{!v.showModal}">
+    <section role="dialog" tabindex="-1"
+      aria-labelledby="modal-heading-01"
+        aria-modal="true"
+        aria-describedby="modal-content-id-1"
+        class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+             title="Close"
+             onclick="{!c.noClick}">
+            <lightning:icon iconName="utility:close" variant="inverse" size="small" />
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Confirm</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+          Any unsaved data will be lost. Do you want to leave this page?
+        </div>
+        <footer class="slds-modal__footer">
+          <button class="slds-button slds-button_neutral" onclick="{!c.noClick}">No</button>
+          <button class="slds-button slds-button_brand"  onclick="{!c.yesClick}">Yes</button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </aura:if>
+</aura:component>

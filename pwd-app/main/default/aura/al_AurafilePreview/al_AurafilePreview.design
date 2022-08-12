@@ -1,0 +1,6 @@
+<design:component >
+<design:attribute name="fileID" label="Enter the Document ID here eg.0693S000000RS7YQAW"
+    description="Document ID."/>
+<design:attribute name="description" label="Enter Document Label here - eg.Rules of Behavior"
+    description="Document Description"/>
+</design:component>

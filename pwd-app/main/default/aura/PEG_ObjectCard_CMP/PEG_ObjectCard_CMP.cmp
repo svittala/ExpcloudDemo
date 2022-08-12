@@ -1,0 +1,77 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global">
+    
+    <!-- Global Component Configuration -->
+    <aura:attribute name="title"         type="String"   default="Object Summary" 
+                    description="Component card title."/>
+    <aura:attribute name="icon"          type="String"   default="custom:custom3"
+                    description="Component card icon."/>
+    <aura:attribute name="showBorder"    type="Boolean"  default="false"
+                    description="Show border around component card?"/>
+    <aura:attribute name="columns"       type="Integer"  default="2"
+                    description="Number of columns"/>
+    <aura:attribute name="mode"          type="String"   default="view"
+                    description="Card display mode (view, readonly, edit)"/>
+    
+    <!-- Record and fields Configuration -->
+    <aura:attribute name="targetIdField" type="String"   default="{{{recordId}}}"
+                    description="Id field for the target record."/>
+    <aura:attribute name="targetId"      type="String"   
+                    description="Id of the target record."/>
+    <aura:attribute name="targetObjName" type="String"
+                    description="Object Name of the target record."/>
+    <aura:attribute name="fieldStr"      type="String"
+                    default='["Name","OwnerId"]' 
+                    description="List of object fields to display in card." />
+    <aura:attribute name="fieldJson"     type="Object"
+                    description="JSON conversion of fieldStr field." />
+    
+    <!-- Actions configuration -->
+    <aura:attribute name="objActionStr"  type="String"
+                    default='[{"label":"Open",
+                               "icon":"open",
+                               "event":{"name":"e.force:navigateToSObject",
+                                        "params":{"recordId":"{{{Row.Id}}}"}}}
+                             ]'
+                    description="Header actions configuration (if any)." />
+    <aura:attribute name="objActionJson"  type="List"
+                    default='[]'
+                    description="JSON conversion of header actions configuration." />
+    
+    
+    <!-- Component Initialization -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    
+    <!-- Component Display -->
+    <lightning:card title="{!v.title}" iconName="{!v.icon}" 
+                   class="{! if(v.showBorder, 'slds-card_boundary', '')}" >
+        <aura:set attribute="actions">
+            
+            <aura:if isTrue="{!v.objActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.objActionJson}"
+                                   callback="{!c.handleObjAction}" />
+            </aura:if>
+        </aura:set>
+        
+        <div class="slds-card__body slds-card__body_inner">
+      
+        <aura:if isTrue="{!v.targetId.length > 0}">
+        <lightning:recordForm 
+            recordId="{!v.targetId}" 
+            objectApiName="{!v.targetObjName}" 
+            fields="{!v.fieldJson}"
+            columns="{!v.columns}"
+            mode="{!v.mode}"
+            density="comfy"/>
+        </aura:if>
+        
+        </div>
+    </lightning:card>
+    
+</aura:component>

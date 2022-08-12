@@ -1,0 +1,15 @@
+{
+  "componentVariants" : [ {
+    "id" : "2e3fb65a-ed07-43c3-bc88-8d70ef2b6f2f",
+    "propertyOverrides" : {
+      "componentAttributes" : {
+        "tileMenuEditor" : "PortalProgram"
+      }
+    },
+    "targetId" : "a0054b73-9980-4586-8b2c-689f7909b27a",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "App_Launcher_Tile_Menu_1_Component_Properties",
+  "id" : "c57f1537-3f21-4f10-b4ad-1a5e3f6416e3",
+  "type" : "experienceVariation"
+}

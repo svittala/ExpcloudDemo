@@ -1,0 +1,10 @@
+<template>
+    <template if:true={fileId}>
+        <div align="center">
+        <iframe src={pdfurl} style={pdfHeight}></iframe>
+    </div>
+    </template>
+    <template if:false={pdfurl}>
+        <lightning-card>No PDF File ID found. Please specify PDF File ID.</lightning-card>
+    </template>
+</template>

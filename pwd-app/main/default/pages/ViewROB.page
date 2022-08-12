@@ -1,0 +1,20 @@
+<apex:page controller="ViewRulesOfBehavior">
+<apex:stylesheet value="{!URLFOR($Resource.uswds_2_x, '/css/uswds.min.css')}"/>
+
+    <apex:form >
+<apex:pageBlock >
+
+<apex:pageMessages id="Messages"></apex:pageMessages>
+
+<apex:iframe height="500px" width="100%" src="data:application/pdf;base64,{!pdf}"></apex:iframe>
+
+    <br/><br/>
+        <center><div style="align:center;font-weight:bold;font-size:16px;color:green">{!message}</div></center>
+<apex:pageBlockButtons location="bottom">
+<apex:commandButton action="{!save}" value="Acknowledge"/>
+    <apex:commandButton action="{!cancel}" value="Cancel"/>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+    </apex:form>
+
+</apex:page>

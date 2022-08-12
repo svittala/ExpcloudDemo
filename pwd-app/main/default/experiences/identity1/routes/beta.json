@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "a256294c-18f4-4107-bd06-4ccba68184b1",
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "configurationTags" : [ ],
+  "id" : "23769132-a54b-41ad-9ddb-810a690a96f7",
+  "label" : "beta",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-beta",
+  "type" : "route",
+  "urlPrefix" : "beta"
+}

@@ -1,0 +1,24 @@
+.THIS .slds-timeline__media_task:before {
+    z-index: 0;
+}
+.THIS .slds-timeline__media_email:before {
+    z-index: 0;
+}
+.THIS .slds-timeline__media_call:before {
+    z-index: 0;
+}
+.THIS .slds-timeline__media_event:before {
+    z-index: 0;
+}
+.THIS .slds-timeline__icon {
+    z-index: 1;
+    border-bottom-width: 0.25rem;
+    border-top-width:    0.25rem;
+    margin-top:         -0.4rem;
+}
+.THIS .reducedSpacing {
+    padding-bottom: 1rem !important;
+}
+.THIS .alignHorizontal {
+    vertical-align: text-bottom;
+}

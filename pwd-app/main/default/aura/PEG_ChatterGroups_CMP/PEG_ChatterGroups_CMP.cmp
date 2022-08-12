@@ -1,0 +1,120 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component presenting the Chatter Feeds of a set of Chatter Groups (with merge fields based on current record / user)." >  
+<!-- 
+* @author P-E GROS
+* @date   Nov. 2019
+
+Legal Notice
+This code is the property of Salesforce.com and is protected by U.S. and International
+copyright laws. Reproduction, distribution without written permission of Salesforce is
+strictly prohibited. In particular this code has been delivered by Salesforce.com for
+its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+re-used, reproduced or distributed for any other purposes.
+-->
+
+    <!-- Global component configuration -->
+    <aura:attribute name="title"         type="String"  access="global" 
+                    description="Component title (supports custom labels)." />
+    <aura:attribute name="icon"          type="String"  access="global" 
+                    description="Component icon name." />
+    <aura:attribute name="showBorder"    type="Boolean" access="global" 
+                    description="Activates component border." />
+    <aura:attribute name="showPublisher" type="Boolean" access="global" 
+                    description="Display Chatter publisher." />
+    <aura:attribute name="feedDesign"    type="String"  access="global" 
+                    default="BROWSE"
+                    description="Displays overview or full details of each feed." />
+    <aura:attribute name="feedHeight"    type="String"  access="global" 
+                    default=""
+                    description="Height of the feed (empty = no scroll)."/>
+    <aura:attribute name="showDebug"     type="Boolean" access="global" 
+                    description="Display debug info." />
+
+    <aura:attribute name="configStr"     type="String"  access="global" 
+                    description="Component configuration (as a JSON stringified list of individual Chatter Group Names, possibly leveraging 'merge' fields)." />
+
+    <!-- Internal technical attributes -->
+    <aura:attribute name="groupList"     type="List"    access="public" 
+                    description="JSON array of groups available (with Id and Name fields provided)." />
+    <aura:attribute name="selectGroup"   type="Object"  access="public" 
+                    description="ID and Name of the selected group." />
+
+    <!-- Component variant initialisation and change handling -->
+    <aura:handler   name="init"         value="{!this}"
+                    action="{!c.doInit}"
+                    description="Component initialisation (JSON parsing, custom label management...)." />
+
+    
+    <!-- Utilities used -->
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    <c:PEG_SOQL_CMP  aura:id="soqlUtil"/>
+
+
+    <!-- Component Display -->
+    <lightning:card title="{! (v.title.length > 0 ? v.title + ' - ' : '') + v.selectGroup.Name}"
+                    iconName="{#v.icon}"
+                    class="{# if(v.showBorder, 'slds-card_boundary', '')}" >
+
+        <aura:set attribute="actions">
+            <lightning:buttonGroup class="slds-col">
+                <aura:if isTrue="{!v.groupList.length > 1}">
+                    <lightning:buttonMenu   value="{!v.selectGroup}" 
+                                            onselect="{! c.selectChange }"
+                                            menuAlignment="right"
+                                            alternativeText="Group Selector">
+                        <aura:iteration     items="{!v.groupList}" 
+                                            var="groupItem">
+                            <lightning:menuItem value="{!groupItem}"
+                                                label="{!groupItem.Name}" />
+                        </aura:iteration>
+                    </lightning:buttonMenu>
+                </aura:if>
+                <aura:if isTrue="{!v.selectGroup.Id.length > 0}">
+                    <lightning:buttonIcon   iconName="utility:open" 
+                                            alternativeText="Open Group"
+                                            onclick="{! c.openGroup }" />
+                </aura:if>
+            </lightning:buttonGroup>
+        </aura:set>
+
+        <aura:set attribute="footer">
+            <aura:if isTrue="{#v.showDebug}">
+                <dl class="slds-list_horizontal slds-wrap">
+                    <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right"
+                        title="Group Names Label">Group Names:</dt>
+                    <dd class="slds-item_detail slds-truncate slds-text-align_left"
+                        title="Group Names">{!v.configStr}</dd>
+                    <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right"
+                        title="Selected Group ID Label">Selected Group ID:</dt>
+                    <dd class="slds-item_detail slds-truncate slds-text-align_left"
+                        title="Selected Group ID">{!v.selectGroup}</dd>
+                    <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right"
+                        title="Group Number Label">Group Number:</dt>
+                    <dd class="slds-item_detail slds-truncate slds-text-align_left"
+                        title="Group Number">{!v.groupList.length}</dd>
+                </dl>
+            </aura:if>
+        </aura:set>
+
+        <div class="slds-card__body " >
+            <!-- slds-card__body_inner -->
+            <div class="slds-m-around_x-small" aura:id="publisherDiv">
+            </div>
+            <aura:if isTrue="{#v.feedHeight.length > 0}">
+                <ui:scrollerWrapper class="{#v.feedHeight}">
+                    <div aura:id="feedDiv" >
+                    </div>
+                </ui:scrollerWrapper>
+            <aura:set attribute="else">
+                <div aura:id="feedDiv" >
+                </div>
+            </aura:set>
+            </aura:if>
+        </div>
+
+    </lightning:card>
+	
+</aura:component>

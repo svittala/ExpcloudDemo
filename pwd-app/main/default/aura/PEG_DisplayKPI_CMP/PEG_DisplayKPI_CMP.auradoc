@@ -1,0 +1,47 @@
+<aura:documentation>
+    <aura:description>
+    <div class="slds-m-top_large">
+		<h4>Overview</h4>
+		<p>The <code>&lt;c:PEG_DisplayKPI_CMP&gt;</code> component may be used in any record
+		Lightning page and is available directly in the App Builder (or Community Builder).
+		It enables to display a KPI field (number, percent or currency) in a variety of graphical
+        ways and possibly present a message beside via a text field.</p>
+		<p>All of its behaviour is configurable via simple App Builder configuration attributes.</p>
+        <ul>
+            <li>Title: Label of the KPI, which may be dynamically set leveraging custom labels
+            via the <code>$Label.c.CustomLabelName</code> syntax.</li>
+            <li>KPI Field: API name of one of the numeric fields available on object,
+                selectable via drop-down.</li>
+            <li>KPI Format: display format for the KPI field, decimal, currency or percent.</li>
+            <li>Label Field: optional API name of a text field to be displayed next to the KPI value.</li>
+            <li>Display Mode: variety of KPI graphical display options, from a progress ring
+            to a sequence of icons and colours based on the KPI value.</li>
+            <li>Min/Max Values/Thresholds: depending on the display mode selected, may 
+            be the min and max values of the KPI against which the KPI value is evaluated
+                to determine a progress (ring and strength modes) or min / max thresholds
+                triggering a change in icon / colour (other modes).</li>
+            <li>Inverse Colouring: enables to invert the colouring logic. If checked high
+                KPI values are set in red/orange instead of green.</li>
+            <li>Debug: enables to display details about the actual values fetched by / configured
+                on the component.</li>
+        </ul>
+        <p>Notes:</p>
+        <ul>
+        	<li>The component relies on the
+                <a href="/docs/component-library/bundle/lightning:progressRing/documentation">
+        		<code>lightning:progressRing</code></a> standard component for ring display.</li>
+		</ul>
+        <br/>
+	</div>
+
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / Mar. 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

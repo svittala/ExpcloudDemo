@@ -1,0 +1,51 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_Map_CMP&gt;</code> component may be used in any type of Lightning
+        page and is available directly in the App Builder (or Community Builder).
+        It enables to display a google map locating a configurable set of elements, i.e. the current
+        object or a custom set of elements retrieved via a SOQL query.</p>
+    <p>It relies on the standard <code>&lt;lightning:map&gt;</code> to display the different
+        located items.</p>
+    <ul>
+    <li><code>mapMarkersStr</code> enables to set the location of the current object, leveraging
+        merge fields syntax, as available via the custom <code>&lt;c:PEG_Merge_CMP&gt;</code>
+        component.</li>
+    <li><code>locationQuery</code> enables to fetch other elements to locate on the map via a SOQL
+        query, the <code>locationConfigStr</code> providing the template to transform SOQL results
+        into location information for the map component.</li>
+    </ul>
+    <p>As an example, these elements may be configured in the following way:</p>
+<pre>&lt;c:PEG_Map_CMP 
+   mapMarkersStr = '[ { "location": { "City" : "{{{Object.BillingCity}}}",
+                                      "Country" : "{{{Object.BillingCountry}}}" },
+                        "icon" : "custom:custom1",
+                        "title" : "{{{Object.Name}}}",
+                        "description" : "{{{Object.Type}}}" } ]'
+   locationQuery = 'select BillingCity,BillingCountry,Name,Type
+                      from Account
+                     where BillingCity !=null WITH SECURITY_ENFORCED order by Id LIMIT 3'
+   locationConfigStr = '{ "location" : { "City" : { "field" : "BillingCity" },
+                                         "Country" : { "field" : "BillingCountry" } },
+                          "icon" : { "value" : "custom:custom24" },
+                          "title" : { "field" : "Name" },
+                          "description" : { "field" : "Type" } }' /&gt;</pre>
+    <p>For the <code>locationConfigStr</code> attribute, the mapping of the location
+    elements must indicate whether each attribute should be set via a fixed "value"
+    or a "field" extracted from the SOQL query result.</p>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+        
+    </aura:description>
+</aura:documentation>

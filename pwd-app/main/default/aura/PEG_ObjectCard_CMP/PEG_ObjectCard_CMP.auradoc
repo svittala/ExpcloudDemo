@@ -1,0 +1,104 @@
+<aura:documentation>
+	<aura:description>
+        
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_ObjectCard_CMP&gt;</code> component may be used in any type of Lightning
+        page and is available directly in the App Builder (or Community Builder).
+        It enables to display a card containing a configurable set of fields of the current
+        object or any other related object identified by a lookup field.</p>
+    <p>It relies on the standard <code>&lt;lightning:recordForm&gt;</code> Lighting component to
+        fetch and display object data, in either edit, view (with inline edit) or readonly mode.</p>
+    <p>Most of its behaviour is configurable via simple App Builder configuration attributes
+        (title, icon...) and extensible in terms of actions available (both at row and global
+        levels). For each attribute, some additional help is provided to in information popup. 
+    </p>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Display current Object Data</h4>
+    <p>In the most simple use case, the <code>&lt;c:PEG_ObjectCard_CMP&gt;</code> may be used
+        to display some fields of the current object.</p>
+        <ul>
+        <li>the <code>targetIdField</code> attribute should be set to <code>{{{recordId}}}</code>
+            (which will be automatically set to the current record ID),</li>
+        <li>the <code>targetObjName</code> attribute should be set to the current object type
+        ('Account' in the example below),</li>
+        <li>the <code>fieldStr</code> attribute should list the API names of the fields to be displayed.</li>
+        <li>the <code>columns</code> attribute enables to configure the number of fields 
+            displayed per line of the Object card.</li>
+        <li>the <code>mode</code> attribute must be set to indicate whether the card is in edit, view or
+            read-only mode.</li>
+        </ul>
+<pre>&lt;c:PEG_ObjectCard_CMP
+    title='Object Card'
+    icon='standard:account'
+    columns='2'
+    mode='view'
+    targetIdField='{{{recordId}}}'
+    targetObjName='Account'
+    fieldStr='["Name","OwnerId"]'/&gt;</pre>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Display related Object Data</h4>
+    <p>The <code>&lt;c:PEG_ObjectCard_CMP&gt;</code> may also be used to display some fields
+        of another object determined via a context "merge" operation (see <code>&lt;c:PEG_Merge_CMP&gt;</code>
+        component).</p>
+    <p>In such a case, the <code>targetIdField</code> attribute should be configured to 
+        fetch the ID of the target object (and the <code>targetObjName</code> set 
+        accordingly). This is done via a <code>{{{Object.xxxx}}}</code> expression, xxxx
+        being the API name of the lookup field on the current Object.</p>
+<pre>&lt;c:PEG_ObjectCard_CMP
+    title='Related Account'
+    icon='standard:account'
+    columns='2'
+    mode='view'
+    targetIdField='{{{Object.Account__c}}}'
+    targetObjName='Account'
+    fieldStr='["Name","OwnerId"]'/&gt;</pre>
+    <p>Any other supported merge keyword may be used, such as <code>User</code> or <code>Context</code>.
+        This enables to use the <code>&lt;c:PEG_ObjectCard_CMP&gt;</code> component out of a 
+        Lightning record page.</p>
+    <br/>
+    </div>
+      
+    <div class="slds-m-top_large">
+    <h4>Adding Header Actions</h4>
+    <p>The component uses a <code>&lt;c:PEG_ActionGroup_CMP&gt;</code> interaction component
+        to display a group of actions (buttons and menus) within the main card header.
+        This group is displayed between the search widgets (when activated, see corresponding
+        section) and the refresh button.</p>
+    <p>This component may be configured by setting the set of buttons/menus to be displayed,
+        with the Lightning events to be triggered for each of them. All the standard contextual
+        elements are available to customize the event parameters and the component also provides
+        the ID of the target object as input (as the <code>Id</code> attribute of <code>Row</code>
+        context object, see <code>&lt;c:PEG_Merge_CMP&gt;</code> component).</p>
+ <pre>&lt;c:PEG_ObjectCard_CMP
+    title='Related Account'
+    icon='standard:account'
+    columns='2'
+    mode='view'
+    targetIdField='{{{Object.Account__c}}}'
+    targetObjName='Account'
+    fieldStr='["Name","OwnerId"]'
+    objActionStr='[{"label":"Open",
+                    "icon":"open",
+                    "event":{"name":"e.force:navigateToSObject",
+                             "params":{"recordId":"{{{Row.Id}}}"}}} ]' /&gt;</pre>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

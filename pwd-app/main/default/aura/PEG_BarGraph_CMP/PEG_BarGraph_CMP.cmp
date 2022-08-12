@@ -1,0 +1,42 @@
+<aura:component access="global" description="Lightning Component to display a vertical or horizontal bar graph.">
+
+        <!-- Global component configuration -->
+        <aura:attribute name="graphType" type="String" default="bar"
+                description="Type of Chart to display (bar, horizontalBar)." />
+        <aura:attribute name="title" type="String" description="Title of the graph." />
+        <!--
+    <aura:attribute name="height"       type="Integer"  default="50"
+                    description="Height of the card" />
+    <aura:attribute name="width"        type="Integer"  default="100"
+                    description="Width of the card" />
+    -->
+        <!-- Global component configuration (input) -->
+        <aura:attribute name="dimension" type="String" required="true"
+                description="Name of main dimension field (used for horizontal split)." />
+        <aura:attribute name="subDimension" type="String"
+                description="Name of secondary dimension field (used for stacking, optional)." />
+        <aura:attribute name="measure" type="String" required="true"
+                description="Name of the measure field to be displayed." />
+        <aura:attribute name="measure2" type="String"
+                description="Name of the second measure field to be displayed (planed for future use)." />
+        <aura:attribute name="data" type="Object" required="true" description="List of measure and dimension values." />
+        <aura:attribute name="barGraphData" default="" type="String" required="false"
+                description="Summary of bar graph data" />
+
+        <!-- Component initialization -->
+        <ltng:require scripts="{!$Resource.PEG_ChartJs}" afterScriptsLoaded="{!c.initGraph}" />
+
+        <!-- Utility Components -->
+        <c:PEG_JSON_CMP aura:id="jsonUtil" />
+
+        <!-- Component Display -->
+        <div class="chart-container" style="{# 'position: relative; ' + (v.graphType == 'bar' ? 'width:auto; height:auto;' : 'width:auto; height:auto;')}">
+
+        <canvas aura:id="GraphCanvas"   class="slds-align_absolute-center"
+                aria-label="{!v.barGraphData}" role="img"  />
+    <!--
+            height="{!v.height}"       width="{!v.width}"   />
+    -->
+    </div>
+	
+</aura:component>

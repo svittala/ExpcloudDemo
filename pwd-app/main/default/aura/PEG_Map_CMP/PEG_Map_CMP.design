@@ -1,0 +1,37 @@
+<design:component label="PEG Map">
+	<design:attribute name="title"
+                      label="Card Title" />
+    <design:attribute name="icon"
+                      label="Card Icon" />
+    <design:attribute name="showBorder"
+                      label="Show card border?" />
+    
+    
+    <design:attribute name="markersTitle"
+                      label="Markers Title." />
+    <design:attribute name="mapMarkersStr"
+                      label="Main Markers" />
+    <design:attribute name="locationQuery"
+                      label="Query for other Markers" />
+    <design:attribute name="locationConfigStr"
+                      label="Config for others Markers" />
+    
+    <design:attribute name="tableActionStr"
+                      label="Header Actions"/>
+    
+    <design:attribute name="bypassFLS"
+                      label="Bypass FLS?" />
+    <design:attribute name="bypassSharing"
+                      label="Bypass Sharing?" />
+    <design:attribute name="queryType"
+                      label="Query Type"
+                      description="To authorize bypass, a valid PEG_Query__mdt devName should be provided." />
+    
+    <design:attribute name="isStorable"
+                      label="Use Storable Actions?"
+                      description="Use local browser cache on repeated similar queries."/>
+    <design:attribute name="isBackground"
+                      label="Send query in Background?"
+                      description="For long running SOQL queries."/>
+    
+</design:component>

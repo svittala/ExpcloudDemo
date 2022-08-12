@@ -1,0 +1,9 @@
+<design:component label="PEG Message" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="message"
+                      label="Component Message" />
+    <design:attribute name="variant"
+                      label="Variant" 
+                      datasource="base,info,success,warning,error"/>	
+</design:component>

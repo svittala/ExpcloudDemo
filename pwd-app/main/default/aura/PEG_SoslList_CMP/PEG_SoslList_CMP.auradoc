@@ -1,0 +1,101 @@
+<aura:documentation>
+	<aura:description>
+        
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_SoslList_CMP&gt;</code> component may be used in any type of
+        Lightning page and is available directly in the App Builder (or Community Builder).
+        It enables to fetch any kind of data via a single SOSL query and to display them
+        as a list of tiles. It also offers the possibility to display a search input box
+        to let the User define/refine its search.</p>
+        <p>It relies on</p>
+        <ul>
+        <li>the <code>&lt;c:PEG_SOSL_CMP&gt;</code> utility component to fetch data
+        via SOSL</li>
+        <li>the <code>&lt;c:PEG_Merge_CMP&gt;</code> one to customize the SOSL
+        query depending on the current Object or User (and/or the search input).</li>
+        <li>the <code>&lt;c:PEG_CollapsedTile_CMP&gt;</code> to display each result element.</li>
+        </ul>
+    <p>Most of its behaviour is configurable via simple App Builder configuration attributes
+        (title, icon...). 
+    </p>
+    <br/>
+    </div>
+     
+    <div class="slds-m-top_large">
+    <h4>Baseline Usage</h4>
+    <p>In the most simple use case, the <code>&lt;c:PEG_SoslList_CMP&gt;</code> may be used
+        with a simple SOSL query to fetch the data and the configuration of the table displaying
+        the results (see the standard <code>&lt;lightning:datatable&gt;</code> component for
+        more details about this configuration).</p>
+<pre>&lt;c:PEG_SoslList_CMP
+    query='FIND 'TEST' IN ALL FIELDS RETURNING Account(Name,CreatedDate),Lead(Name,Status,CreatedDate)'
+    displayStr='[{"name":"Account","icon":"standard:account","color": "slds-icon-standard-account","isCollapsible": "true","columns": "2",
+                  "display":{"title":"Name",
+                             "content": [{"label":"Name","value":"Name","type":"text"},
+                                         {"label":"Created on","value":"CreatedDate","type":"date"}] } },
+                 {"name":"Lead","icon":"standard:lead","color": "slds-icon-standard-lead","isCollapsible": "true","columns": "2",
+                  "display":{"title":"Name",
+                             "content": [{"label":"Status","value":"Status","type":"text"},
+                                         {"label":"Created on","value":"CreatedDate","type":"date"}] } } ]'
+    size='3'
+    title='TEST Accounts and Leads'
+    icon='standard:search' /&gt;</pre>
+        <b>Notes</b>
+        <ul>
+        <li>The <code>title</code> and <code>icon</code> attributes enable to configure the wrapping card</li>
+        <li>The <code>showBorder</code> attribute may also be used to enforce a visible frame around the card
+            (e.g. when in a subtab).</li>
+        <li>The <code>showCount</code> attribute enables to display, after the title, the actual number of rows
+            fetched.</li>
+        <li>The <code>size</code> attribute enables to set the width of each tile displayed (a number between
+            1 and 12, 12 corresponding to the full width of the containing card).</li>
+        <li>The <code>showQuery</code> attribute is a debug option, enabling to display various parameters
+            (such as the query) in the card footer.</li>
+        <li>The <code>tableDisplay</code> attribute enables to display main tile content as a HTML
+            table instead of a horizontal list, e.g. when displaying the result in a small width zone.</li>
+        <li>The <code>displayStr</code> attribute defines how the tile will be displayed for each type of
+            object returned by the SOSL request. The <code>icon</code> and <code>color</code> enable to 
+            clearly identify the object type by adding an icon and a side color for each tile if necessary
+            (they are optional).</li>
+        </ul>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Search Usage</h4>
+    <p>The <code>&lt;c:PEG_SoslList_CMP&gt;</code> may also be configured to display a search input
+        box, letting the user input keyword to customise the configured SOSL query on demand.</p>
+    <p>In such a case, the string input by the User in this box is provided as parameter
+        to the underlying SOSL query. Leveraging the <code>&lt;c:PEG_Merge_CMP&gt;</code>,
+        this value may be provided in the SOSL query via the <code>{{{Row.value}}}</code>
+        merge token.</p>
+<pre>&lt;c:PEG_SoslList_CMP
+    query='FIND '{{{Row.value}}}' IN ALL FIELDS RETURNING Account(Name,CreatedDate),Lead(Name,Status,CreatedDate)'
+    displayStr='[{"name":"Account","icon":"standard:account","color": "slds-icon-standard-account","isCollapsible": "true","columns": "2",
+                  "display":{"title":"Name",
+                             "content": [{"label":"Name","value":"Name","type":"text"},
+                                         {"label":"Created on","value":"CreatedDate","type":"date"}] } },
+                 {"name":"Lead","icon":"standard:lead","color": "slds-icon-standard-lead","isCollapsible": "true","columns": "2",
+                  "display":{"title":"Name",
+                             "content": [{"label":"Status","value":"Status","type":"text"},
+                                         {"label":"Created on","value":"CreatedDate","type":"date"}] } } ]'
+    size='3'
+    title='Search Accounts and Leads'
+    icon='standard:search' /&gt;</pre> 
+    <p>Both record context and user search may be combined in the SOSL query definition.</p>
+    <pre>query='FIND '{{{Row.value}}} {{{Object.Name}}}' IN ALL FIELDS RETURNING...</pre>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

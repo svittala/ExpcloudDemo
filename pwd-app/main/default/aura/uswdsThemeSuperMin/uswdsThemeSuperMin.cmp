@@ -1,0 +1,157 @@
+<aura:component
+  implements="forceCommunity:themeLayout"
+  extends="forceCommunity:navigationMenuBase"
+  access="global"
+  description="A USWDS Theme Layout"
+>
+  <ltng:require styles="{!$Resource.uswds_2_x+'/css/uswds.min.css'}" />
+  <ltng:require scripts="{!$Resource.uswds_2_x+'/js/uswds-init.min.js'}" />
+  <ltng:require scripts="{!$Resource.uswds_2_x+'/js/uswds.min.js'}" />
+
+  <!-- component drop zones and toggles -->
+  <!-- header image and text options -->
+  <aura:attribute name="logoType" type="String" default="Square" />
+
+  <!-- navBar options -->
+  <aura:attribute name="navBar" type="Aura.Component[]" required="false" />
+  <aura:attribute name="customNavToggle" type="String" default="Off" />
+  <aura:attribute name="customNavBar" type="Aura.Component[]" />
+  <!-- profileMenu options -->
+  <aura:attribute name="displayLogin" type="String" default="Yes" />
+  <aura:attribute name="profileMenu" type="Aura.Component[]" required="false" />
+  <aura:attribute name="customUserProfileToggle" type="String" default="Off" />
+  <aura:attribute name="customUserProfile" type="Aura.Component[]" />
+  <aura:attribute name="themeHeader" type="Aura.Component[]" required="false"/>
+  <!-- shopping cart options-->
+  <aura:attribute
+    name="shoppingCart"
+    type="Aura.Component[]"
+    required="false"
+  />
+  <!-- search options -->
+  <aura:attribute name="search" type="Aura.Component[]" required="false" />
+  <aura:attribute name="customSearchToggle" type="String" default="Off" />
+  <aura:attribute name="customSearch" type="Aura.Component[]" />
+  <!-- body layout -->
+  <aura:attribute name="containerWidth" type="String" default="Standard" />
+  <aura:attribute
+    name="announcementBanner"
+    type="Aura.Component[]"
+    required="false"
+    description="A drop zone to hold a site-wide announcement banner."
+  />
+  <!-- footer email signup -->
+  <aura:attribute name="footerEmailSignUp" type="Aura.Component[]" />
+  <aura:attribute name="footerEmailSignUpToggle" type="String" default="Off" />
+  <!-- main site header attributes -->
+  <aura:attribute name="homePath" type="String" default="/s" />
+  <aura:attribute name="siteName" type="String" default="" />
+  <aura:attribute name="bannerType" type="String" default="Gov English" />
+  <aura:attribute
+    name="secondaryNavigationLinkSetId"
+    type="String"
+    default=""
+  />
+
+  <!--Footer Attributes-->
+  <aura:attribute name="footerNavType" type="String" default="Big" />
+  <aura:attribute
+    name="footerMenuNavigationLinkSetId"
+    type="String"
+    default=""
+  />
+  <aura:attribute
+    name="boilerplateLinkNavigationLinkSetId"
+    type="String"
+    default=""
+  />
+  <aura:attribute
+    name="socialMediaNavigationLinkSetId"
+    type="String"
+    default=""
+  />
+  <aura:attribute name="agencyName" type="String" default="" />
+  <aura:attribute name="agencyURL" type="String" default="" />
+  <aura:attribute name="contactCenterName" type="String" default="" />
+  <aura:attribute name="contactEmail" type="String" default="" />
+  <aura:attribute name="contactPhone" type="String" default="" />
+  <aura:attribute name="contactLink" type="String" default="" />
+  <aura:attribute name="contactLinkText" type="String" default="" />
+  <!-- Identifier -->
+  <aura:attribute name="identifierType" type="string" default="English" />
+  <aura:attribute name="identityDomain" type="string" default="labs.gsa.gov" />
+  <aura:attribute name="agencyName2" type="String" default="" />
+  <aura:attribute name="agencyURL2" type="String" default="" />
+  <aura:attribute name="agencyLogo2" type="String" default="" />
+  <!-- END attributes -->
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+  <a class="usa-skipnav" href="#mainContent">Skip to Main Content</a>
+  <div class="slds-grid">
+    <div class="slds-col slds-size_1-of-1">
+      <!-- US Website Banner -->
+      <c:uswdsUSABannerMin siteName="{!v.siteName}" bannerType="{!v.bannerType}" />
+
+      <!-- Site Header -->
+      <div class="usa-overlay"></div>
+      <header class="usa-header usa-header--extended">
+        <!-- nav menu start -->
+        <nav aria-label="Primary navigation" class="usa-nav">
+          <div class="usa-nav__inner">
+            <button class="usa-nav__close">
+              <img src="{!$Resource.uswds_2_x+'/img/close.svg'}" alt="close" />
+            </button>
+            <!-- section let's you turn on/off the inherent Salesforce navBar zone and replace it
+						with an aura.component[] zone which lets you drop in your own custom styled nav menu -->
+            <aura:if isTrue="{!v.customNavToggle == 'On'}">
+              {!v.customNavBar}
+              <aura:set attribute="else"> {!v.navBar} </aura:set>
+            </aura:if>
+
+            <div class="usa-nav__secondary">
+              <!-- inline style to keep SF User Profile Menu from being squished -->
+              <div style="line-height: normal; margin-bottom: 10px">
+                <div class="grid-row">
+
+
+                </div>
+              </div>
+              <!-- section let's you turn on/off the inherent Salesforce Search zone 
+							and replace it with an aura.component[] zone which lets you drop in your own 
+							custom styled Search box -->
+              <aura:if isTrue="{!v.customSearchToggle == 'On'}">
+                {!v.customSearch}
+                <aura:set attribute="else"> {!v.search} </aura:set>
+              </aura:if>
+              <!-- custom margin-top since USWDS template places secondary-links above Search
+							in this case, we are putting it below -->
+              <ul class="usa-nav__secondary-links" style="margin-top: 0.25rem">
+                <c:uswdsNavSecondaryLinks
+                  navigationLinkSetId="{!v.secondaryNavigationLinkSetId}"
+                />
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+    </div>
+  </div>
+
+  <!-- main body -->
+  <div aura:id="mainContent" id="mainContent" class="">
+    <div>{!v.body}</div>
+  </div>
+
+
+  <c:uswdsIdentifier
+    identifierType="{!v.identifierType}"
+    navigationLinkSetId="{!v.boilerplateLinkNavigationLinkSetId}"
+    agencyName="{!v.agencyName}"
+    agencyURL="{!v.agencyURL}"
+    identityDomain="{!v.identityDomain}"
+    agencyName2="{!v.agencyName2}"
+    agencyURL2="{!v.agencyURL2}"
+    agencyLogo2="{!v.agencyLogo2}"
+  />
+
+</aura:component>

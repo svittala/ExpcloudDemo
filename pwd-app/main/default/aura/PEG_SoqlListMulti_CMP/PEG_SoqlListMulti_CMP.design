@@ -1,0 +1,52 @@
+<design:component label="PEG Custom SOQL List Selector" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="icon"
+                      label="Component Icon" />
+    <design:attribute name="showBorder"
+                      label="Show Border?" />
+    
+    <design:attribute name="showCount"
+                      label="Show row count" />
+    <design:attribute name="tableHeight"
+                      label="Table height" />
+    
+    <design:attribute name="showQuery"
+                      label="Display SOQL (for debug)?" />
+    <design:attribute name="isFlatten"
+                      label="Flatten results?"
+                      description="To be able to display in the data table fields within JSON sub-structures (e.g. xxx__r.yyy__c related fields)"/>
+
+    <design:attribute name="showSearch"
+                      label="Show filter?"
+                      description="Displays a utility to locally filter the results displayed." />
+
+    <design:attribute name="maxRowSelection"   
+                      label="Max selection"
+                      description="Max number of rows selected (0 means no selection checkbox display)."/>
+    
+    <design:attribute name="soqlListStr"
+                      label="Lists Configuration"
+                      description="JSON configuration of the set of SOQL Lists" />
+    
+    <design:attribute name="bypassFLS"
+                      label="Bypass FLS?" />
+    <design:attribute name="bypassSharing"
+                      label="Bypass Sharing?" />
+    <design:attribute name="queryType"
+                      label="Query Type"
+                      description="To authorize bypass, a valid PEG_Query__mdt devName should be provided." />
+
+    <design:attribute name="isStorable"
+                      label="Use Storable Actions?"
+                      description="Use local browser cache on repeated similar queries."/>
+    <design:attribute name="isBackground"
+                      label="Send query in Background?"
+                      description="For long running SOQL queries."/>
+
+    <design:attribute name="tableActionStr"
+                      label="Card header Actions" />
+    <design:attribute name="rowActions"
+                      label="Row Actions" />
+	
+</design:component>

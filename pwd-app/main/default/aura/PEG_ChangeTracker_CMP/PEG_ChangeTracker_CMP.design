@@ -1,0 +1,10 @@
+<design:component label="PEG Change Tracker">
+	<design:attribute name="trackedFieldset"
+                      label="Tracked Fieldset"
+                      description="Name of the FieldSet containing the fields to be tracked."
+                      datasource="apex://PEG_FieldSetList_CTL" />
+
+    <design:attribute name="actionName"
+                      label="Handling Action"
+                      description="Name of the Action handler class handling the change."/>
+</design:component>

@@ -1,0 +1,47 @@
+{
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "id" : "a256294c-18f4-4107-bd06-4ccba68184b1",
+  "label" : "beta",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "richTextValue" : "<p><b style=\"font-size: 20px;\">This site is in Beta</b></p>"
+      },
+      "componentName" : "forceCommunity:richTextInline",
+      "id" : "195518c6-d1bc-4ef1-a9e6-fa591172be55",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "1ac63897-7038-4866-9f34-139088df6dd8",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "id" : "2328ea21-f651-4fd0-b2c8-ee01e0a4a086",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "096fbd7b-0f1a-4abb-857d-b2f50633865c",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "beta"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "23e2a365-a3cb-4880-ba9e-ae23b466ccee",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "a4ea9006-6809-4037-8710-35870914c20b",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-beta"
+}

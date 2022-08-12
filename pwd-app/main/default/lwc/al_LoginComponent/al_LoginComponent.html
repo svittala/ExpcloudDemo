@@ -1,0 +1,56 @@
+<template>
+  <article class="slds-card">
+   <div align=CENTER>
+    <button class="login-button slds-button"  type="submit" style="background-color:#3f83cc;padding:0.5rem;width:300px" onclick={handleDiscovery}> Non-HHS User    
+       <!--a style="color:white;textsyle:bold;font-weight:bold;font-size:20px" href="https://idp.int.identitysandbox.gov/">Non-HHS User </a-->
+    </button>    
+    </div>
+    <br/>
+    <div align=CENTER >
+    <button class="slds-button slds-button_inverse " style="text-color:white;background-color:orange;padding:0.5rem;width:300px">
+       <a href="https://ucpath-hhs--ssodev.my.salesforce.com/services/auth/sso/HHS_Users" style="color:white;font-weight:bold;font-size:20px">HHS User </a>
+    </button>
+    </div>
+    <br/>
+    <!--div align=CENTER >
+         <button type="submit" class="login-button slds-button" onclick={handleDiscovery}>Discovery</button>
+    </div!-->
+   <br/>  
+    <div align=CENTER >
+    <div  style="align:center;width:250px" >
+    This is a U.S. government service. Your use indicates your consent to monitoring, recording, and no expectation of privacy. Misuse is subject to criminal and civil penalties. 
+    <br/><a href="/identity/s/terms-of-service" >Read more details.</a>
+    </div>
+    </div>
+  </article>
+  <template if:true={isDisovery}>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+          <header class="slds-media slds-media_center slds-has-flexi-truncate">
+            <div class="slds-media__body">
+            </div>
+          </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <div class=slds-col> 
+                 <template if:true={errorCheck}>
+                    <div class="error slds-var-p-around_x-small slds-var-p-top_small" role="alert">
+                        <span>{errorMessage}</span>
+                    </div>
+                </template>
+            </div>
+            <div class="slds-col slds-var-p-top_small">               
+                <div class="slds-form-element">
+                    <span> Please enter your email address here</span>
+                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                        <input type="email" data-id="inputEmail" placeholder="Email" class="slds-input input-element" onchange={handleEmailChange} required/>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-var-p-top_small" align=CENTER>
+                <button type="submit" class="login-button slds-button" onclick={handleEmail}>Login</button>
+            </div>
+        </div>
+      </article>
+      </template>
+</template>

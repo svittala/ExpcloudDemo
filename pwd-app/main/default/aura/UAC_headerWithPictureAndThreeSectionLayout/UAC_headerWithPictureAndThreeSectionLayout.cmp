@@ -1,0 +1,42 @@
+<!--
+  @File Name          : UAC_headerWithPictureAndThreeSectionLayout.cmp
+  @Description        : Lightning layout template for Record page. Includes header component
+                        with a photo display area, section below the Header and three sections of main content.
+  @Author             : Anupreeta Chakraborty (Deloitte)
+  @Group              : UAC_designTemplate
+  @Last Modified By   : Anupreeta Chakraborty (Deloitte)
+  @Last Modified On   : 7/17/2020, 3:46:14 PM
+  @Modification Log   :
+  Ver       Date            Author      		    Modification
+  1.0    7/17/2020   Anupreeta Chakraborty (Deloitte)     Initial Version
+-->
+<aura:component implements="lightning:recordHomeTemplate" description="Header with Profile Picture, subheader and three regions">
+    <aura:attribute name="photo" type="Aura.Component[]" description="Photo region" />
+    <aura:attribute name="header" type="Aura.Component[]" description="Header region" />
+	<aura:attribute name="subheader" type="Aura.Component[]" description="Subheader region" />
+    <aura:attribute name="mainRegion1" type="Aura.Component[]" description="Main region 1" />
+    <aura:attribute name="mainRegion2" type="Aura.Component[]" description="Main region 2" />
+    <aura:attribute name="mainRegion3" type="Aura.Component[]" description="Main region 3" />
+    
+    <lightning:layout class="slds-wrap">
+        <lightning:layoutItem flexibility="no-grow" padding="around-small" class="slds-align_absolute-center">
+            {!v.photo}
+        </lightning:layoutItem>
+        <lightning:layoutItem flexibility="grow" padding="around-small">
+            {!v.header}
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layout class="slds-wrap">
+        <lightning:layoutItem size="12" mediumDeviceSize="3" flexibility="grow" padding="around-small">
+           {!v.mainRegion1}
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" mediumDeviceSize="9" flexibility="grow" padding="around-small">
+            {!v.mainRegion2}
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layout class="slds-wrap">
+        <lightning:layoutItem flexibility="grow" padding="around-small">
+            {!v.subheader}
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

@@ -1,0 +1,27 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_FoldableSections_TPL&gt;</code> component is a Lightning template
+        usable to create any type of Lightning page in the App Builder.
+        It provides 3 vertical zones in a 25%-50%-25% horizontal repartition, the lateral two
+        zones being foldable.</p>
+    <p>Leveraging the <code>&lt;c:PEG_Context_CMP&gt;</code> component, there is a possibility
+        to manage default alues for the fold/unfold state of each foldable zone. The context
+        should simply contain a <code>template</code> attribute set to a JSON object with two
+        boolean state attributes.</p>
+<pre>let context = { "template":{"isLeftOpen":true,"isRightOpen":false} };</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

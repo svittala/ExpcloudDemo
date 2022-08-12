@@ -1,12 +1,12 @@
 {
   "packageDirectories": [
     {
-      "path": "force-app",
+      "path": "pwd-app",
       "default": true
     }
   ],
   "name": "ExpCloudDemo",
   "namespace": "",
   "sfdcLoginUrl": "http://uacpath--sprintqa.my.salesforce.com",
-  "sourceApiVersion": "54.0"
+  "sourceApiVersion": "55.0"
 }

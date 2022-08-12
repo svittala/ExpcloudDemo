@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "8ca1f253-3fb7-4866-bb68-013a86d93ed9",
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "configurationTags" : [ ],
+  "id" : "ca673b5c-7143-4007-95d0-07e9a958524f",
+  "label" : "Rules of Behavior",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-r-o-b",
+  "type" : "route",
+  "urlPrefix" : "ROB"
+}

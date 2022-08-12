@@ -1,0 +1,18 @@
+<aura:component implements="lightning:availableForFlowScreens, forceCommunity:availableForAllPageTypes" controller="LightningMFILoginFormController">
+    <aura:attribute name="email" type="String" default="Youre@Email.com"/>
+    <aura:attribute name="submitButtonLabel" type="String" default="Login"/>
+    <aura:attribute name="starturl" type="String" default="/"/>
+    <aura:attribute name="op_url" type="String" default="" description="login url after user is created. "/>
+    <aura:attribute name="errorstring" type="String"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <div>
+        <ui:inputText value="" aura:id="email" placeholder="{!v.email}"/>
+    </div>
+    <div>
+        <p>Error: {!v.errorstring}</p>
+    </div>
+    <div >
+        <ui:button aura:id="submitButton" label="{!v.submitButtonLabel}" press="{!c.handleLogin}" class="sfdc_button"/>
+    </div>
+</aura:component>

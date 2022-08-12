@@ -1,0 +1,73 @@
+<aura:component
+  extends="forceCommunity:navigationMenuBase"
+  implements="forceCommunity:availableForAllPageTypes"
+  access="global"
+>
+  <ltng:require styles="{!$Resource.uswds_2_x+'/css/uswds.min.css'}" />
+  <ltng:require scripts="{!$Resource.uswds_2_x+'/js/uswds.min.js'}" />
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <aura:attribute name="identifierType" type="string" default="English" />
+  <aura:attribute name="identifierContent" type="Map" />
+  <aura:attribute
+    name="navigationLinkSetId"
+    type="String"
+    default="boilerplate"
+    description="Accepts navigationLinkSetId or Developer Name of the corresponding Navigation Menu. This component expects a single-tiered menu, no sub-menu items."
+  />
+  <aura:attribute
+    name="startNumber"
+    type="Integer"
+    default="1"
+    description="Start number for the navigation menu. Default = 1 which skips the first entry, Home. Changing to 0 will include a link to Home in the navigation menu output."
+  />
+  <aura:attribute name="identityDomain" type="String" default="" />
+  <aura:attribute name="agencyName" type="String" default="" />
+  <aura:attribute name="agencyURL" type="String" default="" />
+  <aura:attribute name="agencyName2" type="String" default="" />
+  <aura:attribute name="agencyURL2" type="String" default="" />
+  <aura:attribute name="agencyLogo2" type="String" default="" />
+  <aura:attribute name="agencyLogoReference2" type="String" default="" />
+
+  <div class="usa-identifier" style="background-color:#264A64">
+    <nav
+      class="usa-identifier__section usa-identifier__section--required-links"
+      aria-label="{! v.identifierContent.requiredLinksAria }"
+    >
+      <div class="usa-identifier__container">
+        <!-- insert loop here -->
+        <ul onclick="{!c.onClick}" class="usa-identifier__required-links-list">
+          <aura:iteration
+            items="{!v.menuItems}"
+            var="item"
+            start="{! v.startNumber }"
+          >
+            <li class="usa-identifier__required-links-item">
+              <a
+                data-menu-item-id="{!item.id}"
+                class="usa-identifier__required-link usa-link"
+                >{!item.label}</a
+              >
+            </li>
+          </aura:iteration>
+        </ul>
+      </div>
+    </nav>
+    <section
+      class="usa-identifier__section usa-identifier__section--usagov" style="background-color:#264A64"
+      aria-label="{! v.identifierContent.usaGovAria }"
+    >
+      <div class="usa-identifier__container" height="50px"    >
+
+        <img
+         
+        src="{!$Resource.SSOImages2+'/sso_images/acf_main_logo_white.png'}"
+        alt="ACF ORR Logo"
+      />
+      <div class="usa-identifier__container" >
+      U.S. Department of Health and Human Services<br/>330 C Street, S.W., Washington, D.C. 20201<br/>
+    
+    </div>
+      </div>
+    </section>
+  </div>
+</aura:component>

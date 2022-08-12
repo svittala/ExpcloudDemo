@@ -1,0 +1,6 @@
+<aura:documentation>
+	<aura:description>Documentation</aura:description>
+	<aura:example name="MFI LoginForm" ref="exampleComponentName" label="Login Form Data Collector">
+		Example Description
+	</aura:example>
+</aura:documentation>

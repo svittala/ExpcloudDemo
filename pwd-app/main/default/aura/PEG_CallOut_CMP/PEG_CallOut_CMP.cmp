@@ -1,0 +1,25 @@
+<aura:component controller="PEG_CallOut_CTL"
+                description="Utility Component enabling to execute a Callout to a remote Web Service
+                             and fetch the result in an asynchronous manner.">
+    
+    <!-- Methode pour executer une requête -->
+    <aura:method name="runCallOut"
+                 access="global"
+                 description="Method to trigger a Web Service request and fetch its result.">
+        
+        <aura:attribute name="targetURL"   type="String" 
+                        description="Target URL for the callout." />
+        <aura:attribute name="httpMethod" type="String" 
+                        description="HTTP method to be used (GET, POST....)." />
+        <aura:attribute name="headerParams" type="String" 
+                        description="Header parameters to be provided in the request, as a stringified JSON object." />
+        <aura:attribute name="requestBody" type="String"
+                        description="Request body parameters, usually a stringified JSON Object." />
+        <aura:attribute name="callback"      type="Function"
+                        description="Function called when receiving (asynchronously) the response 
+                                     to the request. Two alternative parameters may be provided,
+                                     either the callout result (in String format) or an error structure."/>
+        
+    </aura:method>
+    
+</aura:component>

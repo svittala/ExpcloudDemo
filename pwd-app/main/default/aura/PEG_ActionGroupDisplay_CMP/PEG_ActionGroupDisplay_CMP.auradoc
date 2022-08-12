@@ -1,0 +1,78 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>    
+    <p>The <code>&lt;c:PEG_ActionGroupDisplay_CMP&gt;</code> component may be used in any type
+        of Lightning page and is available directly in the App Builder (or Community Builder).
+        It enables to display a custom group of action buttons and/or menus to trigger any
+        kind of Lightning events (with parameters).</p>
+    <p>Compared to standard Quick Actions, it enables to take into account the current
+        object/user context to conditionnaly display a set of actions (leveraging the 
+        Lightning conditional display features). Object status values or User custom
+        permissions may indeed be used to display one group of actions or another one
+        (there is no unitary display control per action within a group).</p>
+    <p>It relies on the <code>&lt;c:PEG_Merge_CMP&gt;</code> component to provide contextual
+        data as parameters to the events triggered, and on the <code>&lt;c:PEG_ActionGroup_CMP&gt;</code>
+        to actually display the group of actions.</p>
+    <p>It provides different attributes to customise the way the action group is displayed
+        within the Lightning page.</p>
+    <ul>
+    <li><code>showCard</code> enables, when set to true, to display the action group
+        within a standard <code>lightning:card</code>. Otherwise, only a standard SLDS
+        box div is used as a container.</li>
+    <li><code>title</code> and <code>icon</code> enable to customise these elements for
+        the containing card (if applicable).</li>
+    <li><code>showBorder</code> enables to force a surrounding frame around the action 
+        group container.</li>
+    <li><code>showInline</code> enables to display the action group within the header of 
+        the containing card (if applicable).</li>
+    <li><code>alignClass</code> enables to modify the alignment of the action group within
+        the container (if not set in the card header). By default, it is set to 
+        "slds-grid_align-center" but it may be set to "slds-grid_align-end" to push on 
+        the right or "slds-grid_align-start" to push it on the left.</li>
+    </ul>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Example</h4>    
+    <p>The <code>actionListStr</code> attribute contains the main configuration of
+        the component and should contain a JSON list describing the actions to be 
+        displayed and the events to be triggered.</p>
+    <p>The following example illustrates a wide range of possibilities, leveraging
+        colours, icons, buttons, menus and context merge possibilities.</p>
+<pre>[  
+ { "label" : "Message", "icon" : "activity", "variant" : "brand",
+   "event" : { "name" : "e.force:showToast",
+               "params" : { "title" : "Success!",
+                            "message" : "The record ID is {{{recordId}}} and User ID is {{{User.Id}}}" } } },
+ { "label" : "Error", "variant" : "neutral",
+   "event" : { "name" : "e.force:showToast",
+               "params" : { "type":"error", "title":"Success!",
+                            "message" : "The User is {{{User.Name}}} in Department {{{User.Department}}}" } } },
+ { "label" : "Menu", "type" : "menu",
+   "items" : [
+     { "label" : "New Task", "icon" : "activity",
+       "event" : { "name" : "e.force:createRecord",
+                   "params" : { "entityApiName":"Task",
+                                "defaultFieldValues": { "WhatId" : "{{{recordId}}}",
+                                                        "Description" : "Hello World" } } } },
+     { "label" : "Edit",
+       "event":{ "name" : "e.force:editRecord",
+                 "params" : { "recordId" : "{{{recordId}}}" } } } ] }
+]</pre>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+        
+    </aura:description>
+</aura:documentation>

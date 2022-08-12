@@ -1,0 +1,2 @@
+<apex:page standardController="User" action="{!if($Profile.Name='System Administrator',URLFOR('/'&$CurrentPage.parameters.id&'/e', $CurrentPage.parameters.id, [retURL=URLFOR('/'&$CurrentPage.parameters.id&'?noredirect=1&isUserEntityOverride=1')], true), URLFOR('/'&$CurrentPage.parameters.id&'?noredirect=1&isUserEntityOverride=1', $CurrentPage.parameters.id, null, true))}" >
+</apex:page>

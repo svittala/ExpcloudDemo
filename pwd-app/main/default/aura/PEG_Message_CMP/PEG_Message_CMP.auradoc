@@ -1,0 +1,22 @@
+<aura:documentation>
+	<aura:description>
+        
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_Message_CMP&gt;</code> component may be used in any type of Lightning
+        page and is available directly in the App Builder (or Community Builder).
+        It enables to display different types of base messages and leverage the Custom Labels
+        to get them dynamically translated according to the User language.</p>
+    <p>It provides 2 levels for message display ('title' for headline vs 'message' for details)
+        and offers various variants (info, error....) to match the type of information.</p>
+    <p>All of its behaviour is configurable via simple App Builder configuration attributes.</p>
+    <pre>&lt;c:PEG_Component_CMP
+    title="Static text"
+    message="$Label.c.CustomLabelName"
+    variant="info" /&gt;</pre> 
+    <p>Custom labels may be used in both title and message attributes.</p>
+    <br/>
+    </div>
+    
+    </aura:description>
+</aura:documentation>

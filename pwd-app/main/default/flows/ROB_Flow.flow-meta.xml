@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <assignments>
+        <name>set_user_record_values</name>
+        <label>set user record values</label>
+        <locationX>50</locationX>
+        <locationY>398</locationY>
+        <assignmentItems>
+            <assignToReference>usertoupdate.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>usertoupdate.UAC_loginAcknowledgment__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>usertoupdate.UAC_loginAcknowledgmentTimestamp__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>do_update</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>IsAccepted</name>
+        <label>IsAccepted</label>
+        <locationX>182</locationX>
+        <locationY>278</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>welcome</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not accepted</defaultConnectorLabel>
+        <rules>
+            <name>Accepted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>AcceptTerms</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>set_user_record_values</targetReference>
+            </connector>
+            <label>Accepted</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>ROB Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <isAdditionalPermissionRequiredToRun>true</isAdditionalPermissionRequiredToRun>
+    <label>ROB Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordUpdates>
+        <description>update the record</description>
+        <name>do_update</name>
+        <label>do update</label>
+        <locationX>50</locationX>
+        <locationY>518</locationY>
+        <inputReference>usertoupdate</inputReference>
+    </recordUpdates>
+    <runInMode>DefaultMode</runInMode>
+    <screens>
+        <name>welcome</name>
+        <label>Welcome</label>
+        <locationX>182</locationX>
+        <locationY>158</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>IsAccepted</targetReference>
+        </connector>
+        <fields>
+            <name>Title</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 18px; font-family: &amp;quot;Courier New&amp;quot;; color: rgb(0, 0, 0);&quot;&gt;ACF ORR Applauncher&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>WelcomeText</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;ACF Rules of Behavior for Privileged User Accounts&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Text1</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;SIGNATURE PAGE&lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;I have read the ACF Rules of Behavior for Privileged User Accounts and understand and agree to comply with its provisions. &lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;I understand that violations of the ACF Rules of Behavior for Privileged User Accounts may lead to disciplinary action and that these actions may include termination of employment, removal or disbarment from work on federal contracts or projects, revocation of access to federal information, information systems, and facilities, criminal penalties, and imprisonment. &lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: left;&quot;&gt;I also understand that violation of certain laws, such as the Privacy Act of 1974, copyright law, and 18 USC 2071, which the ACF Rules of Behavior for Privileged User Accounts draws upon, may result in monetary fines and criminal charges that may result in imprisonment.&amp;nbsp;&amp;nbsp;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>AcceptTerms</name>
+            <dataType>Boolean</dataType>
+            <fieldText>&lt;SPAN ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Courier New&quot; STYLE=&quot;font-size:14px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;Accept&lt;/FONT&gt;&lt;/SPAN&gt;</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>welcome</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <description>user record to update</description>
+        <name>usertoupdate</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>User</objectType>
+    </variables>
+</Flow>

@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "c274de48-5127-4579-be51-09cc6f5a5bf5",
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "configurationTags" : [ ],
+  "id" : "15bd3ec8-688c-4162-90cf-9ba6058125da",
+  "label" : "ChallengeVerify",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-challengeverify",
+  "type" : "route",
+  "urlPrefix" : "challengeverify"
+}

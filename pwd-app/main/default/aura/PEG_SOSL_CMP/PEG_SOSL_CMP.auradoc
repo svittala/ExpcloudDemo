@@ -1,0 +1,46 @@
+<aura:documentation>
+    <aura:description>
+	<div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_SOSL_CMP&gt;</code> component is a pure utility Lightning component.
+        It provides one method to Lightning components to execute operations on the Salesforce
+        database: <code>runQuery</code> for SOSL queries.</p>
+    <p>In order to call these methods, the requesting Lightning component just has to instanciate
+        the <code>&lt;c:PEG_SOSL_CMP&gt;</code> within its body and give it a unique
+        <code>aura:id</code> to be able to find it easily to call its methods.</p>
+<pre>&lt;c:PEG_SOSL_CMP  aura:id="soslUtil"/&gt;</pre>
+    <br/>
+    </div>
+    
+    <div class="slds-m-top_large">
+    <h4>Executing SOSL queries</h4>
+    <p>In order to trigger a SOSL query, just call the <code>runQuery</code> method on the 
+        <code>&lt;c:PEG_SOSL_CMP&gt;</code> component, providing the SOSL query to execute,
+        the two boolean flags (controlling respectively the caching use and the background mode),
+        and a callback method to process the results (with two JSON object parameters containing
+        respectively the result of the query or its error).</p>
+<pre>component.find('soslUtil').runQuery(
+     "FIND 'test' IN ALL FIELDS RETURNING Account (Name)",
+     false, false,
+     function(queryResult,queryError) {
+          if (queryResult) {
+              // process OK (in queryResult object)
+              ...
+          } else {
+              // process KO (in queryError object)
+              ...
+          }});</pre>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description>
+</aura:documentation>

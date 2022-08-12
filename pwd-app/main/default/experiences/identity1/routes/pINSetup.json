@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "20b2f127-e620-4ff4-8260-b6ff040bbc85",
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "configurationTags" : [ ],
+  "id" : "b9da2938-e12c-4dc9-bb01-f60df329252b",
+  "label" : "PINSetup",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-pinsetup",
+  "type" : "route",
+  "urlPrefix" : "pinsetup"
+}

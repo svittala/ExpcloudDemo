@@ -1,0 +1,35 @@
+<design:component label="PEG To-Do List" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="icon"
+                      label="Component Icon" />
+    <design:attribute name="showBorder"
+                      label="Show Border?" />
+    <design:attribute name="showQuery"
+                      label="Debug?" />
+    
+    <design:attribute name="queryListStr"
+                      label="Queries configuration" />
+    <design:attribute name="tableDisplay"
+                      label="Display content in table mode?"
+                      description="Display content as HTML table or as horizontal list."/>
+    
+    <design:attribute name="bypassFLS"
+                      label="Bypass FLS?" />
+    <design:attribute name="bypassSharing"
+                      label="Bypass Sharing?" />
+    <design:attribute name="queryType"
+                      label="Query Type"
+                      description="To authorize bypass, a valid PEG_Query__mdt devName should be provided." />
+
+    <design:attribute name="isStorable"
+                      label="Use Storable Actions?"
+                      description="Use local browser cache on repeated similar queries."/>
+    <design:attribute name="isBackground"
+                      label="Send query in Background?"
+                      description="For long running SOQL queries."/>
+	
+    <design:attribute name="tableActionStr"
+                      label="Header Actions"/>
+    
+</design:component>

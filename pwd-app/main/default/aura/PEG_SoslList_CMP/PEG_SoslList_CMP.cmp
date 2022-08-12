@@ -1,0 +1,237 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Component able to present tiles in a card with data fetched via a SOSL query (with merge fields based on current record / user)." >
+    
+    <!-- Global Component Parameters -->
+    <aura:attribute name="title"        type="String"  default="List Example"
+                    description="Component card title."/>
+    <aura:attribute name="icon"         type="String"  default="standard:picklist_type"
+                    description="Component card icon."/>
+    <aura:attribute name="showBorder"   type="Boolean" default="false"
+                    description="Show border around component card?"/>
+    <aura:attribute name="size"         type="Integer" default="4"
+                    description="Size of each individual result card, from 1 (1/12 of width) to 12 (full width)."/>
+    <aura:attribute name="showCount"    type="Boolean" default="true"
+                    description="Show row count in title?"/>
+    <aura:attribute name="showQuery"    type="Boolean" default="false"
+                    description="Show SOSL query (for debug)?"/>
+
+
+    
+    <!-- Data Management Parameters -->
+    <aura:attribute name="query"             type="String"
+                    default="FIND '{{{Row.value}}}' IN ALL FIELDS RETURNING Account(Name,CreatedDate),Opportunity(Name,StageName,CreatedDate),Lead(Name,Status,CreatedDate)"
+                    description="SOSL query to be used with merge fields in {{{xxx.xxx}}} format."/>
+   
+    <aura:attribute name="displayStr" type="String"
+                    default='[{"name":"Account","icon":"standard:account","color": "slds-icon-standard-account","isCollapsible": "true","columns": "2",
+                               "display":{"title":"Name",
+                                          "content": [{"label":"Name","value":"Name","type":"text"},
+                                                      {"label":"Created on","value":"CreatedDate","type":"date"}] } },
+                              {"name":"Opportunity","icon":"standard:opportunity","color": "slds-icon-standard-opportunity","isCollapsible": "true","columns": "2",
+                               "display":{"title":"Name",
+                                          "content": [{"label":"Status","value":"Status","type":"text"},
+                                                      {"label":"Created on","value":"CreatedDate","type":"date"}] } },
+                              {"name":"Lead","icon":"standard:lead","color": "slds-icon-standard-lead","isCollapsible": "true","columns": "2",
+                               "display":{"title":"Name",
+                                          "content": [{"label":"Status","value":"Status","type":"text"},
+                                                      {"label":"Created on","value":"CreatedDate","type":"date"}] } }
+                             ]'
+                    description="Output configuration as String containing a JSON list."/>
+    <aura:attribute name="displayJson" type="Object"
+                    description="JSON parsing of displayStr attribute."/>
+    <aura:attribute name="tableDisplay" type="boolean" default="false" 
+                    description="Display content in table mode?"/>
+    
+    <!-- FIND '%%' IN ALL FIELDS RETURNING Account (Name),Contact(Name),Knowledge__kav(Title,Summary),Case(Subject) -->
+    
+    <aura:attribute name="isStorable"        type="Boolean" default="false" 
+                    description="Query action storable mode activation." />
+    <aura:attribute name="isBackground"      type="Boolean" default="false" 
+                    description="Query action background mode activation." />
+    
+    <!-- Result holding -->
+    <aura:attribute name="results" type="Object"
+                    description="Results of the SOSL query." />
+    <aura:attribute name="resultsCount" type="Integer"
+                    description="Number of results (aggregated)." />
+    <aura:attribute name="resultsOrig" type="Object"
+                    description="Original list of results (before filtering)." />
+    
+    <!-- Search Handling -->
+    <aura:attribute name="showSearch"        type="Boolean" default="true"
+                    description="Displays a search utility in the header."/>
+    <aura:attribute name="searchString"      type="String"   default=""
+                    description="Search input string."/>
+    
+    <!-- Result Filtering -->
+    <aura:attribute name="displayScope" type="string"  default="All" 
+                    description="Scope of the display ('All' or object name)."/>
+    
+    <!-- Expand / Collapse -->
+    <aura:attribute name="isCollapsible"  type="Boolean" default="false"
+                    description="Card content collapsible?." />
+    <aura:attribute name="isExpanded"  type="Boolean" default="true"
+                    description="Card content expand status." />
+    <aura:attribute name="isAscending"    type="Boolean"   default="true" 
+                    description="Flag to track that sorting (on title) is in ascending mode." />
+
+    <!-- Actions configuration -->
+    <aura:attribute name="tableActionStr"  type="String"
+                    default='
+[ { "label":"", "icon":"refresh",
+    "event": { "name":"e.force:refreshView",
+               "params": { } } } ]'
+                    description="Header actions configuration (if any)." />
+    <aura:attribute name="tableActionJson"  type="List"
+                    default='[]'
+                    description="JSON conversion of header actions configuration." />
+    
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.initConfig}"
+                  description="Init of component : parsing and reset of attributes."/>
+    <aura:handler event="lightning:tabRefreshed" action="{!c.refreshList}"
+                  description="Refreshing of the underlying SOSL query." />
+    
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    <c:PEG_SOSL_CMP  aura:id="soslUtil"/>
+    <c:PEG_JSON_CMP  aura:id="jsonUtil"/>
+    
+    <!-- Results display -->
+    <lightning:card title="{!v.title + if(v.showCount,' (' + v.resultsCount + ')','') }"
+                    iconName="{#v.icon}"
+                    class="{# if(v.showBorder, 'slds-card_boundary', '') + if(v.isCollapsible,' slds-m-left_x-small','')}" >
+
+        <aura:set attribute="actions">
+            <aura:if isTrue="{!v.tableActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.tableActionJson}"
+                                   callback="{!c.handleTableAction}" />
+            </aura:if>
+            
+            <aura:if isTrue="{#v.showSearch}">
+            <lightning:buttonGroup class="slds-col slds-text-color_default">
+                <div onkeyup="{!c.filterList}" class="slds-button_last" >
+                <lightning:input class="mySearch"
+                                 placeholder="Rechercher..."
+                                 type="search"
+                                 name="SearchString"
+                                 value="{!v.searchString}"
+                                 variant="label-hidden"
+                                 onchange="{!c.resetSearch}" />
+                </div>
+            </lightning:buttonGroup>
+            </aura:if>    
+            
+            <lightning:buttonGroup class="slds-col">
+            <aura:if isTrue="{!v.displayJson.length > 1}">
+            <lightning:buttonMenu alternativeText="Object selection menu"
+                                  value="{!v.displayScope}"
+                                  onselect="{!c.changeDisplayScope}"
+                                  label="{!v.displayScope}">
+              <lightning:menuItem value="All"
+                                  label="All"
+                                  checked="{! v.displayScope == 'All' }" />
+              <aura:iteration items="{!v.displayJson}"
+                              var="eachObject" >
+              <lightning:menuItem value="{!eachObject.name}"
+                                  label="{!eachObject.name}"
+                                  checked="{! eachObject.name == v.displayScope }" />
+              </aura:iteration>
+            </lightning:buttonMenu>
+            </aura:if>
+            <lightning:buttonIcon iconName="{! 'utility:' + (v.isAscending ? 'arrowup' : 'arrowdown') }"
+                                  variant="border"
+                                  onclick="{! c.changeSort }"
+                                  alternativeText="Sort" />
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border"
+                                  onclick="{!c.refreshList}"/>
+            </lightning:buttonGroup>
+        </aura:set>
+        
+        <aura:if isTrue="{#v.isCollapsible}">
+        <div class="slds-is-relative">
+            <div style="position: absolute; top: -4.125em; left: -2.25em;">
+                <lightning:buttonStateful
+                         variant="text"
+                         iconNameWhenOff="utility:chevronright"
+                         iconNameWhenOn="utility:chevrondown"
+                         state="{!v.isExpanded}"
+                         class="slds-m-top_medium slds-m-left_small"
+                         onclick="{! c.expandCollapse }" />
+            </div>
+        </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.results.length > 0}">
+        <aura:if isTrue="{!v.isExpanded}">
+           <div class="slds-card__body slds-card__body_inner">
+           <!--
+           <div class="{! 'slds-card__body slds-card__body_inner ' + if(v.showBorder, 'slds-border_top', '')}"> 
+           -->
+             <lightning:layout pullToBoundary="small" multipleRows="true">
+             <aura:iteration items="{!v.results}" var="eachResult">
+                 <lightning:layoutItem size="{#v.size}" flexibility="auto" padding="horizontal-small">
+                 <c:PEG_CollapsedTile_CMP
+                          label="{!eachResult.title}"
+                          icon="{!eachResult.icon}"
+                          recordId="{!eachResult.id}"
+                          sObjectName="{!eachResult.name}"
+                          columns="{!eachResult.columns}"
+                          showBorder="false"
+                          isCollapsible="{!eachResult.isCollapsible}"
+                          isExpanded="false">
+                 
+                 <!-- Tile content -->
+                 <aura:if isTrue="{#v.tableDisplay}">
+                     <!-- Table mode -->
+                     <table>
+                     <aura:iteration items="{!eachResult.content}" var="eachContent">                 
+                     <tr>
+                       <td class="slds-dl_horizontal__label slds-text-color_weak slds-truncate">
+                           {!eachContent.label}</td>
+                       <td class="slds-dl_horizontal__detail">
+                       <aura:if isTrue="{!eachContent.type == 'date'}">
+                           <lightning:formattedDateTime value="{!eachContent.value}"/>
+                       <aura:set attribute="else">
+                           <lightning:formattedText     value="{!eachContent.value}"/>
+                       </aura:set>
+                       </aura:if>
+                       </td>
+                    </tr>
+                    </aura:iteration>
+                    </table>
+                <aura:set attribute="else"> 
+                    <!-- UL mode -->
+                    <ul class="slds-list_horizontal slds-list_horizontal slds-has-dividers_left slds-wrap"> 
+                    <aura:iteration items="{!eachResult.content}" var="eachContent">                 
+                    <li class="slds-item ">
+                        <span class="slds-text-body_small slds-text-color_weak slds-m-right_xx-small">
+                              {!eachContent.label}:</span>
+                        <aura:if isTrue="{!eachContent.type == 'date'}">
+                              <lightning:formattedDateTime value="{!eachContent.value}"/>
+                        <aura:set attribute="else">
+                              <lightning:formattedText     value="{!eachContent.value}"/>
+                        </aura:set>
+                        </aura:if>
+                    </li>
+                    </aura:iteration>
+                    </ul>
+                 </aura:set>
+                 </aura:if>
+                 </c:PEG_CollapsedTile_CMP>
+                 </lightning:layoutItem>
+             </aura:iteration>
+            
+             </lightning:layout> 
+          </div>     
+        </aura:if>
+        </aura:if>      
+    </lightning:card>
+	
+</aura:component>

@@ -1,0 +1,27 @@
+<aura:component >
+	
+    <!-- mergeTemplate -->  
+    <aura:method name="getSort" action="{!c.doGetSort}"
+                 description="Synchronous method enabling to fetch a standard JSON list sort function.">
+    </aura:method>
+    
+    <aura:method name="flattenJson" action="{!c.doJsonFlatten}"
+                 description="Synchronous method enabling to flatten a JSON list or object (i.e. move fields up to the root level).">
+        <aura:attribute name="json"      type="Object"  required="true"
+                        description="JSON list or object to flatten" />
+        <aura:attribute name="children"  type="Object"  required="true"
+                        description="List of JSON array field names to be replaced by '_children' (for tree display of JSON input)." />
+    </aura:method>
+    
+    <aura:method name="transposeJson" action="{!c.doJsonTranspose}"
+                 description="Synchronous method enabling to transpose a JSON list structure into a JSON object.">
+        <aura:attribute name="json"   type="Object"  required="true"
+                        description="JSON list to transpose." />
+    </aura:method>
+    <aura:method name="getColors" action="{!c.doGetColors}"
+                 description="Synchronous method enabling to fetch a list of colors of a given size.">
+        <aura:attribute name="colorNumber"   type="Integer"  required="true"
+                        description="Number of colors requested." />
+    </aura:method>
+    
+</aura:component>

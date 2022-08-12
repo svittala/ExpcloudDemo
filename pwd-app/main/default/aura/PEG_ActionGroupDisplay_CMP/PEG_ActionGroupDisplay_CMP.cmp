@@ -1,0 +1,127 @@
+<aura:component access="global"
+                implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                description="Component to display an action group (i.e. list of buttons and menus) triggering events.">
+	
+    <!-- Configuration générale du composant -->
+    <aura:attribute name="showCard"   type="Boolean"  default="true"
+                    description="Display action group within a card?"/>
+    <aura:attribute name="title"      type="String"   default="Actions"
+                    description="Title of containing card (if any)" />
+    <aura:attribute name="icon"       type="String"   default="standard:announcement"
+                    description="Icon of containing card (if any)." />
+    <aura:attribute name="showBorder" type="Boolean"  default="false"
+                    description="Display frame around card (if any)?"/>
+    <aura:attribute name="showInline" type="Boolean"  default="true"
+                    description="Display actions within card header (if any)?"/>
+    <aura:attribute name="alignClass" type="String"   default="slds-grid_align-center"
+                    description="SLDS card for the alignment of the action group."/>
+    <aura:attribute name="isVertical"      type="Boolean" default="false"
+                    description="Tells whether the different should be displayed vertically."/>
+    
+    
+    <!-- Configuration de la liste des actions du menu. -->
+    <aura:attribute name="actionListStr"   type="String"
+                    default='[
+    {
+        "label":"Message",
+        "icon":"activity",
+        "variant":"brand",
+        "event":{
+            "name":"e.force:showToast",
+            "params":{
+                 "title":"Success!",
+                 "message":"The record ID is {{{recordId}}} and User ID is {{{User.Id}}}"
+            }
+        }
+    },
+    {
+        "label":"Error",
+        "variant":"neutral",
+        "event":{
+            "name":"e.force:showToast",
+            "params":{
+                 "type":"error",
+                 "title":"Success!","message":"The User is {{{User.Name}}} in Department {{{User.Department}}}"
+            }
+        }
+    },
+    {
+        "label":"Menu",
+        "type":"menu",
+        "items":[
+        {
+            "label":"New Task",
+            "icon":"activity",
+            "event":{
+                 "name":"e.force:createRecord",
+                 "params":{
+                       "entityApiName":"Task",
+                       "defaultFieldValues":{
+                             "WhatId":"{{{recordId}}}",
+                             "Description":"Hello World"
+                       }
+                 }
+             }
+        },
+        {
+             "label":"Edit",
+             "event":{
+                 "name":"e.force:editRecord",
+                 "params":{
+                       "recordId":"{{{recordId}}}"
+                 }
+             }
+        }]
+    }
+]'
+                    description="Configuration of the list of actions as as JSON string." />
+    <aura:attribute name="actionListJson"  type="List"
+                    description="Configuration of the list of actions as JSON list."/>
+    
+    <!-- Component Initialisation -->
+    <aura:handler name="init" value="{!this}" action="{!c.parseActionList}"
+                  description="Initialisation du composant"/>
+
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP aura:id="mergeUtil"
+                     recordId="{!v.recordId}"
+                     sObjectName="{!v.sObjectName}"/>
+    
+    <!-- Affichage du composant -->
+    <aura:if isTrue="{!v.actionListJson.length > 0}" >
+    <aura:if isTrue="{!v.showCard}">
+    <lightning:card title="{#v.title}"     iconName="{#v.icon}"
+                    class="{# if(v.showBorder, 'slds-card_boundary', '')}" >
+        
+         <aura:set attribute="actions">
+         <aura:if isTrue="{# v.showInline}">
+             <c:PEG_ActionGroup_CMP actionList="{!v.actionListJson}"
+                                    callback="{!c.handleAction}"
+                                    isVertical="{#v.isVertical}"/>
+         </aura:if>
+         </aura:set>
+                   
+         <aura:if isTrue="{# !v.showInline}">
+            <div class="slds-card__body slds-card__body_inner">            
+            <div class="{# 'slds-grid ' + v.alignClass}">
+              <c:PEG_ActionGroup_CMP actionList="{!v.actionListJson}"
+                                     callback="{!c.handleAction}"
+                                     isVertical="{#v.isVertical}"/>
+            </div>
+            </div>
+        </aura:if>
+    </lightning:card>
+    <aura:set attribute="else">
+            <div class="{! if(v.showBorder, 'slds-box', 'slds-p-around_x-small') + ' slds-theme_default'}">            
+            <div class="{! 'slds-grid ' + v.alignClass}">
+                <c:PEG_ActionGroup_CMP actionList="{!v.actionListJson}"
+                                       callback="{!c.handleAction}"
+                                       isVertical="{#v.isVertical}"/>
+            </div>
+            </div>
+    </aura:set>
+    </aura:if>
+    </aura:if>
+    
+</aura:component>

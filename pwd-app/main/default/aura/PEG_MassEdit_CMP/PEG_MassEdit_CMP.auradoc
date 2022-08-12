@@ -1,0 +1,55 @@
+<aura:documentation>
+	<aura:description>
+    <div class="slds-m-top_large">
+    <h4>Overview</h4>
+    <p>The <code>&lt;c:PEG_MassEdit_CMP&gt;</code> component is meant to be used in a 
+        popup triggered by the <code>&lt;c:PEG_ReportingHandler_CMP&gt;</code> component
+        to execute mass modifications on a selection of records, e.g. coming from a 
+        header action of the <code>&lt;c:PEG_SoqlList_CMP&gt;</code> component.</p>
+    <p>It relies on a <code>&lt;lightning:recordEditForm&gt;</code> component to display
+        an edit form for a selected list of fields. The modifications entered by the
+        User in the fields are then applied to the whole set of records provided in input.</p>
+    <p>This component is used in creation mode, leveraging the record type of the first
+        record provided. Fields with mandatory or default values should thus be avoided
+        to prevent having these values applied automatically.</p>
+    <p>Only 3 attributes are required when instantiating the  <code>&lt;c:PEG_MassEdit_CMP&gt;</code> component:</p>
+    <ul>
+    <li><code>records</code> : a stringified JSON list of the records on which to apply the
+        mass edit (containing at least the standard "id" and "record type" fields).</li>
+    <li><code>sObjectName</code> : the object type corresponding to the selected records
+        provided.</li>
+    <li><code>fields</code> : a stringified JSON list of the edit form fields (should
+        be valid API field names for the object type).</li>
+    </ul>
+    <br/>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Usage Example</h4>
+    <p>Leveraging the <code>&lt;c:PEG_SoqlList_CMP&gt;</code> and 
+        <code>&lt;c:PEG_ReportingHandler_CMP&gt;</code> components, the following
+        header action configuration may be used to invoke the 
+        <code>&lt;c:PEG_MassEdit_CMP&gt;</code> component.</p>
+<pre>"tableActions" : [
+    { "label" : "Edit",
+      "event" : { "name":"e.ltng:sendMessage",
+                  "params" : { "channel" : "PEG_PopUp",
+                               "message" : { "name" : "c:PEG_MassEdit_CMP",
+                                             "header" : "Mass Edit",
+                                             "params" : { "records" : "{{{Row.SelectedRows}}}",
+                                                          "fields" : [ "StageName", "Responsible__c" ],
+                                                          "sObjectName" : "Opportunity" } } } } } 
+]</pre>
+    </div>
+        
+    <div class="slds-m-top_large">
+    <h4>Legal Notice</h4>
+    <p>This code is the property of Salesforce.com and is protected by U.S. and International
+        copyright laws. Reproduction, distribution without written permission of Salesforce is
+        strictly prohibited. In particular this code has been delivered by Salesforce.com for
+        its Client’s internal purposes pursuant to specific terms and conditions, and cannot be
+        re-used, reproduced or distributed for any other purposes.</p>
+    <p>Author: P-E GROS / April 2019</p>
+    </div>
+    </aura:description> 
+</aura:documentation>

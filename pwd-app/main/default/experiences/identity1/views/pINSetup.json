@@ -1,0 +1,71 @@
+{
+  "appPageId" : "12228f5c-e5dd-4980-b569-8f095305ba3b",
+  "componentName" : "siteforce:dynamicLayout",
+  "id" : "20b2f127-e620-4ff4-8260-b6ff040bbc85",
+  "label" : "PINSetup",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "400ddbfa-ac52-4373-ba71-6fccf63f219d",
+          "columns" : [ {
+            "UUID" : "764c8eb9-dbbf-4b2e-aed2-fa9121191217",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "400ddbfa-ac52-4373-ba71-6fccf63f219d",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "height" : "300",
+            "pageName" : "PINSetup",
+            "recordId" : "{!recordId}"
+          },
+          "componentName" : "forceCommunity:visualforcePage",
+          "id" : "13ff5737-8bc3-4e3e-941f-a2c961a9efb8",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "764c8eb9-dbbf-4b2e-aed2-fa9121191217",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "295a0e01-b9ff-482c-80c6-6fb2a6f9318e",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "PINSetup"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "5d788680-0e75-4f86-9b42-a76f8456719d",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "ffbb58c6-6235-4f57-adcc-b428311deb3d",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "evUDUS2Pg3NapzCcdcufD7rZxDGax5",
+  "type" : "view",
+  "viewType" : "custom-pinsetup"
+}

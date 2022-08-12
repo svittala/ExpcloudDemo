@@ -1,0 +1,224 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                description="Lightning App Builder Component to display custom Graphs.">
+    
+    <!-- Global component configuration -->
+    <aura:attribute name="title"       type="String"   default="KPIs of the Day"
+                    description="Id field for the target record." />
+    <aura:attribute name="icon"        type="String"   default="standard:dashboard"
+                    description="Component card icon." />
+    <aura:attribute name="showBorder"  type="Boolean"  default="false"
+                    description="Show border around component card?" />
+    <aura:attribute name="showQuery"   type="Boolean" default="false"
+                    description="Show SOQL query (for debug)?"/>
+    
+    <aura:attribute name="width"  type="Integer"
+                    description="width of the card" />
+    
+    <!-- Graph configuration -->
+    <aura:attribute name="query"  type="String" 
+                    default="select StageName, count(Id) Number, sum(Amount) Amount from Opportunity Group by StageName"
+                    description="Default 'group by' SOQL query to fetch graph data." />
+    <!-- select StageName, Type, count(Id) Number, sum(Amount) Amount from Opportunity Group by StageName, Type -->
+    <aura:attribute name="graphType"  type="String" 
+                    default="pie"
+                    description="Type of Chart to display (doughnut, pie, bar, horizontalBar, line...)."/>
+    
+    <aura:attribute name="dimension"       type="String" 
+                    default="StageName"
+                    description="Name of the field used as main dimension for Chart grouping."/>
+    <aura:attribute name="dimensionLabel"  type="String" 
+                    default="Stage"
+                    description="Label of the dimension field."/>
+    <aura:attribute name="subDimension"    type="String"  
+                    description="Name of the field used as sub-dimension for bar charts (stacking)."/>
+    <aura:attribute name="subDimensionLabel"  type="String" 
+                    description="Label of the dimension field."/>
+    
+    <aura:attribute name="measureStr"      type="String" 
+                    default='["Number","Amount"]'
+                    description="List of field names to be used as measures."/>
+    
+    <!-- Actions configuration -->
+    <aura:attribute name="cardActionStr"  type="String"
+                    default='[ {"label":"Show", "icon":"answer",
+                                "event": { "name":"e.force:showToast",
+                                           "params":{"type":"error", "title":"Success!",
+                                           "message":"The User is {{{User.Name}}} in Department {{{User.Department}}}"}}}]'
+                    description="Header actions configuration (if any)." />
+    <aura:attribute name="cardActionJson"  type="List"
+                    default='[]'
+                    description="JSON conversion of header actions configuration." />
+
+    
+    <!-- Component Data -->
+    <aura:attribute name="legend"          type="List" 
+                    description="Legend containing the list of dimension values with their matching colors." />
+    <aura:attribute name="measureValues"   type="List" 
+                    description="List of measure key data." />
+    <aura:attribute name="data"            type="Object" 
+                    description="Transposed JSON structured retrieved from SOQL query (columns by field)." />
+                   
+    <!-- Misc. configuration --> 
+    <aura:attribute name="bypassFLS"         type="Boolean" default="false" 
+                    description="Bypass FLS when executing query." />
+    <aura:attribute name="bypassSharing"     type="Boolean" default="false" 
+                    description="Bypass Sharing when executing query." />
+    <aura:attribute name="queryType"         type="String"  default="" 
+                    description="When requesting a byPass, a valid queryType should be provided (see PEG_Query__mdt)." />
+    <aura:attribute name="isStorable"        type="Boolean" default="false" 
+                    description="Query action storable mode activation." />
+    <aura:attribute name="isBackground"      type="Boolean" default="false" 
+                    description="Query action background mode activation." />
+    
+    <!-- Init Component -->
+    <aura:handler name="init" value="{!this}" action="{!c.initData}"
+                  description="Initialization of the component : generation of the SOQL query." />
+    <aura:handler event="lightning:tabRefreshed" action="{!c.reloadData}"
+                  description="Refreshing of the underlying SOQL query." />
+    
+    <!-- Utility Components -->
+    <lightning:notificationsLibrary aura:id="notifUtil"/>
+    <c:PEG_Merge_CMP   aura:id="mergeUtil"
+                       recordId="{!v.recordId}"
+                       sObjectName="{!v.sObjectName}"/>
+    <c:PEG_SOQL_CMP    aura:id="soqlUtil"/>
+    <c:PEG_JSON_CMP    aura:id="jsonUtil"/>
+    <c:PEG_Context_CMP aura:id="contextMgr"/>
+    
+    <!-- Component Display -->
+    <lightning:card title="{!v.title}" iconName="{!v.icon}" 
+                   class="{! if(v.showBorder, 'slds-card_boundary', '')}" >
+        
+        <!-- Card actions -->
+        <aura:set attribute="actions">     
+            <aura:if isTrue="{!v.cardActionJson.length > 0}">
+            <c:PEG_ActionGroup_CMP actionList="{!v.cardActionJson}"
+                                   callback="{!c.handleCardAction}" />
+            </aura:if>
+            
+            <lightning:buttonGroup class="slds-col">
+            <lightning:buttonIcon iconName="utility:refresh"
+                                  alternativeText="refresh"
+                                  variant="border"
+                                  onclick="{!c.reloadData}"/>
+            </lightning:buttonGroup>
+        </aura:set>
+        
+        <!-- Card Footer -->
+        <aura:set attribute="footer">
+            <aura:if isTrue="{#v.showQuery}">
+            <dl class="slds-list_horizontal slds-wrap">
+            <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="SOQL Template Label">
+                SOQL Template</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="SOQL Template Value">
+                {#v.query}</dd>
+            
+            <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="Graph Type Label">
+                Graph Type</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="Graph Type Value">
+                {!v.graphType}</dd>
+                
+            <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="Main Dimension Label">
+                Main dimension</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="Main Dimension Value">
+                {!v.dimension}</dd>
+                
+            <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="Measures Label">
+                Measures</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="Measures Value">
+                {!v.measureStr}</dd>
+            <!--
+            <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-align_right" title="Width Label">
+                width</dt>
+            <dd class="slds-item_detail slds-text-align_left" title="Width Value">
+                {!v.width}</dd>
+            -->
+            </dl>
+          </aura:if>
+        </aura:set>
+            
+            
+        <div class="slds-card__body slds-card__body_inner ">
+          <lightning:layout  horizontalAlign="center" multipleRows="true">
+              <!-- pullToBoundary="small" -->
+          <!-- Display of pie or doughnut chart -->
+          <aura:if isTrue="{!((v.graphType == 'pie') || (v.graphType == 'doughnut')) ? true : false}">
+              <aura:iteration items="{!v.measureValues}" var="eachMeasure"> 
+                  <lightning:layoutItem class="pieSize slds-m-bottom_small" flexibility="auto" >
+                  <div class="slds-text-heading_small slds-m-vertical_x-small slds-align_absolute-center">
+                  {#eachMeasure.name + ' / ' + v.dimensionLabel}
+                  </div>  
+                  <c:PEG_PieGraph_CMP graphType="{#v.graphType}"
+                                      title="{#eachMeasure.name + ' / ' + v.dimensionLabel}"
+                                      dimension="{!v.dimension}"
+                                      measure="{!eachMeasure.name}"
+                                      data="{!v.data}" />
+                  <div class="slds-text-heading_small slds-m-top_x-small slds-align_absolute-center">
+                      Total:
+                      <lightning:formattedNumber value="{!eachMeasure.total}"
+                                                 class="slds-m-left_x-small"/>
+                  </div>              
+                  </lightning:layoutItem>
+              </aura:iteration>
+              
+              <!-- Display of legend -->
+              <aura:if isTrue="{! v.legend.length > 0}">
+              <lightning:layoutItem class="legendSize" flexibility="no-shrink,auto" >
+              <!-- padding="horizontal-small" -->
+              <div class="slds-text-title slds-m-bottom_x-small">{!v.dimensionLabel}</div>
+              <ul class="slds-list_horizontal slds-list_horizontal  slds-wrap"> 
+                  <aura:iteration items="{!v.legend}" var="eachvalue" >                 
+                  <li class="slds-item slds-m-right_small">
+                  <span class="dot slds-m-right_xx-small" style="{! 'background-color: ' + eachvalue.color + ';'}"></span>
+                  {!eachvalue.name}
+                  <!-- <span class="slds-badge slds-badge_lightest slds-m-bottom_x-small"> slds-has-dividers_left-->
+                  </li>
+                  </aura:iteration>
+              </ul>
+              </lightning:layoutItem>
+              </aura:if>
+           
+          <!-- Display of bar chart -->
+          <aura:set attribute="else">
+              
+              <aura:iteration items="{!v.measureValues}" var="eachMeasure"> 
+              <lightning:layoutItem class="barSize slds-m-bottom_small" flexibility="auto" >
+              <!-- padding="horizontal-small" -->
+              <div class="slds-text-heading_small slds-m-vertical_x-small slds-align_absolute-center">
+                  {#eachMeasure.name}&nbsp;/&nbsp;{#v.subDimensionLabel.length > 0 ? v.subDimensionLabel + ' - ' : ''}{#v.dimensionLabel}
+              </div>
+              <c:PEG_BarGraph_CMP graphType="{#v.graphType}"
+                                  title="{#eachMeasure.name + ' / ' + v.dimensionLabel + ' . ' + v.subDimensionLabel}"
+                                  dimension="{!v.dimension}"
+                                  subDimension="{!v.subDimension}"
+                                  measure="{!eachMeasure.name}"
+                                  data="{!v.data}" />
+              
+              </lightning:layoutItem>
+              </aura:iteration>
+              
+              <!-- Display of legend -->
+              <aura:if isTrue="{! and(v.legend.length > 0, v.subDimension.length > 0) }">
+              <lightning:layoutItem class="legendSize" flexibility="no-shrink,auto" >
+              <!-- padding="horizontal-small" -->
+              <div class="slds-text-title slds-m-bottom_x-small">{!v.dimensionLabel}</div>
+              <ul class="slds-list_horizontal slds-list_horizontal  slds-wrap"> 
+                  <aura:iteration items="{!v.legend}" var="eachvalue" >                 
+                  <li class="slds-item slds-m-right_small">
+                  <span class="dot slds-m-right_xx-small" style="{! 'background-color: ' + eachvalue.color + ';'}"></span>
+                  {!eachvalue.name}
+                  <!-- <span class="slds-badge slds-badge_lightest slds-m-bottom_x-small"> slds-has-dividers_left-->
+                  </li>
+                  </aura:iteration>
+              </ul>
+              </lightning:layoutItem>
+              </aura:if>
+              
+          </aura:set>
+          </aura:if>
+              
+          </lightning:layout>       
+        </div>       
+    </lightning:card>	
+</aura:component>

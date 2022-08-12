@@ -1,0 +1,119 @@
+.THIS.test{}
+
+.THIS .pegBanner-large {
+    width	:	100% !important;
+    height	:	100px !important; 
+    overflow:	hidden;
+    text-align: center;
+}
+
+.THIS .pegBanner-medium {
+    width	:	100% !important;
+    height	:	50px !important; 
+    overflow:	hidden;
+    text-align: center;
+}
+
+.THIS .pegBanner img {
+    /*margin: -10px 0px 0px -180px;*/
+	object-fit: cover;
+    width:100%;
+	height:100%;
+    object-position: center;
+}
+
+/*
+.THIS .pegAvatar {
+    width	:	110px !important;
+    height	:	110px !important; 
+    text-align: center;
+    overflow:	hidden;
+    position:absolute;
+	top:60px;
+	left:20px;
+}
+*/
+
+.THIS .pegAvatar-large {
+    width	:	110px !important;
+    height	:	110px !important; 
+    /*border-radius : 50px !important; */
+    text-align: center;
+    overflow:	hidden;
+    position:absolute;
+	top:60px;
+	left:20px;
+}
+
+.THIS .pegAvatar-medium {
+    width	:	80px !important;
+    height	:	80px !important; 
+    text-align: center;
+    overflow:	hidden;
+    position:absolute;
+	top:30px;
+	left:20px;
+}
+
+.THIS .pegAvatar img {
+    /*margin: -10px 0px 0px -180px;*/
+	object-fit: contain;
+    width:90%;
+	height:90%;
+    border-radius : 50px !important; 
+    border-style: solid;
+    border-width : 5px !important;
+    border-top-width : 5px !important;
+    border-bottom-width : 5px !important;
+    border-left-width : 5px !important;
+    border-right-width : 5px !important;
+    border-color: white !important;
+    object-position: 50% 50%;
+}
+
+.THIS .pegBadge-large {
+    /*border-radius : 50px !important; */
+    text-align: center;
+    position:absolute;
+	top:20px;
+	right:20px;
+    word-wrap: break-word !important;
+}
+
+.THIS .pegBadge-medium {
+    text-align: center;
+    position:absolute;
+	top:15px;
+	right:15px;
+    word-wrap: break-word !important;
+}
+
+.THIS .pegCard-large {
+    margin-top  : 10px   !important;
+    margin-left : 140px  !important;
+    margin-right : 10px  !important;
+    /*width : calc(100% - 150) !important;*/
+    /*position:absolute;
+	top:100px;
+	left:100px;*/
+}
+
+.THIS .pegCard-medium {
+    margin-top  : 5px   !important;
+    margin-left : 110px  !important;
+    margin-right : 10px  !important;
+    /*width : calc(100% - 150) !important;*/
+    /*position:absolute;
+	top:100px;
+	left:100px;*/
+}
+
+.THIS .slds-card__body {
+    margin-top : 0.2rem  !important;
+    /*word-wrap: break-word !important;*/
+}
+.THIS .slds-card__header {
+    margin-bottom : 0px  !important;
+    padding-left  : 0px !important;
+    text-overflow: ellipsis !important;
+}

@@ -1,0 +1,90 @@
+<design:component label="PEG Custom SOQL List" >
+	<design:attribute name="title"
+                      label="Component Title" />
+    <design:attribute name="icon"
+                      label="Component Icon" />
+    <design:attribute name="showBorder"
+                      label="Show Border?" />
+    <design:attribute name="showCount"
+                      label="Show row count" />
+    <design:attribute name="tableHeight"
+                      label="Table height" />
+    <design:attribute name="query"
+                      label="SOQL query template"
+                      description="Valid SELECT... SOQL statement, with {{{xxxx}}} merge fields on User and current Object." />
+
+    <design:attribute name="isCollapsible"
+                      label="Collapsible result table?"/>
+    <design:attribute name="isExpanded"
+                      label="Expanded by default?"
+                      description="(if collapsible)"/>
+
+    <design:attribute name="showQuery"
+                      label="Display SOQL (for debug)?" />
+    <design:attribute name="fields"
+                      label="Table Configuration"
+                      description="Configuration of the result data table, following the format expected by the standard 'lightning:datatable' component." />
+    <design:attribute name="keyField"
+                      label="Row Identifier"
+                      description="Name of the field identifying a table row." />
+
+    <design:attribute name="isFlatten"
+                      label="Flatten results?"
+                      description="To be able to display in the data table fields within JSON sub-structures (e.g. xxx__r.yyy__c related fields)"/>
+
+    <design:attribute name="isInfiniteLoad" 
+                      label="Infinite load ?"
+                      description="Sets the data-table in infinite loading mode (SOQL should not have LIMIT and OFFSET keywords)."/>
+    <design:attribute name="pageSize"
+                      label="Page Size"
+                      description="Number of rows fetched by each query (in case of infinite loading)."/>
+    <design:attribute name="loadMoreOffset"
+                      label="Load more Offset"
+                      description="Number of pixels before the end of teh table at which the next page is fetched (in cas of infinite loading)." />
+    
+    <design:attribute name="showSearch"
+                      label="Show filter?"
+                      description="Displays a utility to locally filter the results displayed." />
+    
+    <design:attribute name="maxRowSelection"   
+                      label="Max selection"
+                      description="Max number of rows selected (0 means no selection checkbox display)."/>
+    
+    <design:attribute name="hasTotal"
+                      label="Has total line?"
+                      description="When using group by rollup SOQL, to manage last line as totals." />
+    <design:attribute name="totalStr"
+                      label="Totals line configuration."
+                      description='List of fields to display in the total line (JSON list as ["fieldName1",...]).' />
+    
+    <design:attribute name="isTreeView"
+                      label="Display as Tree?"
+                      description="When using subqueries, enables to display results as tree-table instead of standard data-table." />
+    <design:attribute name="treeFieldName"
+                      label="Sub-hierarchy fields."
+                      description='JSON list with the names of the fields providing access to the sub-hierarchy.' />
+    
+    
+    <design:attribute name="bypassFLS"
+                      label="Bypass FLS?" />
+    <design:attribute name="bypassSharing"
+                      label="Bypass Sharing?" />
+    <design:attribute name="queryType"
+                      label="Query Type"
+                      description="To authorize bypass, a valid PEG_Query__mdt devName should be provided." />
+    
+    
+    <design:attribute name="isStorable"
+                      label="Use Storable Actions?"
+                      description="Use local browser cache on repeated similar queries."/>
+    <design:attribute name="isBackground"
+                      label="Send query in Background?"
+                      description="For long running SOQL queries."/>
+    
+    
+    <design:attribute name="tableActionStr"
+                      label="Header Actions"/>
+    <design:attribute name="rowActionStr"
+                      label="Row Actions"/>
+                      
+</design:component>
